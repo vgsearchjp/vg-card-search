@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
+import { r2 } from "@/lib/r2";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-
 export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
@@ -42,16 +43,30 @@ const files = cards.map(
   card => card.storage_image_url
 );
 
-const { error: removeError } =
-  await supabaseAdmin.storage
-    .from("card-images")
-    .remove(files);
+try {
+console.log("R2削除開始");
+console.log(files);
 
-if (removeError) {
+  await r2.send(
+    new DeleteObjectsCommand({
+      Bucket: "vg-card-images",
+      Delete: {
+        Objects: files.map((file) => ({
+          Key: file,
+        })),
+      },
+    })
+  );
+
+console.log("R2削除成功");
+
+} catch (error) {
+
+  console.log(error);
 
   return NextResponse.json({
     success: false,
-    error: removeError,
+    error,
   });
 
 }

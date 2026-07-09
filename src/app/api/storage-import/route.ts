@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { r2 } from "@/lib/r2";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function GET(request: Request) {
 
 console.log("★★Storage API開始★★");
-
+console.log("カード取得開始");
 const { searchParams } = new URL(request.url);
 
 const productId = Number(searchParams.get("productId"));
@@ -20,8 +22,8 @@ await supabaseAdmin
 .from("cards")
 .select("id,image_url,card_no")
 .eq("product_id", productId)
-.is("storage_image_url", null);
-
+// .is("storage_image_url", null);
+console.log("取得カード数", cards?.length);
 if (error) {
 return NextResponse.json({
 success:false,
@@ -49,15 +51,17 @@ const total = cards.length;
 const batchSize = 10;
 
 for (let i = 0; i < cards.length; i += batchSize) {
-
+console.log("バッチ開始", i);
 const batch = cards.slice(i, i + batchSize);
 
 await Promise.all(
   batch.map(async (card) => {
-
+  console.log("処理開始", card.card_no);
     const imageResponse = await fetch(card.image_url);
 
     const imageBlob = await imageResponse.blob();
+
+    const buffer = Buffer.from(await imageBlob.arrayBuffer());
 
     const safeCardNo = card.card_no.replace(/[\/\\:*?"<>|＋]/g, "_");
 
@@ -65,23 +69,33 @@ await Promise.all(
 
     console.log(fileName);
 
-    const { error: uploadError } =
-      await supabaseAdmin.storage
-        .from("card-images")
-        .upload(fileName, imageBlob, { upsert: true });
+    try {
+console.log("R2アップロード", fileName);
+  await r2.send(
+    new PutObjectCommand({
+      Bucket: "vg-card-images",
+      Key: fileName,
+      Body: buffer,
+      ContentType: "image/png",
+    })
+  );
+console.log("R2アップロード成功", fileName);
+} catch (error) {
 
-    if (uploadError) {
-      console.log(uploadError);
-      failed++;
-      return;
-    }
+  console.log(error);
+
+  failed++;
+
+  return;
+
+}
 
     saved++;
 
     const { error: updateError } =
       await supabaseAdmin
         .from("cards")
-        .update({ storage_image_url: fileName })
+        .update({storage_image_url: fileName,})
         .eq("id", card.id);
 
     if (updateError) {

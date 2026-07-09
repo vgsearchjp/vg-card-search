@@ -404,6 +404,7 @@ const FloatingBackButton = ({ onClick }: { onClick: () => void }) => (
     />
   </button>
 );
+
 const getCardImage = (card: any) => {
 
   if (!card) {
@@ -417,8 +418,8 @@ const getCardImage = (card: any) => {
 
   // Storage方式
   if (card.storage_image_url) {
-    return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/card-images/${card.storage_image_url}`;
-  }
+  return `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
+}
 
   // Storage画像がまだ無い場合は公式URL
   return card.image_url || "";
@@ -491,50 +492,33 @@ setStorageResults((prev) => ({
 await loadCards(product.id);
 };
 
-const compressStorageImages = async (product: any) => {
+const deleteStorageImages = async (product: any) => {
 
   const ok = confirm(
-    `${product.product_code} の画像を圧縮しますか？`
+    `${product.product_code} のStorage画像を削除しますか？`
   );
 
   if (!ok) return;
 
   const response = await fetch(
-    `/api/storage-compress?productId=${product.id}`
+    `/api/storage-delete?productId=${product.id}`
   );
 
   const data = await response.json();
 
-  console.log(data);
-
   if (!data.success) {
-
-    alert("画像圧縮に失敗しました。");
-
-    console.error(data);
-
+    alert("削除に失敗しました");
+    console.log(data);
     return;
-
   }
 
-  alert(
-`${product.product_code}
-
-画像圧縮が完了しました。
-
-対象：${data.total}枚
-成功：${data.successCount}枚
-スキップ：${data.skipCount}枚
-失敗：${data.failedCount}枚
-
-圧縮前：${(data.before / 1024 / 1024).toFixed(2)} MB
-圧縮後：${(data.after / 1024 / 1024).toFixed(2)} MB
-削減容量：${(data.saved / 1024 / 1024).toFixed(2)} MB`
-  );
+  alert(`${data.deleted}枚削除しました`);
 
   await loadCards(product.id);
+  loadProducts();
 
 };
+
 
 const deleteProduct = async (id: number) => {
   const ok = confirm("この商品を削除しますか？");
@@ -659,31 +643,61 @@ const saveCard = async () => {
   alert("商品を選択してください");
   return;
 }
+const selectedProduct =
+  products.find(
+    (p) => p.id === Number(selectedProductId)
+  );
 
+if (!selectedProduct) {
+
+  alert("商品が見つかりません");
+
+  return;
+
+}
   let finalImageUrl = imageUrl;
-
+  let storageImageUrl = "";
   if (imageFile) {
-    const fileName =
-      Date.now() + "_" + imageFile.name;
 
-    const { error: uploadError } =
-      await supabase.storage
-        .from("card-images")
-        .upload(fileName, imageFile);
+  const formData = new FormData();
 
-    if (uploadError) {
-      console.log(uploadError);
-      alert(JSON.stringify(uploadError));
-      return;
+  formData.append("file", imageFile);
+
+  formData.append(
+    "productCode",
+    selectedProduct.product_code
+  );
+
+  formData.append(
+    "cardNo",
+    cardNo
+  );
+
+  const response = await fetch(
+    "/api/r2-upload",
+    {
+      method: "POST",
+      body: formData,
     }
+  );
 
-    const { data } =
-      supabase.storage
-        .from("card-images")
-        .getPublicUrl(fileName);
+  const result =
+    await response.json();
 
-    finalImageUrl = data.publicUrl;
+  if (!result.success) {
+
+    console.log(result);
+
+    alert("画像アップロード失敗");
+
+    return;
+
   }
+
+  finalImageUrl =
+    `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${result.path}`;
+storageImageUrl = result.path;
+}
 
   let error;
 
@@ -697,6 +711,7 @@ const saveCard = async () => {
        card_name: cardName,
        rarity: rarity,
        image_url: finalImageUrl,
+       storage_image_url: storageImageUrl,
        card_type: cardType,
        nation: nation,
        race: race,
@@ -723,6 +738,7 @@ const saveCard = async () => {
   card_name: cardName,
   rarity: rarity,
   image_url: finalImageUrl,
+  storage_image_url: storageImageUrl,
   sort_order: cards.length,
   card_type: cardType,
   nation: nation,
@@ -1007,7 +1023,6 @@ if (homeRarity) {
 if (homeTrigger) {
   query = query.eq("trigger_type", homeTrigger);
 }
-console.log("homeTrigger =", homeTrigger);
 
 const { data, error, count } =
   await query
@@ -1062,21 +1077,12 @@ const resequenceCards = async () => {
     )
     .order("sort_order");
 
-  console.log("RESEQUENCE DATA", data);
-
   if (error || !data) {
-    console.log("RESEQUENCE ERROR", error);
     return;
   }
 
   for (let i = 0; i < data.length; i++) {
 
-    console.log(
-      "UPDATE",
-      data[i].card_no,
-      "=>",
-      i
-    );
 
     await supabase
       .from("cards")
@@ -1085,9 +1091,8 @@ const resequenceCards = async () => {
       })
       .eq("id", data[i].id);
   }
-
-  console.log("RESEQUENCE END");
 };
+
 const loadCollection = async (
   cardId: number
 ) => {
@@ -5677,14 +5682,14 @@ activeTab === "manage" && (
 className="border px-3 py-1 mt-2 ml-2"
 onClick={() => saveImagesToStorage(product)}
 >
-画像をStorageへ保存
+Storageへ保存
 </button>
 
 <button
-  onClick={() => compressStorageImages(product)}
+  onClick={() => deleteStorageImages(product)}
   className="border px-3 py-1 mt-2 ml-2"
 >
-  画像を圧縮
+  画像(R2)削除
 </button>
 
 <button
