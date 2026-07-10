@@ -372,6 +372,13 @@ const [isSearchResult, setIsSearchResult] = useState(false);
 const [importResults, setImportResults] =useState<Record<number,{insert: number;update: number;skip: number;}>>({});
 const [storageResults, setStorageResults] = useState<Record<number,{saved:number;skip:number;failed:number;total:number;}>>({});
 const [showStorageStatus, setShowStorageStatus] = useState<Record<number, boolean>>({});
+const [storageLoading, setStorageLoading] = useState(false);
+const [storageMessage, setStorageMessage] = useState("");
+const [storageProgress, setStorageProgress] = useState({
+  total: 0,
+  current: 0,
+  currentCard: "",
+});
 const [imageMode, setImageMode] = useState<"storage" | "url">("storage");
 useEffect(() => {
   const saved = localStorage.getItem("imageMode");
@@ -473,7 +480,40 @@ const saveImagesToStorage = async (product: any) => {
     alert("公式URLが登録されていません");
     return;
   }
+const ok = confirm(
+`${product.product_code} の画像をCloudflare R2へ保存します。
 
+この処理には数分かかる場合があります。
+
+開始しますか？`
+);
+
+if (!ok) return;
+
+setStorageLoading(true);
+
+const timer = setInterval(async () => {
+
+  const response = await fetch(
+    `/api/progress?productId=${product.id}`
+  );
+
+  const progress = await response.json();
+
+  setStorageProgress(progress);
+
+  if (progress.finished) {
+
+    clearInterval(timer);
+
+  }
+
+}, 500);
+
+setStorageMessage(
+  "Cloudflare R2へ画像を保存しています..."
+);
+try {
 const result = await fetch(`/api/storage-import?productId=${product.id}&productCode=${encodeURIComponent(product.product_code)}`);
 
 const data = await result.json();
@@ -490,6 +530,29 @@ setStorageResults((prev) => ({
   },
 }));
 await loadCards(product.id);
+alert(
+`${product.product_code}
+
+Cloudflare R2への保存が完了しました。
+
+対象：${data.total}枚
+保存：${data.saved}枚
+失敗：${data.failed}枚`
+);
+
+
+} finally {
+
+  setStorageLoading(false);
+
+  setStorageProgress({
+    total: 0,
+    current: 0,
+    currentCard: "",
+  });
+
+}
+
 };
 
 const deleteStorageImages = async (product: any) => {
@@ -2372,7 +2435,47 @@ const displayDeckSearchCards = hideSameCard
 
 return (
   <main className="overflow-x-hidden">
+{storageLoading && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
+    <div className="bg-white rounded-lg shadow-lg p-6 w-[420px]">
+
+      <div className="text-xl font-bold text-center">
+        Cloudflare R2へ保存中
+      </div>
+
+      <div className="mt-4 text-center">
+        {storageMessage}
+      </div>
+
+      <div className="mt-6 w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+        <div
+          className="h-3 bg-blue-500 transition-all duration-300"
+          style={{
+            width:
+              storageProgress.total === 0
+                ? "0%"
+                : `${storageProgress.current / storageProgress.total * 100}%`,
+          }}
+        />
+      </div>
+
+      <div className="mt-3 text-center font-bold">
+        {storageProgress.current} / {storageProgress.total}
+      </div>
+
+      <div className="mt-2 text-center text-sm text-gray-600 break-all">
+        {storageProgress.currentCard}
+      </div>
+
+      <div className="mt-4 text-center text-sm text-gray-500">
+        このまま画面を閉じないでください。
+      </div>
+
+    </div>
+
+  </div>
+)}
    <div className="w-full overflow-x-hidden">
 
 <div className="bg-slate-900 text-white">
