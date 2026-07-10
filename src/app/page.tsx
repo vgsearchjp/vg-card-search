@@ -475,40 +475,53 @@ await deleteCardsCache(product.id);
 };
 
 const saveImagesToStorage = async (product: any) => {
-console.log("saveImagesToStorage開始");
   if (!product.official_url) {
     alert("公式URLが登録されていません");
     return;
   }
-const ok = confirm(
+if (process.env.NODE_ENV === "production") {
+
+  if (process.env.NODE_ENV === "production") {
+
+  const ok = confirm(
 `${product.product_code} の画像をCloudflare R2へ保存します。
 
 この処理には数分かかる場合があります。
 
 開始しますか？`
-);
-
-if (!ok) return;
-
-setStorageLoading(true);
-
-const timer = setInterval(async () => {
-
-  const response = await fetch(
-    `/api/progress?productId=${product.id}`
   );
 
-  const progress = await response.json();
+  if (!ok) return;
 
-  setStorageProgress(progress);
+}
 
-  if (progress.finished) {
+}
 
-    clearInterval(timer);
+let timer: ReturnType<typeof setInterval> | undefined;
 
-  }
+if (process.env.NODE_ENV === "production") {
 
-}, 500);
+  setStorageLoading(true);
+
+  timer = setInterval(async () => {
+
+    const response = await fetch(
+      `/api/progress?productId=${product.id}`
+    );
+
+    const progress = await response.json();
+
+    setStorageProgress(progress);
+
+    if (progress.finished && timer) {
+
+      clearInterval(timer);
+
+    }
+
+  }, 500);
+
+}
 
 setStorageMessage(
   "Cloudflare R2へ画像を保存しています..."
@@ -530,7 +543,10 @@ setStorageResults((prev) => ({
   },
 }));
 await loadCards(product.id);
-alert(
+
+if (process.env.NODE_ENV === "production") {
+
+  alert(
 `${product.product_code}
 
 Cloudflare R2への保存が完了しました。
@@ -538,12 +554,17 @@ Cloudflare R2への保存が完了しました。
 対象：${data.total}枚
 保存：${data.saved}枚
 失敗：${data.failed}枚`
-);
+  );
 
+}
 
 } finally {
 
+  if (process.env.NODE_ENV === "production") {
+
   setStorageLoading(false);
+
+}
 
   setStorageProgress({
     total: 0,
