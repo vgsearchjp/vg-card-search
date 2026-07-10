@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { saveCardsCache, getCardsCache, deleteCardsCache } from "@/lib/indexedDb";
+import { saveCardsCache, getCardsCache, deleteCardsCache, saveAllCardsCache, getAllCardsCache, deleteAllCardsCache } from "@/lib/indexedDb";
 import { v4 as uuidv4 } from "uuid";
 import { domToPng } from "modern-screenshot";
 import DeckImageForSave from "@/components/DeckImageForSave";
@@ -472,6 +472,9 @@ setImportResults((prev) => ({
   },
 }));
 await deleteCardsCache(product.id);
+await deleteAllCardsCache();
+
+await loadCards(String(product.id));
 };
 
 const saveImagesToStorage = async (product: any) => {
@@ -867,9 +870,10 @@ storageImageUrl = result.path;
   setTriggerType("");
   setIllustrator("");
 
-  await deleteCardsCache(Number(selectedProductId));
+await deleteCardsCache(Number(selectedProductId));
+await deleteAllCardsCache();
 
-  await loadCards(selectedProductId);
+await loadCards(selectedProductId);
 };
   
 const loadProducts = async () => {
@@ -976,6 +980,133 @@ setStorageResults(result);
 
   setAllNormalRarities(normalList);
   setAllParallelRarities(parallelList);
+};
+
+const loadAllCardsCache = async () => {
+
+
+
+  const cache = await getAllCardsCache();
+
+  if (cache) {
+
+    return cache;
+
+  }
+
+  const { data, error } = await supabase
+    .from("cards")
+    .select(`
+      *,
+      products (
+        sort_order
+      )
+    `)
+    .order("sort_order", {
+      referencedTable: "products",
+    })
+    .order("sort_order");
+
+  if (error) {
+
+    console.log(error);
+
+    return [];
+
+  }
+
+  await saveAllCardsCache(data || []);
+
+  return data || [];
+
+};
+const filterDeckCards = (
+  cards: any[],
+  nation: string,
+  cardType: string,
+  grade: string,
+  rarity: string,
+  parallel: string,
+  keyword: string,
+  include: boolean,
+  trigger: string
+) => {
+
+  let result = [...cards];
+
+  if (include) {
+    result = result.filter(
+      card => card.nation === nation || card.nation === "-"
+    );
+  } else {
+    result = result.filter(
+      card => card.nation === nation
+    );
+  }
+
+  if (keyword) {
+    const word = keyword.toLowerCase();
+
+    result = result.filter(card =>
+      card.card_name.toLowerCase().includes(word) ||
+      card.card_no.toLowerCase().includes(word)
+    );
+  }
+
+  if (cardType) {
+    result = result.filter(
+      card => card.card_type === cardType
+    );
+  }
+
+  if (deckMode === "main" && !cardType) {
+    result = result.filter(
+      card => card.card_type !== "必殺技"
+    );
+  }
+
+  if (grade) {
+    result = result.filter(
+      card => card.grade === Number(grade)
+    );
+  }
+
+  if (rarity) {
+    result = result.filter(
+      card => card.rarity === rarity
+    );
+  }
+
+  if (trigger) {
+    result = result.filter(
+      card => card.trigger_type === trigger
+    );
+  }
+
+  if (parallel === "normal") {
+    result = result.filter(
+      card => allNormalRarities.includes(card.rarity)
+    );
+  }
+
+  if (parallel === "parallel") {
+    result = result.filter(
+      card => allParallelRarities.includes(card.rarity)
+    );
+  }
+
+  result.sort((a, b) => {
+
+    if (a.products.sort_order !== b.products.sort_order) {
+      return a.products.sort_order - b.products.sort_order;
+    }
+
+    return a.sort_order - b.sort_order;
+
+  });
+
+  return result;
+
 };
 
 const loadCards = async (productId?: string) => {
@@ -1388,14 +1519,7 @@ setRarityList(list);
 
 const loadAllNations = async () => {
 
-  const { data, error } = await supabase
-  .from("cards")
-  .select("nation");
-
-if (error) {
-  console.log(error);
-  return;
-}
+const data = await loadAllCardsCache();
 
 const list = [
   ...new Set(
@@ -1420,82 +1544,21 @@ const loadNationCards = async (
   trigger: string = searchTrigger
 ) => {
 
-let query = supabase
-  .from("cards")
-  .select(`
-    *,
-    products (
-      sort_order
-    )
-  `);
+const cards = await loadAllCardsCache();
 
-if (include) {
-  query = query.or(
-    `nation.eq.${nation},nation.eq.-`
-  );
-} else {
-  query = query.eq("nation", nation);
-}
-if(keyword){
-query=query.or(
-`card_name.ilike.%${keyword}%,card_no.ilike.%${keyword}%`
+const data = filterDeckCards(
+  cards,
+  nation,
+  cardType,
+  grade,
+  rarity,
+  parallel,
+  keyword,
+  include,
+  trigger
 );
-}
 
-if(cardType){
-query=query.eq("card_type",cardType);
-}
-
-if(deckMode==="main" && !cardType){
-query=query.neq("card_type","必殺技");
-}
-
-if(grade){
-query=query.eq("grade",Number(grade));
-}
-
-if(rarity){
-query=query.eq("rarity",rarity);
-}
-
-if(trigger){
-  query = query.eq("trigger_type", trigger);
-}
-
-if(parallel==="normal"){
-query=query.in("rarity",allNormalRarities);
-}
-
-if(parallel==="parallel"){
-query=query.in("rarity",allParallelRarities);
-}
-
-const { data, error } =
-  await query
-    .order(
-      "sort_order",
-      {
-        referencedTable: "products"
-      }
-    )
-    .order("sort_order");
-
-if(error){
-console.log(error);
-return;
-}
-
-if (data) {
-  data.sort((a: any, b: any) => {
-    if (a.products.sort_order !== b.products.sort_order) {
-      return a.products.sort_order - b.products.sort_order;
-    }
-    return a.sort_order - b.sort_order;
-  });
-}
-
-
-setDeckSearchCards(data || []);
+setDeckSearchCards(data);
 
 };
 
@@ -1812,19 +1875,46 @@ if (rideSelectMode === "generator") {
   return;
 }
 
-  const { data, error } =
-  await query
-    .order("sort_order",
-      {
-        referencedTable: "products"
-      }
-    )
-    .order("sort_order");
+const cards = await loadAllCardsCache();
 
-  if (error) {
-    console.log(error);
-    return;
+let data = filterDeckCards(
+  cards,
+  deckNation,
+  searchCardType,
+  "",
+  "",
+  searchParallel,
+  keyword,
+  false,
+  ""
+);
+if (deckMode === "ride") {
+
+  if (rideSelectMode === "g3") {
+    data = data.filter(card => card.grade === 3);
   }
+
+  if (rideSelectMode === "g2") {
+    data = data.filter(card => card.grade === 2);
+  }
+
+  if (rideSelectMode === "g1") {
+    data = data.filter(card => card.grade === 1);
+  }
+
+  if (rideSelectMode === "g0") {
+    data = data.filter(card => card.grade === 0);
+  }
+
+}
+
+if (deckMode === "gdeck") {
+  data = data.filter(card => card.card_type === "Gユニット");
+}
+
+if (deckMode === "finisher") {
+  data = data.filter(card => card.card_type === "必殺技");
+}
 
   console.log(
   "MODE",
@@ -1839,11 +1929,6 @@ console.log(
 console.log(
   "RESULT",
   data
-);
-
-console.log(
-  "ERROR",
-  error
 );
 
 if (data) {
@@ -1861,7 +1946,7 @@ if (data) {
 });
 
 }
-  setDeckSearchCards(data || []);
+setDeckSearchCards(data);
 
 };
 
@@ -1918,9 +2003,10 @@ const deleteCard = async (id: number) => {
 
   await resequenceCards();
 
-  await deleteCardsCache(Number(selectedProductId));
+await deleteCardsCache(Number(selectedProductId));
+await deleteAllCardsCache();
 
-  loadCards(selectedProductId);
+loadCards(selectedProductId);
 };
 
 const moveCard = async (
@@ -1939,8 +2025,10 @@ const moveCard = async (
     .update({ sort_order: currentOrder })
     .eq("id", targetId);
 
-  await deleteCardsCache(Number(selectedProductId));
-  await loadCards(selectedProductId);
+await deleteCardsCache(Number(selectedProductId));
+await deleteAllCardsCache();
+
+await loadCards(selectedProductId);
 };
 
 const saveDeckImage = async () => {
