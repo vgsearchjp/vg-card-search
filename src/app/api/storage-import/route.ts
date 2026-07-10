@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { r2 } from "@/lib/r2";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-
+import { progressMap } from "../progress/route";
 export async function GET(request: Request) {
 
 console.log("★★Storage API開始★★");
@@ -47,6 +47,12 @@ let skip = 0;
 let failed = 0;
 
 const total = cards.length;
+progressMap.set(productId, {
+  total,
+  current: 0,
+  currentCard: "",
+  finished: false,
+});
 
 const batchSize = 10;
 
@@ -57,6 +63,7 @@ const batch = cards.slice(i, i + batchSize);
 await Promise.all(
   batch.map(async (card) => {
   console.log("処理開始", card.card_no);
+  
     const imageResponse = await fetch(card.image_url);
 
     const imageBlob = await imageResponse.blob();
@@ -66,7 +73,12 @@ await Promise.all(
     const safeCardNo = card.card_no.replace(/[\/\\:*?"<>|＋]/g, "_");
 
     const fileName = `${productCode}/${safeCardNo.replace(productCode + "_", "")}.png`;
-
+    progressMap.set(productId, {
+    total,
+    current: saved + failed + skip,
+    currentCard: fileName,
+    finished: false,
+    });
     console.log(fileName);
 
     try {
@@ -111,14 +123,21 @@ console.log("R2アップロード成功", fileName);
 
 }
 
+progressMap.set(productId, {
+  total,
+  current: total,
+  currentCard: "",
+  finished: true,
+});
+
 return NextResponse.json({
-success: true,
-productId,
-productCode,
-saved,
-skip,
-failed,
-total,
+  success: true,
+  productId,
+  productCode,
+  saved,
+  skip,
+  failed,
+  total,
 });
 
 }

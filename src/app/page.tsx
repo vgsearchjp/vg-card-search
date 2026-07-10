@@ -475,7 +475,7 @@ await deleteCardsCache(product.id);
 };
 
 const saveImagesToStorage = async (product: any) => {
-
+console.log("saveImagesToStorage開始");
   if (!product.official_url) {
     alert("公式URLが登録されていません");
     return;
