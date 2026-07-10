@@ -1,5 +1,5 @@
 const DB_NAME = "VGCardSearch";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_NAME = "cards";
 
 function openDB(): Promise<IDBDatabase> {
