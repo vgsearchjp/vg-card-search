@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { saveCardsCache, getCardsCache, deleteCardsCache, saveAllCardsCache, getAllCardsCache, deleteAllCardsCache } from "@/lib/indexedDb";
+import {
+  saveCardsCache,
+  getCardsCache,
+  deleteCardsCache,
+  saveAllCardsCache,
+  getAllCardsCache,
+  deleteAllCardsCache,
+} from "@/lib/indexedDb";
 import { v4 as uuidv4 } from "uuid";
 import { domToPng } from "modern-screenshot";
 import DeckImageForSave from "@/components/DeckImageForSave";
