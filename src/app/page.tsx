@@ -11,7 +11,7 @@ import {
   deleteAllCardsCache,
 } from "@/lib/indexedDb";
 import { v4 as uuidv4 } from "uuid";
-import { domToPng } from "modern-screenshot";
+import { toPng } from "html-to-image";
 import DeckImageForSave from "@/components/DeckImageForSave";
 import { FiArrowLeft } from "react-icons/fi";
 
@@ -2102,15 +2102,17 @@ await new Promise(resolve => setTimeout(resolve, 5000));
 
 if (isIOS) {
 
-  dataUrl = await domToPng(saveImageRef.current!, {
-  scale: 4,
+dataUrl = await toPng(saveImageRef.current!, {
+  cacheBust: true,
+  pixelRatio: 4,
 });
   
 
 } else {
 
-  dataUrl = await domToPng(saveImageRef.current!, {
-  scale: 4,
+dataUrl = await toPng(saveImageRef.current!, {
+  cacheBust: true,
+  pixelRatio: 4,
 });
 
 }
