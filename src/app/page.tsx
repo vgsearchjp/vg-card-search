@@ -2044,7 +2044,7 @@ const saveDeckImage = async () => {
 
   setSavingDeckImage(true);
 
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 50));
 
 let dataUrl = "";
 
@@ -2089,22 +2089,20 @@ const images = Array.from(
 // 最新画像取得＆読み込み待ち
 await Promise.all(
   images.map(async (img) => {
-
     const url = img.src.split("?")[0];
 
-    await new Promise<void>((resolve) => {
+    img.src = `${url}?t=${Date.now()}`;
 
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-
-      img.src = `${url}?t=${Date.now()}`;
-
-    });
+    if (!img.complete) {
+      await new Promise<void>((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      });
+    }
 
     try {
       await img.decode();
     } catch {}
-
   })
 );
 
