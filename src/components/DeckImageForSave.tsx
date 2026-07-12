@@ -39,7 +39,11 @@ export default function DeckImageForSave({
 
 <img
   key={card.card_no}
-  src={getCardImage(card)}
+  src={(() => {
+    const url = getCardImage(card);
+    console.log("RIDE:", url);
+    return url;
+  })()}
   alt=""
   className={
     index === 4
@@ -66,8 +70,12 @@ export default function DeckImageForSave({
     >
 
       <img
-        src={getCardImage(item.card)}
-        alt=""
+  src={(() => {
+    const url = getCardImage(item.card);
+    console.log("MAIN:", url);
+    return url;
+  })()}
+  alt=""
         className="w-full border rounded"
       />
 
