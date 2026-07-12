@@ -6668,7 +6668,7 @@ className="max-h-[90vh] max-w-[90vw]"
 
 <div
   ref={saveImageRef}
-  className="fixed left-[-10000px] top-0 pointer-events-none"
+  className="fixed top-0 left-0 opacity-0 pointer-events-none z-[-1]"
 >
 
   <DeckImageForSave
