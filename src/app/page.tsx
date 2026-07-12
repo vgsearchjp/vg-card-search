@@ -2047,7 +2047,7 @@ const saveDeckImage = async () => {
 
   setSavingDeckImage(true);
 
-  await new Promise((resolve) => setTimeout(resolve, 50000));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
 let dataUrl = "";
 
