@@ -2077,8 +2077,8 @@ console.log("開始");
 
   console.log(result);
 
-  const images = Array.from(
-  deckImageRef.current.querySelectorAll("img")
+const images = Array.from(
+  saveImageRef.current!.querySelectorAll("img")
 );
 
 await Promise.all(
@@ -2101,20 +2101,28 @@ await Promise.all(
 await new Promise(resolve => setTimeout(resolve, 5000));
 
 if (isIOS) {
-
+console.log(saveImageRef.current);
+console.log(saveImageRef.current?.innerHTML);
+console.log(
+  saveImageRef.current?.getBoundingClientRect()
+);
 dataUrl = await toPng(saveImageRef.current!, {
   cacheBust: true,
   pixelRatio: 1,
 });
-  
+console.log(dataUrl.substring(0, 100));  
 
 } else {
-
+console.log(saveImageRef.current);
+console.log(saveImageRef.current?.innerHTML);
+console.log(
+saveImageRef.current?.getBoundingClientRect()
+);
 dataUrl = await toPng(saveImageRef.current!, {
   cacheBust: true,
   pixelRatio: 1,
 });
-
+console.log(dataUrl.substring(0, 100));
 }
 
 } catch (e) {
