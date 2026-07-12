@@ -2104,7 +2104,7 @@ if (isIOS) {
 
 dataUrl = await toPng(saveImageRef.current!, {
   cacheBust: true,
-  pixelRatio: 4,
+  pixelRatio: 1,
 });
   
 
@@ -2112,7 +2112,7 @@ dataUrl = await toPng(saveImageRef.current!, {
 
 dataUrl = await toPng(saveImageRef.current!, {
   cacheBust: true,
-  pixelRatio: 4,
+  pixelRatio: 1,
 });
 
 }
