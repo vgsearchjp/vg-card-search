@@ -2082,17 +2082,23 @@ console.log("開始");
 );
 
 await Promise.all(
-  images.map((img: HTMLImageElement) => {
-    if (img.complete && img.naturalWidth > 0) {
-      return Promise.resolve();
+  images.map(async (img: HTMLImageElement) => {
+    if (!img.complete || img.naturalWidth === 0) {
+      await new Promise<void>((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      });
     }
 
-    return new Promise<void>((resolve) => {
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-    });
+    if ("decode" in img) {
+      try {
+        await img.decode();
+      } catch {}
+    }
   })
 );
+
+await new Promise(resolve => setTimeout(resolve, 500));
 
 if (isIOS) {
 
