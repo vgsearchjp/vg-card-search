@@ -2079,6 +2079,14 @@ console.log("開始");
 
 await new Promise(resolve => setTimeout(resolve, 500));
 
+const images = Array.from(saveImageRef.current!.querySelectorAll("img"));
+
+console.log("画像枚数:", images.length);
+
+images.forEach((img, i) => {
+  console.log(i, img.src);
+});
+
 if (isIOS) {
 
 try {
