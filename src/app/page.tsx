@@ -2077,9 +2077,37 @@ console.log("開始");
 
   console.log(result);
 
-await new Promise(resolve => setTimeout(resolve, 500));
+// Reactの描画完了待ち
+await new Promise(resolve => requestAnimationFrame(resolve));
+await new Promise(resolve => requestAnimationFrame(resolve));
 
-const images = Array.from(saveImageRef.current!.querySelectorAll("img"));
+// 少し余裕を持たせる
+await new Promise(resolve => setTimeout(resolve, 200));
+
+// 保存対象の画像取得
+const images = Array.from(
+  saveImageRef.current!.querySelectorAll("img")
+) as HTMLImageElement[];
+
+// 最新画像取得＆読み込み待ち
+await Promise.all(
+  images.map(async (img) => {
+    const url = img.src.split("?")[0];
+
+    img.src = `${url}?t=${Date.now()}`;
+
+    if (!img.complete) {
+      await new Promise<void>((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      });
+    }
+
+    try {
+      await img.decode();
+    } catch {}
+  })
+);
 
 console.log("画像枚数:", images.length);
 
