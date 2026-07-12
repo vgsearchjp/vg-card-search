@@ -2052,7 +2052,6 @@ const isIOS =
   /iPhone|iPad|iPod/.test(navigator.userAgent);
 
 try {
-console.log("開始");
   const response = await fetch("/api/deck-image", {
     method: "POST",
     headers: {
@@ -2073,9 +2072,7 @@ console.log("開始");
     }),
   });
 
-  const result = await response.json();
-
-  console.log(result);
+const result = await response.json();
 
 // Reactの描画完了待ち
 await new Promise(resolve => requestAnimationFrame(resolve));
@@ -2092,28 +2089,24 @@ const images = Array.from(
 // 最新画像取得＆読み込み待ち
 await Promise.all(
   images.map(async (img) => {
+
     const url = img.src.split("?")[0];
 
-    img.src = `${url}?t=${Date.now()}`;
+    await new Promise<void>((resolve) => {
 
-    if (!img.complete) {
-      await new Promise<void>((resolve) => {
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-      });
-    }
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+
+      img.src = `${url}?t=${Date.now()}`;
+
+    });
 
     try {
       await img.decode();
     } catch {}
+
   })
 );
-
-console.log("画像枚数:", images.length);
-
-images.forEach((img, i) => {
-  console.log(i, img.src);
-});
 
 if (isIOS) {
 
@@ -2123,7 +2116,6 @@ try {
     bgcolor: "#ffffff",
   });
 
-  console.log("保存成功");
 } catch (e) {
   console.error(e);
   alert(String(e));
@@ -2139,7 +2131,6 @@ try {
     bgcolor: "#ffffff",
   });
 
-  console.log("保存成功");
 } catch (e) {
   console.error(e);
   alert(String(e));
