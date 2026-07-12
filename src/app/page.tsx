@@ -2077,28 +2077,7 @@ console.log("開始");
 
   console.log(result);
 
-const images = Array.from(
-  saveImageRef.current!.querySelectorAll("img")
-);
-
-await Promise.all(
-  images.map(async (img: HTMLImageElement) => {
-    if (!img.complete || img.naturalWidth === 0) {
-      await new Promise<void>((resolve) => {
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-      });
-    }
-
-    if ("decode" in img) {
-      try {
-        await img.decode();
-      } catch {}
-    }
-  })
-);
-
-await new Promise(resolve => setTimeout(resolve, 5000));
+await new Promise(resolve => setTimeout(resolve, 500));
 
 if (isIOS) {
 
