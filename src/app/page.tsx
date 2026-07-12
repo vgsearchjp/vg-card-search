@@ -2089,9 +2089,6 @@ const images = Array.from(
 // 最新画像取得＆読み込み待ち
 await Promise.all(
   images.map(async (img) => {
-    const url = img.src.split("?")[0];
-
-    img.src = `${url}?t=${Date.now()}`;
 
     if (!img.complete) {
       await new Promise<void>((resolve) => {
@@ -2103,6 +2100,7 @@ await Promise.all(
     try {
       await img.decode();
     } catch {}
+
   })
 );
 
