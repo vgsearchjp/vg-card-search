@@ -39,6 +39,7 @@ export default function DeckImageForSave({
 
 <img
   key={card.card_no}
+  crossOrigin="anonymous"
   src={(() => {
     const url = getCardImage(card);
     console.log("RIDE:", url);
@@ -69,7 +70,8 @@ export default function DeckImageForSave({
       className="relative w-[120px]"
     >
 
-      <img
+<img
+  crossOrigin="anonymous"
   src={(() => {
     const url = getCardImage(item.card);
     console.log("MAIN:", url);
@@ -121,10 +123,11 @@ export default function DeckImageForSave({
     >
 
       <img
-        src={getCardImage(item.card)}
-        alt=""
-        className="w-full border rounded"
-      />
+  crossOrigin="anonymous"
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded"
+/>
 
       <div
         className="
@@ -171,11 +174,12 @@ export default function DeckImageForSave({
       className="relative w-[135px]"
     >
 
-      <img
-        src={getCardImage(item.card)}
-        alt=""
-        className="w-full border rounded"
-      />
+<img
+  crossOrigin="anonymous"
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded"
+/>
 
       <div
         className="
