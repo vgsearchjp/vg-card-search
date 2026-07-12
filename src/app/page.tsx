@@ -16,6 +16,9 @@ import DeckImageForSave from "@/components/DeckImageForSave";
 import { FiArrowLeft } from "react-icons/fi";
 
 export default function Home() {
+  const isIOS =
+  typeof navigator !== "undefined" &&
+  /iPhone|iPad|iPod/.test(navigator.userAgent);
   const deckImageRef = useRef<HTMLDivElement>(null);
   const saveImageRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -2047,9 +2050,6 @@ const saveDeckImage = async () => {
   await new Promise((resolve) => setTimeout(resolve, 50));
 
 let dataUrl = "";
-
-const isIOS =
-  /iPhone|iPad|iPod/.test(navigator.userAgent);
 
 try {
   const response = await fetch("/api/deck-image", {
@@ -6686,7 +6686,11 @@ className="max-h-[90vh] max-w-[90vw]"
 
 <div
   ref={saveImageRef}
-  className="fixed left-[-10000px] top-0 pointer-events-none"
+  className={
+    isIOS
+      ? "fixed top-0 left-0 opacity-0 pointer-events-none"
+      : "fixed left-[-10000px] top-0 pointer-events-none"
+  }
 >
 
   <DeckImageForSave
