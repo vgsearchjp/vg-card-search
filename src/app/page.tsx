@@ -11,7 +11,7 @@ import {
   deleteAllCardsCache,
 } from "@/lib/indexedDb";
 import { v4 as uuidv4 } from "uuid";
-import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 import DeckImageForSave from "@/components/DeckImageForSave";
 import { FiArrowLeft } from "react-icons/fi";
 
@@ -2101,28 +2101,26 @@ await Promise.all(
 await new Promise(resolve => setTimeout(resolve, 5000));
 
 if (isIOS) {
-console.log(saveImageRef.current);
-console.log(saveImageRef.current?.innerHTML);
-console.log(
-  saveImageRef.current?.getBoundingClientRect()
-);
-dataUrl = await toPng(saveImageRef.current!, {
-  cacheBust: true,
-  pixelRatio: 1,
+
+const canvas = await html2canvas(saveImageRef.current!, {
+  useCORS: true,
+  backgroundColor: "#ffffff",
+  scale: 2,
 });
-console.log(dataUrl.substring(0, 100));  
+
+dataUrl = canvas.toDataURL("image/png");
+  
 
 } else {
-console.log(saveImageRef.current);
-console.log(saveImageRef.current?.innerHTML);
-console.log(
-saveImageRef.current?.getBoundingClientRect()
-);
-dataUrl = await toPng(saveImageRef.current!, {
-  cacheBust: true,
-  pixelRatio: 1,
+
+const canvas = await html2canvas(saveImageRef.current!, {
+  useCORS: true,
+  backgroundColor: "#ffffff",
+  scale: 2,
 });
-console.log(dataUrl.substring(0, 100));
+
+dataUrl = canvas.toDataURL("image/png");
+
 }
 
 } catch (e) {
