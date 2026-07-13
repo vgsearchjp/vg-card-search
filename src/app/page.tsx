@@ -58,6 +58,7 @@ const [activeTab, setActiveTab] = useState("manage");
 const [deckView, setDeckView] = useState("list");
 const [deckName, setDeckName] = useState("");
 const [savingDeckImage, setSavingDeckImage] = useState(false);
+const [showSaveImage, setShowSaveImage] = useState(false);
 const [previewImage, setPreviewImage] = useState<string | null>(null);
 const [selectedDeck, setSelectedDeck] =useState<any>(null);
 const [hideSameCard, setHideSameCard] = useState(false);
@@ -2045,9 +2046,15 @@ const saveDeckImage = async () => {
 
   if (!deckImageRef.current) return;
 
-  setSavingDeckImage(true);
+setSavingDeckImage(true);
+setShowSaveImage(true);
 
-  await new Promise((resolve) => setTimeout(resolve, 500));
+await new Promise(resolve => requestAnimationFrame(resolve));
+await new Promise(resolve => requestAnimationFrame(resolve));
+
+while (!saveImageRef.current) {
+  await new Promise(resolve => setTimeout(resolve, 10));
+}
 
 let dataUrl = "";
 
@@ -2081,69 +2088,58 @@ await new Promise(resolve => requestAnimationFrame(resolve));
 // 少し余裕を持たせる
 await new Promise(resolve => setTimeout(resolve, 200));
 
-// 保存対象の画像取得
 const images = Array.from(
   saveImageRef.current!.querySelectorAll("img")
 ) as HTMLImageElement[];
 
-// 最新画像取得＆読み込み待ち
 await Promise.all(
-  images.map(async (img) => {
+  images.map(
+    (img) =>
+      new Promise<void>((resolve) => {
+        if (img.complete && img.naturalWidth > 0) {
+          resolve();
+          return;
+        }
 
-    if (!img.complete) {
-      await new Promise<void>((resolve) => {
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-      });
-    }
+        const finish = () => {
+          img.onload = null;
+          img.onerror = null;
+          resolve();
+        };
 
-    try {
-      await img.decode();
-    } catch {}
-
-  })
+        img.onload = finish;
+        img.onerror = finish;
+      })
+  )
 );
 
-if (isIOS) {
+await new Promise((resolve) => requestAnimationFrame(resolve));
+await new Promise((resolve) => requestAnimationFrame(resolve));
 
 try {
-  dataUrl = await domtoimage.toPng(saveImageRef.current!, {
-    cacheBust: true,
-    bgcolor: "#ffffff",
-  });
-
-} catch (e) {
-  console.error(e);
-  alert(String(e));
-  return;
-}
-  
-
-} else {
-
-try {
-  dataUrl = await domtoimage.toPng(saveImageRef.current!, {
-    cacheBust: true,
-    bgcolor: "#ffffff",
-  });
-
+dataUrl = await domtoimage.toPng(saveImageRef.current!, {
+  cacheBust: true,
+  bgcolor: "#ffffff",
+  imagePlaceholder:
+    "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
+});
 } catch (e) {
   console.error(e);
   alert(String(e));
   return;
 }
 
-}
-
 } catch (e) {
 
   console.error(e);
   alert(String(e));
-  return;
 
-}
-  
+} finally {
+
   setSavingDeckImage(false);
+  setShowSaveImage(false);
+
+}
 
 const link = document.createElement("a");
 const now = new Date();
@@ -6684,31 +6680,31 @@ className="max-h-[90vh] max-w-[90vw]"
 
 )}
 
+{showSaveImage && (
+
 <div
   ref={saveImageRef}
-  className={
-    isIOS
-      ? "fixed top-0 left-0 opacity-0 pointer-events-none"
-      : "fixed left-[-10000px] top-0 pointer-events-none"
-  }
+  className="fixed inset-0 z-[9999] bg-white overflow-auto"
 >
 
   <DeckImageForSave
-  deckName={deckName}
-  rideDeck={[
-    rideG3,
-    rideG2,
-    rideG1,
-    rideG0,
-    rideGenerator,
-  ].filter(Boolean)}
-  mainDeck={displayMainDeckGrouped}
-  gDeck={gDeckGrouped}
-  finisherDeck={finisherDeckGrouped}
-  getCardImage={getCardImage}
-/>
+    deckName={deckName}
+    rideDeck={[
+      rideG3,
+      rideG2,
+      rideG1,
+      rideG0,
+      rideGenerator,
+    ].filter(Boolean)}
+    mainDeck={displayMainDeckGrouped}
+    gDeck={gDeckGrouped}
+    finisherDeck={finisherDeckGrouped}
+    getCardImage={getCardImage}
+  />
 
 </div>
+
+)}
 </div>
 </main>
 
