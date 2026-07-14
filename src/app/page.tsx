@@ -6706,6 +6706,21 @@ className="max-h-[90vh] max-w-[90vw]"
 
 )}
 </div>
+
+<DeckImageForSave
+  deckName={deckName}
+  rideDeck={[
+    rideG3,
+    rideG2,
+    rideG1,
+    rideG0,
+    rideGenerator,
+  ].filter(Boolean)}
+  mainDeck={displayMainDeckGrouped}
+  gDeck={gDeckGrouped}
+  finisherDeck={finisherDeckGrouped}
+  getCardImage={getCardImage}
+/>
 </main>
 
 );
