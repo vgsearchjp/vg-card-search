@@ -6684,7 +6684,7 @@ className="max-h-[90vh] max-w-[90vw]"
 
 <div
   ref={saveImageRef}
-  className="fixed inset-0 z-[9999] bg-white overflow-auto"
+ className="absolute left-0 top-0 bg-white"
 >
 
   <DeckImageForSave
