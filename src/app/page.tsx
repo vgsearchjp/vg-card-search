@@ -11,7 +11,7 @@ import {
   deleteAllCardsCache,
 } from "@/lib/indexedDb";
 import { v4 as uuidv4 } from "uuid";
-import domtoimage from "dom-to-image-more";
+import { toPng } from "html-to-image";
 import DeckImageForSave from "@/components/DeckImageForSave";
 import { FiArrowLeft } from "react-icons/fi";
 
@@ -2117,11 +2117,9 @@ await new Promise((resolve) => requestAnimationFrame(resolve));
 await new Promise((resolve) => requestAnimationFrame(resolve));
 
 try {
-dataUrl = await domtoimage.toPng(saveImageRef.current!, {
+dataUrl = await toPng(saveImageRef.current!, {
   cacheBust: true,
-  bgcolor: "#ffffff",
-  imagePlaceholder:
-    "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
+  backgroundColor: "#ffffff",
 });
 } catch (e) {
   console.error(e);
