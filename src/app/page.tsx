@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { toPng } from "html-to-image";
 import DeckImageForSave from "@/components/DeckImageForSave";
 import { FiArrowLeft } from "react-icons/fi";
+import { generateDeckImage } from "@/lib/canvasTest";
 
 export default function Home() {
   const isIOS =
@@ -2043,6 +2044,22 @@ await loadCards(selectedProductId);
 };
 
 const saveDeckImage = async () => {
+console.log(displayMainDeckGrouped[0]);
+  await generateDeckImage({
+    deckName,
+    rideDeck: [
+      rideG3,
+      rideG2,
+      rideG1,
+      rideG0,
+      rideGenerator,
+    ].filter(Boolean),
+    mainDeck: displayMainDeckGrouped,
+    gDeck: gDeckGrouped,
+    finisherDeck: finisherDeckGrouped,
+  });
+
+  return;
 
   if (!deckImageRef.current) return;
 
@@ -2571,6 +2588,8 @@ const displayDeckSearchCards = hideSameCard
 
 return (
   <main className="overflow-x-hidden">
+
+
 {storageLoading && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
