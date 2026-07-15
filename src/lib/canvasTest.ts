@@ -14,12 +14,52 @@ export async function generateDeckImage({
   try {
     console.log("Canvas Test開始");
 
-    const canvas = document.createElement("canvas");
-   canvas.width = 2400;
-   canvas.height = 2200;
+const startX = 20;
 
-    const ctx = canvas.getContext("2d")!;
+const columns = 9;
 
+const rideWidth = 270;
+const rideHeight = 370;
+
+const mainCardWidth = 270;
+const mainCardHeight = 370;
+
+const gCardWidth = 270;
+const gCardHeight = 370;
+
+const gapX = 10;
+const gapY = 10;
+
+const finisherWidth = 310;
+const finisherHeight = 210;
+const finisherColumns = 8;
+const rideBottom = 140 + rideHeight;
+const mainTitleY = rideBottom + 60;
+const startY = mainTitleY + 30;
+
+const mainRows = Math.ceil(mainDeck.length / columns);
+const mainHeight = mainRows * (mainCardHeight + gapY);
+
+const gRows = Math.ceil(gDeck.length / columns);
+const gHeight = gDeck.length > 0 ? gRows * (gCardHeight + gapY) : 0;
+const finisherRows = Math.ceil(finisherDeck.length / finisherColumns);
+const finisherHeightTotal =
+  finisherDeck.length > 0
+    ? finisherRows * (finisherHeight + gapY)
+    : 0;
+
+const totalHeight =
+  rideBottom +
+  120 +                      // ライド→メイン
+  mainHeight +
+  (gDeck.length > 0 ? 80 + gHeight : 0) +
+  (finisherDeck.length > 0 ? 80 + finisherHeightTotal : 0) +
+  15;                       // 一番下の余白
+const canvas = document.createElement("canvas");
+   canvas.width = 2600;
+   canvas.height = totalHeight;
+
+const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#fff";
     ctx.fillRect(0,0,
     canvas.width,
@@ -30,23 +70,13 @@ export async function generateDeckImage({
     ctx.font = "bold 42px sans-serif";
     ctx.fillText("テストデッキ", 30, 60);
 
-    ctx.font = "bold 30px sans-serif";
-    ctx.fillText("ライドデッキ", 30, 110);
+    ctx.font = "bold 36px sans-serif";
+    ctx.fillText("ライドデッキ", 30, 120);
 
-    ctx.font = "bold 30px sans-serif";
-    ctx.fillText("メインデッキ", 30, 570);
-    const startX = 20;
-const startY = 620;
+    ctx.font = "bold 36px sans-serif";
+    ctx.fillText("メインデッキ", 30, mainTitleY);
 
-const columns = 9;
-const cardWidth = 270;
-const cardHeight = 370;
-const gapX = 10;
-const gapY = 10;
-const finisherWidth = 310;
-const finisherHeight = 210;
-const finisherColumns = 8;
-
+let currentX = startX;
 for (let i = 0; i < mainDeck.length; i++) {
 
   const group = mainDeck[i];
@@ -65,54 +95,99 @@ for (let i = 0; i < mainDeck.length; i++) {
       `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
   });
 
-  const col = i % columns;
-  const row = Math.floor(i / columns);
+const col = i % columns;
+const row = Math.floor(i / columns);
+if (col === 0) currentX = startX;
+const x = currentX;
+const y = startY + row * (mainCardHeight + gapY);
+
+const isHorizontal = img.width > img.height;
+
+if (isHorizontal) {
 
   ctx.drawImage(
     img,
-    startX + col * (cardWidth + gapX),
-    startY + row * (cardHeight + gapY),
-    cardWidth,
-    cardHeight
+    x,
+    y,
+    mainCardHeight,
+    mainCardWidth
   );
-ctx.fillStyle = "#000000";
-ctx.fillRect(
-  startX + col * (cardWidth + gapX) + cardWidth - 48,
-  startY + row * (cardHeight + gapY) + cardHeight - 32,
-  44,
-  28
-);
+currentX += mainCardHeight + gapX;
 
+} else {
+
+  ctx.drawImage(
+    img,
+    x,
+    y,
+    mainCardWidth,
+    mainCardHeight
+  );
+currentX += mainCardWidth + gapX;
+}
+ctx.fillStyle = "#000000";
+if (isHorizontal) {
+
+  ctx.fillRect(
+    x + mainCardHeight - 60,
+    y + mainCardWidth - 40,
+    60,
+    40
+  );
+
+} else {
+
+  ctx.fillRect(
+    x + mainCardWidth - 60,
+    y + mainCardHeight - 40,
+    60,
+    40
+  );
+
+}
 ctx.fillStyle = "#ffffff";
-ctx.font = "bold 20px sans-serif";
+ctx.font = "bold 36px sans-serif";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
-ctx.fillText(
-  `×${group.count}`,
-  startX + col * (cardWidth + gapX) + cardWidth - 26,
-  startY + row * (cardHeight + gapY) + cardHeight - 18
-);
+if (isHorizontal) {
+
+  ctx.fillText(
+    `×${group.count}`,
+    x + mainCardHeight - 34,
+    y + mainCardWidth - 18
+  );
+
+} else {
+
+  ctx.fillText(
+    `×${group.count}`,
+    x + mainCardWidth - 34,
+    y + mainCardHeight - 18
+  );
+
+}
 
 ctx.textAlign = "start";
 ctx.textBaseline = "alphabetic";
 }
 
-const mainRows = Math.ceil(mainDeck.length / columns);
-const mainBottom = startY + mainRows * (cardHeight + gapY);
-let nextSectionY = mainBottom;
 
+const mainBottom = startY + mainRows * (mainCardHeight + gapY);
+let nextSectionY = mainBottom;
+let imageBottom = mainBottom;
 
 if (gDeck.length > 0) {
 ctx.fillStyle = "#000";
-ctx.font = "bold 30px sans-serif";
-ctx.fillText("Gデッキ", 30, mainBottom + 40);
+ctx.font = "bold 36px sans-serif";
+const gTitleY = mainBottom + 40;
+const gStartY = gTitleY + 40;
+ctx.fillText("Gデッキ", 30, gTitleY);
 
 const gStartX = 20;
-const gStartY = mainBottom + 80;
-const gRows = Math.ceil(gDeck.length / columns);
-const gBottom = gStartY + gRows * (cardHeight + gapY);
+const gBottom = gStartY + gHeight;
 nextSectionY = gBottom;
+imageBottom = gBottom;
 for (let i = 0; i < gDeck.length; i++) {
 
   const group = gDeck[i];
@@ -134,31 +209,31 @@ for (let i = 0; i < gDeck.length; i++) {
   const col = i % columns;
   const row = Math.floor(i / columns);
 
-  ctx.drawImage(
-    img,
-    gStartX + col * (cardWidth + gapX),
-    gStartY + row * (cardHeight + gapY),
-    cardWidth,
-    cardHeight
-  );
+ctx.drawImage(
+  img,
+  gStartX + col * (gCardWidth + gapX),
+  gStartY + row * (gCardHeight + gapY),
+  gCardWidth,
+  gCardHeight
+);
 
   ctx.fillStyle = "#000";
   ctx.fillRect(
-    gStartX + col * (cardWidth + gapX) + cardWidth - 48,
-    gStartY + row * (cardHeight + gapY) + cardHeight - 32,
-    44,
-    28
+    gStartX + col * (gCardWidth + gapX) + gCardWidth - 60,
+    gStartY + row * (gCardHeight + gapY) + gCardHeight - 40,
+    60,
+    40
   );
 
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 20px sans-serif";
+  ctx.font = "bold 36px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   ctx.fillText(
     `×${group.count}`,
-    gStartX + col * (cardWidth + gapX) + cardWidth - 26,
-    gStartY + row * (cardHeight + gapY) + cardHeight - 18
+    gStartX + col * (gCardWidth + gapX) + gCardWidth - 34,
+    gStartY + row * (gCardHeight + gapY) + gCardHeight - 18
   );
 
   ctx.textAlign = "start";
@@ -168,13 +243,13 @@ for (let i = 0; i < gDeck.length; i++) {
 
 if (finisherDeck.length > 0) {
 ctx.fillStyle = "#000";
-ctx.font = "bold 30px sans-serif";
-const finisherTitleY = nextSectionY + 40;
+ctx.font = "bold 36px sans-serif";
+const finisherTitleY = nextSectionY + 5;
+const finisherStartY = finisherTitleY + 20;
 
 ctx.fillText("必殺技デッキ", 30, finisherTitleY);
 
 const finisherStartX = 20;
-const finisherStartY = nextSectionY + 80;
 
 for (let i = 0; i < finisherDeck.length; i++) {
 
@@ -210,27 +285,33 @@ ctx.drawImage(
 
   ctx.fillStyle = "#000";
   ctx.fillRect(
-  x + finisherWidth - 48,
-y + finisherHeight - 32,
-  44,
-  28
+  x + finisherWidth - 60,
+y + finisherHeight - 40,
+  60,
+  40
 );
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 20px sans-serif";
+  ctx.font = "bold 36px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
 ctx.fillText(
   `×${group.count}`,
-  x + finisherWidth - 26,
+  x + finisherWidth - 34,
   y + finisherHeight - 18
 );
 
   ctx.textAlign = "start";
   ctx.textBaseline = "alphabetic";
-}
-}
 
+const finisherBottom =
+  finisherStartY +
+  finisherRows * (finisherHeight + gapY);
+
+imageBottom = finisherBottom; 
+}
+}
+currentX = 20;
 for (let i = 0; i < rideDeck.length; i++) {
 
   const card = rideDeck[i];
@@ -248,16 +329,37 @@ for (let i = 0; i < rideDeck.length; i++) {
       `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
   });
 
- ctx.drawImage(
-  img,
-  20 + i * 275,
-  140,
-  270,
-  370
-);
+const isHorizontal = img.width > img.height;
+const x = currentX;
+const y = 140;
+
+if (isHorizontal) {
+
+  ctx.drawImage(
+    img,
+    x,
+    y,
+    rideHeight,
+    rideWidth
+  );
+
+  currentX += rideHeight + 5;
+
+} else {
+
+  ctx.drawImage(
+    img,
+    x,
+    y,
+    rideWidth,
+    rideHeight
+  );
+
+  currentX += rideWidth + 5;
 
 }
 
+}
     console.log("drawImage成功");
 
     canvas.toBlob((blob) => {
