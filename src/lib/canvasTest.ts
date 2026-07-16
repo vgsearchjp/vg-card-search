@@ -1,4 +1,5 @@
 async function loadCardImage(url: string) {
+  await new Promise(resolve => setTimeout(resolve, 20));
   const response = await fetch(url, {
     mode: "cors",
     cache: "force-cache",
