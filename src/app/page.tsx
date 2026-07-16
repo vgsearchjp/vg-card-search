@@ -64,7 +64,7 @@ const [previewImage, setPreviewImage] = useState<string | null>(null);
 const [selectedDeck, setSelectedDeck] =useState<any>(null);
 const [hideSameCard, setHideSameCard] = useState(false);
 const [deckNation, setDeckNation] =useState("");
-const [includeNationless, setIncludeNationless] = useState(true);
+const [includeNationless, setIncludeNationless] = useState(false);
 const [decks, setDecks] = useState<any[]>([]);
 const [deckSearch, setDeckSearch] =useState("");
 const [deckRideG3Images,setDeckRideG3Images] = useState<any>({});
@@ -1032,6 +1032,7 @@ const loadAllCardsCache = async () => {
   return data || [];
 
 };
+
 const filterDeckCards = (
   cards: any[],
   nation: string,
@@ -1041,7 +1042,8 @@ const filterDeckCards = (
   parallel: string,
   keyword: string,
   include: boolean,
-  trigger: string
+  trigger: string,
+  mode: string
 ) => {
 
   let result = [...cards];
@@ -1071,11 +1073,30 @@ const filterDeckCards = (
     );
   }
 
-  if (deckMode === "main" && !cardType) {
-    result = result.filter(
-      card => card.card_type !== "必殺技"
+if (!cardType) {
+
+  if (mode === "main" || mode === "ride") {
+    result = result.filter(card =>
+      card.card_type !== "必殺技" &&
+      card.card_type !== "Gユニット" &&
+      card.card_type !== "その他" &&
+      card.card_type !== "ライドデッキクレスト"
     );
   }
+
+  if (mode === "gdeck") {
+    result = result.filter(
+      card => card.card_type === "Gユニット"
+    );
+  }
+
+  if (mode === "finisher") {
+    result = result.filter(
+      card => card.card_type === "必殺技"
+    );
+  }
+
+}
 
   if (grade) {
     result = result.filter(
@@ -1547,30 +1568,42 @@ setNationList(list);
 
 const loadNationCards = async (
   nation: string,
-  cardType: string = searchCardType,
-  grade: string = searchGrade,
-  rarity: string = searchRarity,
-  parallel: string = searchParallel,
-  keyword: string = cardSearch,
-  include: boolean = includeNationless,
-  trigger: string = searchTrigger
+  cardType?: string,
+  grade?: string,
+  rarity?: string,
+  parallel?: string,
+  keyword?: string,
+  include?: boolean,
+  trigger?: string
 ) => {
+
+const type = cardType ?? searchCardType;
+const g = grade ?? searchGrade;
+const r = rarity ?? searchRarity;
+const p = parallel ?? searchParallel;
+const k = keyword ?? cardSearch;
+const i = include ?? includeNationless;
+const t = trigger ?? searchTrigger;
 
 const cards = await loadAllCardsCache();
 
 const data = filterDeckCards(
   cards,
   nation,
-  cardType,
-  grade,
-  rarity,
-  parallel,
-  keyword,
-  include,
-  trigger
+  type,
+  g,
+  r,
+  p,
+  k,
+  i,
+  t,
+  deckMode
 );
+setTimeout(() => {
+  setDeckSearchCards(data);
+}, 0);
 
-setDeckSearchCards(data);
+return;
 
 };
 
@@ -1898,7 +1931,8 @@ let data = filterDeckCards(
   searchParallel,
   keyword,
   false,
-  ""
+  "",
+  deckMode
 );
 if (deckMode === "ride") {
 
@@ -2523,6 +2557,27 @@ useEffect(() => {
   }
 
 }, [activeTab, user, role]);
+
+useEffect(() => {
+
+  setSearchCardType("");
+  setSearchGrade("");
+  setSearchRarity("");
+  setSearchTrigger("");
+  setSearchParallel("");
+
+  loadNationCards(
+    deckNation,
+    "",
+    "",
+    "",
+    "",
+    "",
+    includeNationless,
+    ""
+  );
+
+}, [deckMode]);
 
 const shopCardName =
   selectedHomeCard?.card_name || "";
@@ -3482,25 +3537,9 @@ setHideSameCard(e.target.checked);
 onClick={() => {
 
 setDeckMode("ride");
-
 setRideSelectMode(null);
-
 setCardSearch("");
 
-setSearchCardType("");
-setSearchGrade("");
-setSearchRarity("");
-setSearchTrigger("");
-setSearchParallel("");
-
-loadNationCards(
-deckNation,
-"",
-"",
-"",
-"",
-""
-);
 
 }}
 className={`border px-4 py-2 ${
@@ -3516,23 +3555,7 @@ deckMode==="ride"
 onClick={() => {
 
 setDeckMode("main");
-
 setCardSearch("");
-
-setSearchCardType("");
-setSearchGrade("");
-setSearchRarity("");
-setSearchTrigger("");
-setSearchParallel("");
-
-loadNationCards(
-  deckNation,
-  "",
-  "",
-  "",
-  "",
-  ""
-);
 
 }}
 className={`border px-2 py-2 border rounded text-sm ${
@@ -3548,23 +3571,7 @@ className={`border px-2 py-2 border rounded text-sm ${
 onClick={() => {
 
 setDeckMode("gdeck");
-
 setCardSearch("");
-
-setSearchCardType("Gユニット");
-setSearchGrade("");
-setSearchRarity("");
-setSearchTrigger("");
-setSearchParallel("");
-
-loadNationCards(
-deckNation,
-"Gユニット",
-"",
-"",
-"",
-""
-);
 
 }}
 className={`border px-2 py-2 border rounded text-sm ${
@@ -3580,23 +3587,7 @@ Gデッキ
 onClick={() => {
 
 setDeckMode("finisher");
-
 setCardSearch("");
-
-setSearchCardType("必殺技");
-setSearchGrade("");
-setSearchRarity("");
-setSearchTrigger("");
-setSearchParallel("");
-
-loadNationCards(
-deckNation,
-"必殺技",
-"",
-"",
-"",
-""
-);
 
 }}
 className={`border px-4 py-2 ${
