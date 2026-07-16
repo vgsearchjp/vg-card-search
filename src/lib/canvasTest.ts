@@ -2,7 +2,6 @@ async function loadCardImage(url: string) {
   const img = new Image();
 
   img.crossOrigin = "anonymous";
-  img.decoding = "sync";
 
   await new Promise<void>((resolve, reject) => {
     img.onload = () => resolve();
