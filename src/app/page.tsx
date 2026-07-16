@@ -4677,7 +4677,7 @@ onClick={()=>addToFinisherDeck(item.card)}
 className={`font-bold mb-2 ${
 mainDeck.length > 50
 ? "text-red-600"
-: mainDeck.length === 40
+: mainDeck.length === 50
 ? "text-green-600"
 : ""
 }`}
