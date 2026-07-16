@@ -1,25 +1,41 @@
 async function loadCardImage(url: string) {
-  const img = new Image();
-
-  img.crossOrigin = "anonymous";
-
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-
-img.onerror = (e) => {
-  console.log("IMAGE ERROR", url, e);
-  reject(new Error(`画像読み込み失敗: ${url}`));
-};
-    img.src = url;
+  const response = await fetch(url, {
+    mode: "cors",
+    cache: "force-cache",
   });
 
-  if ("decode" in img) {
-    try {
-      await img.decode();
-    } catch {}
+  if (!response.ok) {
+    throw new Error(`画像取得失敗: ${url}`);
   }
 
-  return img;
+  const blob = await response.blob();
+
+  const objectUrl = URL.createObjectURL(blob);
+
+  try {
+    const img = new Image();
+
+    img.crossOrigin = "anonymous";
+
+    await new Promise<void>((resolve, reject) => {
+
+      img.onload = () => resolve();
+
+      img.onerror = () => {
+        reject(new Error(`画像読み込み失敗: ${url}`));
+      };
+
+      img.src = objectUrl;
+
+    });
+
+    return img;
+
+  } finally {
+
+    URL.revokeObjectURL(objectUrl);
+
+  }
 }
 
 export async function generateDeckImage({
