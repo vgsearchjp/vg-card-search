@@ -396,7 +396,6 @@ if (isHorizontal) {
       a.click();
       URL.revokeObjectURL(a.href);
 
-      alert("保存成功");
     });
 
   } catch (e) {
