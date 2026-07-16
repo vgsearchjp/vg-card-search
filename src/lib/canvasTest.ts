@@ -64,7 +64,6 @@ export async function generateDeckImage({
   finisherDeck: any[];
 }) {
   try {
-    console.log("Canvas Test開始");
 
 const startX = 20;
 
@@ -385,11 +384,7 @@ if (isHorizontal) {
 }
 
 }
-    console.log("drawImage成功");
-
     canvas.toBlob((blob) => {
-      console.log("toBlob", blob);
-
       if (!blob) {
         alert("blob生成失敗");
         return;
