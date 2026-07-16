@@ -1031,7 +1031,7 @@ alert(`Supabase:${data?.length ?? 0} Error:${error ? "YES" : "NO"}`);
 
   }
 
-alert(`SUPABASE:${data?.length ?? 0}`);
+
 
 await saveAllCardsCache(data || []);
 
@@ -1559,8 +1559,6 @@ setRarityList(list);
 const loadAllNations = async () => {
 
 const data = await loadAllCardsCache();
-
-alert(`cards:${data?.length ?? 0}`);
 
 const list = [
   ...new Set(
@@ -4597,17 +4595,7 @@ onClick={()=>addToFinisherDeck(item.card)}
 <div className="fixed inset-0 bg-black/50 z-[60] md:hidden">
 
 <div ref={deckImageRef} className="absolute inset-1 bg-white rounded p-2 overflow-y-auto">
-
-<div className="text-xs text-red-600 mb-2">
-  deckMode: {deckMode}<br />
-  deckNation: {deckNation}<br />
-  deckSearchCards: {deckSearchCards.length}<br />
-  mainDeck: {displayMainDeckGrouped.length}<br />
-  gDeck: {gDeckGrouped.length}<br />
-  finisher: {finisherDeckGrouped.length}<br />
-  deckImagesLoaded: {String(deckImagesLoaded)}
-</div>
-
+  
 <button
   onClick={() => setShowDeckModal(false)}
   className={`absolute top-2 right-3 text-3xl font-bold ${
