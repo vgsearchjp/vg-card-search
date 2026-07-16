@@ -2584,6 +2584,7 @@ useEffect(() => {
 
 }, [deckMode]);
 
+/*
 useEffect(() => {
 
   if (!showDeckModal) {
@@ -2635,6 +2636,7 @@ useEffect(() => {
   gDeckGrouped,
   finisherDeckGrouped,
 ]);
+*/
 
 const shopCardName =
   selectedHomeCard?.card_name || "";
@@ -4595,7 +4597,7 @@ onClick={()=>addToFinisherDeck(item.card)}
 <div className="fixed inset-0 bg-black/50 z-[60] md:hidden">
 
 <div ref={deckImageRef} className="absolute inset-1 bg-white rounded p-2 overflow-y-auto">
-  
+
 <button
   onClick={() => setShowDeckModal(false)}
   className={`absolute top-2 right-3 text-3xl font-bold ${
