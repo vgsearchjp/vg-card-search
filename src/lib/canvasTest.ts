@@ -89,7 +89,10 @@ for (let i = 0; i < mainDeck.length; i++) {
 
   await new Promise<void>((resolve, reject) => {
     img.onload = () => resolve();
-    img.onerror = reject;
+    img.onerror = () => {
+  console.log("画像読み込み失敗", card.storage_image_url);
+  reject(new Error(card.storage_image_url));
+};
 
     img.src =
       `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
