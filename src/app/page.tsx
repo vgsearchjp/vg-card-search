@@ -4590,7 +4590,16 @@ onClick={()=>addToFinisherDeck(item.card)}
 
 <div className="fixed inset-0 bg-black/50 z-[60] md:hidden">
 
-<div ref={deckImageRef}className="absolute inset-1 bg-white rounded p-2 overflow-y-auto">
+<div ref={deckImageRef} className="absolute inset-1 bg-white rounded p-2 overflow-y-auto">
+
+{!deckImagesLoaded ? (
+
+<div className="flex items-center justify-center h-full text-xl font-bold">
+カード画像を読み込み中...
+</div>
+
+) : (
+<>
 
 <button
   onClick={() => setShowDeckModal(false)}
@@ -4840,7 +4849,9 @@ onClick={()=>addToFinisherDeck(item.card)}
 ))}
 
 </div>
+</>
 
+)}
 </div>
 
 </div>
