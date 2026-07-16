@@ -998,27 +998,30 @@ setStorageResults(result);
 const loadAllCardsCache = async () => {
 
 
+const cache = await getAllCardsCache();
 
-  const cache = await getAllCardsCache();
+if (cache && cache.length === 0) {
+  await deleteAllCardsCache();
+}
 
-  if (cache) {
+if (cache && cache.length > 0) {
+  return cache;
+}
 
-    return cache;
+const { data, error } = await supabase
+  .from("cards")
+  .select(`
+    *,
+    products (
+      sort_order
+    )
+  `)
+  .order("sort_order", {
+    referencedTable: "products",
+  })
+  .order("sort_order");
 
-  }
-
-  const { data, error } = await supabase
-    .from("cards")
-    .select(`
-      *,
-      products (
-        sort_order
-      )
-    `)
-    .order("sort_order", {
-      referencedTable: "products",
-    })
-    .order("sort_order");
+alert(`Supabase:${data?.length ?? 0} Error:${error ? "YES" : "NO"}`);
 
   if (error) {
 
@@ -1028,9 +1031,11 @@ const loadAllCardsCache = async () => {
 
   }
 
-  await saveAllCardsCache(data || []);
+alert(`SUPABASE:${data?.length ?? 0}`);
 
-  return data || [];
+await saveAllCardsCache(data || []);
+
+return data || [];
 
 };
 
@@ -1554,6 +1559,8 @@ setRarityList(list);
 const loadAllNations = async () => {
 
 const data = await loadAllCardsCache();
+
+alert(`cards:${data?.length ?? 0}`);
 
 const list = [
   ...new Set(
@@ -2426,13 +2433,12 @@ if (setting) {
 
   getUser();
 
-  loadProducts();
-  loadAllRarities();
-  loadAllNations();
-  searchProductsByCard();
-  loadDecks();
-  loadPendingUsers();
-
+loadProducts();
+loadAllRarities();
+loadAllNations();
+searchProductsByCard();
+loadDecks();
+loadPendingUsers();
 }, []);
 
 useEffect(() => {
