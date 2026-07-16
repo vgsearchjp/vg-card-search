@@ -4592,14 +4592,15 @@ onClick={()=>addToFinisherDeck(item.card)}
 
 <div ref={deckImageRef} className="absolute inset-1 bg-white rounded p-2 overflow-y-auto">
 
-{!deckImagesLoaded ? (
-
-<div className="flex items-center justify-center h-full text-xl font-bold">
-カード画像を読み込み中...
+<div className="text-xs text-red-600 mb-2">
+  deckMode: {deckMode}<br />
+  deckNation: {deckNation}<br />
+  deckSearchCards: {deckSearchCards.length}<br />
+  mainDeck: {displayMainDeckGrouped.length}<br />
+  gDeck: {gDeckGrouped.length}<br />
+  finisher: {finisherDeckGrouped.length}<br />
+  deckImagesLoaded: {String(deckImagesLoaded)}
 </div>
-
-) : (
-<>
 
 <button
   onClick={() => setShowDeckModal(false)}
@@ -4849,10 +4850,9 @@ onClick={()=>addToFinisherDeck(item.card)}
 ))}
 
 </div>
-</>
 
-)}
 </div>
+
 
 </div>
 
