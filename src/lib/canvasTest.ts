@@ -1,4 +1,5 @@
 async function loadCardImage(url: string) {
+await new Promise(resolve => setTimeout(resolve, 20)); 
 const path = url.replace(
   `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/`,
   ""
