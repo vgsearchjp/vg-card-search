@@ -4687,7 +4687,7 @@ mainDeck.length > 50
 
 <div className="flex flex-wrap gap-1 mb-4">
 
-{displayMainDeckGrouped.map((item:any)=>(
+{displayMainDeckGrouped.slice(0,5).map((item:any)=>(
 
 <div
 key={item.card.id}
@@ -4731,6 +4731,7 @@ className="w-[19%] relative"
 </div>
 
 ))}
+
 </div>
 
 <div
