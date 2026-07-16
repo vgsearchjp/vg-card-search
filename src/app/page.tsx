@@ -373,6 +373,7 @@ const [allNormalRarities,setAllNormalRarities]=useState<string[]>([]);
 const [allParallelRarities,setAllParallelRarities]=useState<string[]>([]);
 const [zoomCard,setZoomCard] =useState<any>(null);
 const [showDeckModal, setShowDeckModal] = useState(false);
+const [deckImagesLoaded, setDeckImagesLoaded] = useState(false);
 const [newPassword,setNewPassword] =useState("");
 const [previousTab, setPreviousTab] =useState("");
 const [confirmPassword,setConfirmPassword] =useState("");
@@ -2578,6 +2579,58 @@ useEffect(() => {
   );
 
 }, [deckMode]);
+
+useEffect(() => {
+
+  if (!showDeckModal) {
+    setDeckImagesLoaded(false);
+    return;
+  }
+
+  const cards = [
+    rideG3,
+    rideG2,
+    rideG1,
+    rideG0,
+    rideGenerator,
+
+    ...displayMainDeckGrouped.map((item: any) => item.card),
+
+    ...gDeckGrouped.map((item: any) => item.card),
+
+    ...finisherDeckGrouped.map((item: any) => item.card),
+  ].filter(Boolean);
+
+  Promise.all(
+    cards.map(card => {
+      return new Promise<void>((resolve) => {
+
+        const img = new Image();
+
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+
+        img.src = getCardImage(card);
+
+      });
+    })
+  ).then(() => {
+
+    setDeckImagesLoaded(true);
+
+  });
+
+}, [
+  showDeckModal,
+  rideG3,
+  rideG2,
+  rideG1,
+  rideG0,
+  rideGenerator,
+  displayMainDeckGrouped,
+  gDeckGrouped,
+  finisherDeckGrouped,
+]);
 
 const shopCardName =
   selectedHomeCard?.card_name || "";
