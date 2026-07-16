@@ -6,10 +6,10 @@ async function loadCardImage(url: string) {
   await new Promise<void>((resolve, reject) => {
     img.onload = () => resolve();
 
-    img.onerror = () => {
-      reject(new Error(`画像読み込み失敗: ${url}`));
-    };
-
+img.onerror = (e) => {
+  console.log("IMAGE ERROR", url, e);
+  reject(new Error(`画像読み込み失敗: ${url}`));
+};
     img.src = url;
   });
 
