@@ -4638,8 +4638,9 @@ className="w-[19%] relative"
 <img
   src={getCardImage(item.card)}
   alt=""
-  crossOrigin="anonymous"
   className="w-full border rounded"
+  onError={() => console.log("NG", item.card.card_name, getCardImage(item.card))}
+  onLoad={() => console.log("OK", item.card.card_name)}
 />
 
 <div
