@@ -1,3 +1,28 @@
+async function loadCardImage(url: string) {
+  const img = new Image();
+
+  img.crossOrigin = "anonymous";
+  img.decoding = "sync";
+
+  await new Promise<void>((resolve, reject) => {
+    img.onload = () => resolve();
+
+    img.onerror = () => {
+      reject(new Error(`画像読み込み失敗: ${url}`));
+    };
+
+    img.src = url;
+  });
+
+  if ("decode" in img) {
+    try {
+      await img.decode();
+    } catch {}
+  }
+
+  return img;
+}
+
 export async function generateDeckImage({
   deckName,
   rideDeck,
@@ -84,19 +109,9 @@ for (let i = 0; i < mainDeck.length; i++) {
 
   if (!card?.storage_image_url) continue;
 
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = () => {
-  console.log("画像読み込み失敗", card.storage_image_url);
-  reject(new Error(card.storage_image_url));
-};
-
-    img.src =
-      `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
-  });
+const img = await loadCardImage(
+  `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
+);
 
 const col = i % columns;
 const row = Math.floor(i / columns);
@@ -198,16 +213,9 @@ for (let i = 0; i < gDeck.length; i++) {
 
   if (!card?.storage_image_url) continue;
 
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = reject;
-
-    img.src =
-      `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
-  });
+const img = await loadCardImage(
+  `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
+);
 
   const col = i % columns;
   const row = Math.floor(i / columns);
@@ -261,19 +269,12 @@ for (let i = 0; i < finisherDeck.length; i++) {
 
   if (!card?.storage_image_url) continue;
 
-  const img = new Image();
-  img.crossOrigin = "anonymous";
+const img = await loadCardImage(
+  `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
+);
 
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = reject;
-
-    img.src =
-      `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
-  });
-
- const col = i % finisherColumns;
- const row = Math.floor(i / finisherColumns);
+const col = i % finisherColumns;
+const row = Math.floor(i / finisherColumns);
 
 const x = finisherStartX + col * (finisherWidth + gapX);
 const y = finisherStartY + row * (finisherHeight + gapY);
@@ -321,16 +322,9 @@ for (let i = 0; i < rideDeck.length; i++) {
 
   if (!card?.storage_image_url) continue;
 
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = reject;
-
-    img.src =
-      `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`;
-  });
+const img = await loadCardImage(
+  `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
+);
 
 const isHorizontal = img.width > img.height;
 const x = currentX;
