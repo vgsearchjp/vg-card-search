@@ -94,6 +94,15 @@ const totalHeight =
   (gDeck.length > 0 ? 80 + gHeight : 0) +
   (finisherDeck.length > 0 ? 80 + finisherHeightTotal : 0) +
   15;                       // 一番下の余白
+
+const img = await loadCardImage(
+  `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${rideDeck[0].storage_image_url}`
+);
+
+alert(`${img.width} × ${img.height}`);
+
+return; 
+
 const canvas = document.createElement("canvas");
    canvas.width = 2600;
    canvas.height = totalHeight;
