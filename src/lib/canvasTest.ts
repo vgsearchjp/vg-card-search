@@ -1,12 +1,19 @@
 async function loadCardImage(url: string) {
   await new Promise(resolve => setTimeout(resolve, 20));
-  let response: Response;
+  const path = url.replace(
+  `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/`,
+  ""
+);
+
+let response: Response;
 
 try {
-  response = await fetch(url);
+  response = await fetch(
+    `/api/card-image?path=${encodeURIComponent(path)}`
+  );
 } catch (e) {
   console.error("fetch失敗", e);
-  alert(`fetch失敗\n${url}\n\n${e}`);
+  alert(`fetch失敗\n${path}\n\n${e}`);
   throw e;
 }
 
