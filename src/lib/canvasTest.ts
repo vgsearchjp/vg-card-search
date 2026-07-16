@@ -1,7 +1,14 @@
 async function loadCardImage(url: string) {
   await new Promise(resolve => setTimeout(resolve, 20));
-  const response = await fetch(url, {
-  });
+  let response: Response;
+
+try {
+  response = await fetch(url);
+} catch (e) {
+  console.error("fetch失敗", e);
+  alert(`fetch失敗\n${url}\n\n${e}`);
+  throw e;
+}
 
   if (!response.ok) {
     throw new Error(`画像取得失敗: ${url}`);
