@@ -4639,8 +4639,8 @@ className="w-[19%] relative"
   src={getCardImage(item.card)}
   alt=""
   className="w-full border rounded"
-  onError={() => console.log("NG", item.card.card_name, getCardImage(item.card))}
-  onLoad={() => console.log("OK", item.card.card_name)}
+  loading="eager"
+  decoding="sync"
 />
 
 <div
