@@ -385,22 +385,20 @@ if (isHorizontal) {
 }
 
 }
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        alert("blob生成失敗");
-        return;
-      }
+return await new Promise<Blob>((resolve, reject) => {
+  canvas.toBlob((blob) => {
+    if (!blob) {
+      reject(new Error("blob生成失敗"));
+      return;
+    }
 
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "test.png";
-      a.click();
-      URL.revokeObjectURL(a.href);
+    resolve(blob);
+  }, "image/png");
+});
 
-    });
-
-  } catch (e) {
-    console.error(e);
-    alert(String(e));
-  }
+} catch (e) {
+  console.error(e);
+  alert(String(e));
+  throw e;
+}
 }
