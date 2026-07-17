@@ -79,8 +79,8 @@ const mainCardHeight = 370;
 const gCardWidth = 270;
 const gCardHeight = 370;
 
-const gapX = 10;
-const gapY = 10;
+const gapX = 4;
+const gapY = 6;
 
 const finisherWidth = 310;
 const finisherHeight = 210;
@@ -110,7 +110,7 @@ const totalHeight =
 
 const canvas = document.createElement("canvas");
    canvas.width = 2600;
-   canvas.height = totalHeight;
+   canvas.height = totalHeight + 300;
 
 const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#fff";
@@ -130,6 +130,8 @@ const ctx = canvas.getContext("2d")!;
     ctx.fillText("メインデッキ", 30, mainTitleY);
 
 let currentX = startX;
+let currentY = startY;
+let rowHeight = 0;
 for (let i = 0; i < mainDeck.length; i++) {
 
   const group = mainDeck[i];
@@ -141,13 +143,18 @@ const img = await loadCardImage(
   `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
 );
 
-const col = i % columns;
-const row = Math.floor(i / columns);
-if (col === 0) currentX = startX;
-const x = currentX;
-const y = startY + row * (mainCardHeight + gapY);
-
 const isHorizontal = img.width > img.height;
+const drawWidth = isHorizontal ? mainCardHeight : mainCardWidth;
+const drawHeight = isHorizontal ? mainCardWidth : mainCardHeight;
+
+if (currentX + drawWidth > canvas.width - startX) {
+  currentX = startX;
+  currentY += rowHeight + gapY;
+  rowHeight = 0;
+}
+
+const x = currentX;
+const y = currentY;
 
 if (isHorizontal) {
 
@@ -158,7 +165,8 @@ if (isHorizontal) {
     mainCardHeight,
     mainCardWidth
   );
-currentX += mainCardHeight + gapX;
+currentX += drawWidth + gapX;
+rowHeight = Math.max(rowHeight, drawHeight);
 
 } else {
 
@@ -169,7 +177,9 @@ currentX += mainCardHeight + gapX;
     mainCardWidth,
     mainCardHeight
   );
-currentX += mainCardWidth + gapX;
+currentX += drawWidth + gapX;
+rowHeight = Math.max(rowHeight, drawHeight);
+
 }
 ctx.fillStyle = "#000000";
 if (isHorizontal) {
@@ -216,10 +226,11 @@ if (isHorizontal) {
 
 ctx.textAlign = "start";
 ctx.textBaseline = "alphabetic";
+
 }
 
 
-const mainBottom = startY + mainRows * (mainCardHeight + gapY);
+const mainBottom = currentY + mainCardHeight;
 let nextSectionY = mainBottom;
 let imageBottom = mainBottom;
 
