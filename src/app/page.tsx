@@ -2086,133 +2086,21 @@ await loadCards(selectedProductId);
 
 const saveDeckImage = async () => {
 console.log(displayMainDeckGrouped[0]);
-  await generateDeckImage({
-    deckName,
-    rideDeck: [
-      rideG3,
-      rideG2,
-      rideG1,
-      rideG0,
-      rideGenerator,
-    ].filter(Boolean),
-    mainDeck: displayMainDeckGrouped,
-    gDeck: gDeckGrouped,
-    finisherDeck: finisherDeckGrouped,
-  });
-
-  return;
-
-  if (!deckImageRef.current) return;
-
-setSavingDeckImage(true);
-setShowSaveImage(true);
-
-await new Promise(resolve => requestAnimationFrame(resolve));
-await new Promise(resolve => requestAnimationFrame(resolve));
-
-while (!saveImageRef.current) {
-  await new Promise(resolve => setTimeout(resolve, 10));
-}
-
-let dataUrl = "";
-
-try {
-  const response = await fetch("/api/deck-image", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      deckName,
-      rideDeck: [
-        rideG3,
-        rideG2,
-        rideG1,
-        rideG0,
-        rideGenerator,
-      ],
-      mainDeck: displayMainDeckGrouped,
-      gDeck: gDeckGrouped,
-      finisherDeck: finisherDeckGrouped,
-    }),
-  });
-
-const result = await response.json();
-
-// Reactの描画完了待ち
-await new Promise(resolve => requestAnimationFrame(resolve));
-await new Promise(resolve => requestAnimationFrame(resolve));
-
-// 少し余裕を持たせる
-await new Promise(resolve => setTimeout(resolve, 200));
-
-const images = Array.from(
-  saveImageRef.current!.querySelectorAll("img")
-) as HTMLImageElement[];
-
-await Promise.all(
-  images.map(
-    (img) =>
-      new Promise<void>((resolve) => {
-        if (img.complete && img.naturalWidth > 0) {
-          resolve();
-          return;
-        }
-
-        const finish = () => {
-          img.onload = null;
-          img.onerror = null;
-          resolve();
-        };
-
-        img.onload = finish;
-        img.onerror = finish;
-      })
-  )
-);
-
-await new Promise((resolve) => requestAnimationFrame(resolve));
-await new Promise((resolve) => requestAnimationFrame(resolve));
-
-try {
-dataUrl = await toPng(saveImageRef.current!, {
-  cacheBust: true,
-  backgroundColor: "#ffffff",
+  const blob = await generateDeckImage({
+  deckName,
+  rideDeck: [
+    rideG3,
+    rideG2,
+    rideG1,
+    rideG0,
+    rideGenerator,
+  ].filter(Boolean),
+  mainDeck: displayMainDeckGrouped,
+  gDeck: gDeckGrouped,
+  finisherDeck: finisherDeckGrouped,
 });
-} catch (e) {
-  console.error(e);
-  alert(String(e));
-  return;
-}
 
-} catch (e) {
-
-  console.error(e);
-  alert(String(e));
-
-} finally {
-
-  setSavingDeckImage(false);
-  setShowSaveImage(false);
-
-}
-
-const link = document.createElement("a");
-const now = new Date();
-const fileName =
-`${deckName || "デッキ"}_${
-now.getFullYear()
-}${
-String(now.getMonth() + 1).padStart(2, "0")
-}${
-String(now.getDate()).padStart(2, "0")
-}_${
-String(now.getHours()).padStart(2, "0")
-}${
-String(now.getMinutes()).padStart(2, "0")
-}${
-String(now.getSeconds()).padStart(2, "0")
-}.png`;
+const dataUrl = URL.createObjectURL(blob);
 
 if (isIOS) {
 
@@ -2220,10 +2108,13 @@ if (isIOS) {
 
 } else {
 
-  link.download = fileName;
+  const link = document.createElement("a");
+
+  link.download = `${deckName || "デッキ"}.png`;
   link.href = dataUrl;
   link.click();
-  link.remove();
+
+  URL.revokeObjectURL(dataUrl);
 
 }
 
