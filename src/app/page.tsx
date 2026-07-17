@@ -59,6 +59,7 @@ const [activeTab, setActiveTab] = useState("manage");
 const [deckView, setDeckView] = useState("list");
 const [deckName, setDeckName] = useState("");
 const [savingDeckImage, setSavingDeckImage] = useState(false);
+const [savedImageUrl, setSavedImageUrl] = useState<string | null>(null);
 const [showSaveImage, setShowSaveImage] = useState(false);
 const [previewImage, setPreviewImage] = useState<string | null>(null);
 const [selectedDeck, setSelectedDeck] =useState<any>(null);
@@ -6776,6 +6777,25 @@ className="max-h-[90vh] max-w-[90vw]"
 
 )}
 </div>
+
+{previewImage && (
+  <div
+    className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-[9999]"
+    onClick={() => setPreviewImage(null)}
+  >
+    <img
+      src={previewImage}
+      alt="保存画像"
+      className="max-w-full max-h-[90vh]"
+    />
+
+    <div className="mt-4 text-white text-center">
+      長押しして画像を保存してください。<br />
+      （タップすると閉じます）
+    </div>
+  </div>
+)}
+
 </main>
 
 );
