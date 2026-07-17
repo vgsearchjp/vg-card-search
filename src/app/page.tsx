@@ -167,6 +167,11 @@ item.card.card_type==="ブリッツオーダー"
 ...mainDeckGrouped.filter(
 (item:any)=>
 item.card.card_type==="セットオーダー"
+),
+
+...mainDeckGrouped.filter(
+(item:any)=>
+item.card.card_type==="トリガーオーダー"
 )
 
 ];
