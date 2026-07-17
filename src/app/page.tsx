@@ -156,6 +156,11 @@ item.card.trigger_type==="オーバートリガー＋100000000"
 
 ...mainDeckGrouped.filter(
 (item:any)=>
+item.card.card_type==="トリガーオーダー"
+),
+
+...mainDeckGrouped.filter(
+(item:any)=>
 item.card.card_type==="ノーマルオーダー"
 ),
 
@@ -167,11 +172,6 @@ item.card.card_type==="ブリッツオーダー"
 ...mainDeckGrouped.filter(
 (item:any)=>
 item.card.card_type==="セットオーダー"
-),
-
-...mainDeckGrouped.filter(
-(item:any)=>
-item.card.card_type==="トリガーオーダー"
 )
 
 ];
