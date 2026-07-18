@@ -108,9 +108,15 @@ const totalHeight =
   (finisherDeck.length > 0 ? 80 + finisherHeightTotal : 0) +
   15;                       // 一番下の余白
 
+let extraBottom = 50;
+
+if (finisherDeck.length > 0) {
+  extraBottom = 180;
+}
+
 const canvas = document.createElement("canvas");
-   canvas.width = 2600;
-   canvas.height = totalHeight + 300;
+canvas.width = 2600;
+canvas.height = totalHeight + extraBottom;
 
 const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#fff";
@@ -227,6 +233,7 @@ if (isHorizontal) {
 ctx.textAlign = "start";
 ctx.textBaseline = "alphabetic";
 
+
 }
 
 
@@ -242,9 +249,13 @@ const gStartY = gTitleY + 40;
 ctx.fillText("Gデッキ", 30, gTitleY);
 
 const gStartX = 20;
-const gBottom = gStartY + gHeight;
-nextSectionY = gBottom;
-imageBottom = gBottom;
+
+let gCurrentX = gStartX;
+let gCurrentY = gStartY;
+let gRowHeight = 0;
+
+nextSectionY = gCurrentY + gRowHeight;
+imageBottom = nextSectionY;
 for (let i = 0; i < gDeck.length; i++) {
 
   const group = gDeck[i];
@@ -256,38 +267,45 @@ const img = await loadCardImage(
   `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
 );
 
-  const col = i % columns;
-  const row = Math.floor(i / columns);
+if (gCurrentX + gCardWidth > canvas.width - gStartX) {
+  gCurrentX = gStartX;
+  gCurrentY += gRowHeight + gapY;
+  gRowHeight = 0;
+}
+
+const x = gCurrentX;
+const y = gCurrentY;
 
 ctx.drawImage(
   img,
-  gStartX + col * (gCardWidth + gapX),
-  gStartY + row * (gCardHeight + gapY),
+  x,
+  y,
   gCardWidth,
   gCardHeight
 );
-
-  ctx.fillStyle = "#000";
-  ctx.fillRect(
-    gStartX + col * (gCardWidth + gapX) + gCardWidth - 60,
-    gStartY + row * (gCardHeight + gapY) + gCardHeight - 40,
+ctx.fillStyle = "#000";
+ctx.fillRect(
+    x + gCardWidth - 60,
+    y + gCardHeight - 40,
     60,
     40
-  );
+);
 
   ctx.fillStyle = "#fff";
   ctx.font = "bold 36px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  ctx.fillText(
+ctx.fillText(
     `×${group.count}`,
-    gStartX + col * (gCardWidth + gapX) + gCardWidth - 34,
-    gStartY + row * (gCardHeight + gapY) + gCardHeight - 18
-  );
+    x + gCardWidth - 34,
+    y + gCardHeight - 18
+);
+ctx.textAlign = "start";
+ctx.textBaseline = "alphabetic";
 
-  ctx.textAlign = "start";
-  ctx.textBaseline = "alphabetic";
+gCurrentX += gCardWidth + gapX;
+gRowHeight = Math.max(gRowHeight, gCardHeight);
 }
 }
 
@@ -300,6 +318,9 @@ const finisherStartY = finisherTitleY + 20;
 ctx.fillText("必殺技デッキ", 30, finisherTitleY);
 
 const finisherStartX = 20;
+let finisherCurrentX = finisherStartX;
+let finisherCurrentY = finisherStartY;
+let finisherRowHeight = 0;
 
 for (let i = 0; i < finisherDeck.length; i++) {
 
@@ -312,11 +333,14 @@ const img = await loadCardImage(
   `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${card.storage_image_url}`
 );
 
-const col = i % finisherColumns;
-const row = Math.floor(i / finisherColumns);
+if (finisherCurrentX + finisherWidth > canvas.width - finisherStartX) {
+  finisherCurrentX = finisherStartX;
+  finisherCurrentY += finisherRowHeight + gapY;
+  finisherRowHeight = 0;
+}
 
-const x = finisherStartX + col * (finisherWidth + gapX);
-const y = finisherStartY + row * (finisherHeight + gapY);
+const x = finisherCurrentX;
+const y = finisherCurrentY;
 
 ctx.drawImage(
   img,
@@ -344,14 +368,15 @@ ctx.fillText(
   y + finisherHeight - 18
 );
 
-  ctx.textAlign = "start";
-  ctx.textBaseline = "alphabetic";
+ctx.textAlign = "start";
+ctx.textBaseline = "alphabetic";
 
-const finisherBottom =
-  finisherStartY +
-  finisherRows * (finisherHeight + gapY);
+finisherCurrentX += finisherWidth + gapX;
+finisherRowHeight = Math.max(finisherRowHeight, finisherHeight);
 
-imageBottom = finisherBottom; 
+const finisherBottom = finisherCurrentY + finisherRowHeight;
+
+imageBottom = finisherBottom;
 }
 }
 currentX = 20;
