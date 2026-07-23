@@ -3403,7 +3403,7 @@ className="
 
 </div>
 
-<div className="mb-6">
+<div className="mb-3">
 
 <div className="font-bold mb-2">
     国家選択
@@ -3474,7 +3474,7 @@ setHideSameCard(e.target.checked);
 </div>
 
 
-<div className="mb-4">
+<div className="mb-2">
 
   <div className="font-bold mb-2">
     デッキ選択
