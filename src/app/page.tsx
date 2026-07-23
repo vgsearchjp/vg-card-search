@@ -3805,14 +3805,23 @@ placeholder="カード検索"
 className="flex-1 border p-2"
 />
 
-  <button
-    onClick={() => {
+<button
+onClick={() => {
 
-      setCardSearch("");
+  setCardSearch("");
 
-      setDeckSearchCards([]);
+  loadNationCards(
+    deckNation,
+    searchCardType,
+    searchGrade,
+    searchRarity,
+    searchParallel,
+    "",
+    includeNationless,
+    searchTrigger
+  );
 
-    }}
+}}
     className="bg-red-500 text-white px-4 rounded"
   >
     ×
