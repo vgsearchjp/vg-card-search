@@ -2481,59 +2481,6 @@ useEffect(() => {
 
 }, [deckMode]);
 
-/*
-useEffect(() => {
-
-  if (!showDeckModal) {
-    setDeckImagesLoaded(false);
-    return;
-  }
-
-  const cards = [
-    rideG3,
-    rideG2,
-    rideG1,
-    rideG0,
-    rideGenerator,
-
-    ...displayMainDeckGrouped.map((item: any) => item.card),
-
-    ...gDeckGrouped.map((item: any) => item.card),
-
-    ...finisherDeckGrouped.map((item: any) => item.card),
-  ].filter(Boolean);
-
-  Promise.all(
-    cards.map(card => {
-      return new Promise<void>((resolve) => {
-
-        const img = new Image();
-
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-
-        img.src = getCardImage(card);
-
-      });
-    })
-  ).then(() => {
-
-    setDeckImagesLoaded(true);
-
-  });
-
-}, [
-  showDeckModal,
-  rideG3,
-  rideG2,
-  rideG1,
-  rideG0,
-  rideGenerator,
-  displayMainDeckGrouped,
-  gDeckGrouped,
-  finisherDeckGrouped,
-]);
-*/
 
 const shopCardName =
   selectedHomeCard?.card_name || "";
@@ -4204,11 +4151,12 @@ addToFinisherDeck(card);
       className="w-[120px] relative"
     >
       
-      <img
-        src={getCardImage(item.card)}
-        alt=""
-        className="w-full border rounded"
-      />
+<img
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded cursor-pointer"
+  onClick={() => setZoomCard(item.card)}
+/>
 
       <div
         className="
@@ -4596,9 +4544,10 @@ className="w-[19%] relative"
 <img
   src={getCardImage(item.card)}
   alt=""
-  className="w-full border rounded"
+  className="w-full border rounded cursor-pointer"
   loading="eager"
   decoding="sync"
+  onClick={() => setZoomCard(item.card)}
 />
 
 <div
