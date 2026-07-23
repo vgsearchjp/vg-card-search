@@ -353,6 +353,7 @@ const [nationList, setNationList] = useState<string[]>([]);
 const [searchCardType,setSearchCardType]=useState("");
 const [homeView, setHomeView] = useState("products");
 const [selectedHomeCard, setSelectedHomeCard] = useState<any>(null);
+const [homeDetailFrom, setHomeDetailFrom] = useState<"cards" | "favorite" | "wanted">("cards");
 const [ownedCount, setOwnedCount] = useState(0);
 const [shortageCount, setShortageCount] = useState(0);
 const [collectionData, setCollectionData] = useState<any>(null);
@@ -2935,6 +2936,7 @@ activeTab === "favorite" && (
     "",
     ""
   );
+  setHomeDetailFrom("favorite");
   setSelectedHomeCard(item.cards);
   loadCollection(item.cards.id);
   setHomeView("detail");
@@ -2995,11 +2997,12 @@ activeTab === "wanted" && (
   "",
     ""
 );
+  setHomeDetailFrom("favorite");
   setSelectedHomeCard(item.cards);
   loadCollection(item.cards.id);
   setHomeView("detail");
   setActiveTab("home");
-　window.scrollTo({
+  window.scrollTo({
   top: 0,
   behavior: "instant"
 });
@@ -5047,6 +5050,7 @@ const parallelList =
        "#detail"
      );
        setPreviousTab("");
+       setHomeDetailFrom("cards");
        setSelectedHomeCard(card);
        loadCollection(card.id);
        setHomeView("detail");
@@ -5113,10 +5117,10 @@ if (isSearchResult) {
 {homeView === "detail" && (
 <>
   <button
-    onClick={() => {
-      setHomeView("cards");
-      setSelectedHomeCard(null);
-    }}
+onClick={() => {
+  setHomeView(homeDetailFrom);
+  setSelectedHomeCard(null);
+}}
     className="hidden md:inline-block border px-4 py-2 mb-4"
   >
     戻る
@@ -5747,7 +5751,7 @@ wanted
 
 <FloatingBackButton
   onClick={() => {
-    setHomeView("cards");
+    setHomeView(homeDetailFrom);
     setSelectedHomeCard(null);
     window.scrollTo({
       top: 0,
