@@ -3403,39 +3403,33 @@ className="
 
 </div>
 
-      <div className="mb-6">
+<div className="mb-6">
 
-        <div className="font-bold mb-2">
-          国家選択
-        </div>
+<div className="font-bold mb-2">
+    国家選択
+</div>
+<select
+  className="border p-3 w-[300px]"
+  value={deckNation}
+  onChange={(e)=>{
+  setDeckNation(e.target.value);
+  loadNationCards(e.target.value);}}
+>
+<option value="">
+  国家を選択
+</option>
+{nationList.map( (nation) => (
+<option
+  key={nation}
+  value={nation}
+  >
+  {nation}
+</option>
+)
+)}
 
-        <select
-          className="border p-3 w-[300px]"
-          value={deckNation}
-          onChange={(e)=>{
-　　　　　setDeckNation(e.target.value);
-　　　　　loadNationCards(e.target.value);}}
-        >
-
-          <option value="">
-            国家を選択
-          </option>
-
-          {nationList.map(
-            (nation) => (
-
-              <option
-                key={nation}
-                value={nation}
-              >
-                {nation}
-              </option>
-
-            )
-          )}
-
-        </select>
-       <div className="mt-2 mb-4 flex items-center gap-6">
+</select>
+<div className="mt-2 mb-4 flex items-center gap-6">
 <label
   htmlFor="includeNationless"
   className="flex items-center gap-2 cursor-pointer"
@@ -3497,13 +3491,13 @@ setCardSearch("");
 
 
 }}
-className={`border px-4 py-2 ${
+className={`border px-2 py-2 border rounded text-[13px] flex-1 ${
 deckMode==="ride"
 ? "bg-blue-500 text-white"
 : "bg-white"
 }`}
 >
-ライドデッキ
+ライド
 </button>
 
 <button
@@ -3513,13 +3507,13 @@ setDeckMode("main");
 setCardSearch("");
 
 }}
-className={`border px-2 py-2 border rounded text-sm ${
+className={`border px-2 py-2 border rounded text-[13px] flex-1 ${
   deckMode === "main"
     ? "bg-blue-500 text-white"
     : "bg-white"
 }`}
 >
-  メインデッキ
+  メイン
 </button>
 
 <button
@@ -3529,7 +3523,7 @@ setDeckMode("gdeck");
 setCardSearch("");
 
 }}
-className={`border px-2 py-2 border rounded text-sm ${
+className={`border px-2 py-2 border rounded text-[13px] flex-1 ${
 deckMode === "gdeck"
 ? "bg-blue-500 text-white"
 : "bg-white"
@@ -3545,13 +3539,13 @@ setDeckMode("finisher");
 setCardSearch("");
 
 }}
-className={`border px-4 py-2 ${
+className={`border px-2 py-2 border rounded text-[13px] flex-1 ${
 deckMode==="finisher"
 ? "bg-blue-500 text-white"
-: ""
+: "bg-white"
 }`}
 >
-必殺技デッキ
+必殺技
 </button>
 
 </div>
