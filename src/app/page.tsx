@@ -2990,18 +2990,19 @@ activeTab === "wanted" && (
         className="border rounded p-3 bg-white cursor-pointer"
         onClick={() => {
 
-  setPreviousTab("wanted");
+setPreviousTab("wanted");
 
-  window.history.pushState(
+window.history.pushState(
   { view: "wanted-detail" },
   "",
-    ""
+  ""
 );
-  setHomeDetailFrom("favorite");
-  setSelectedHomeCard(item.cards);
-  loadCollection(item.cards.id);
-  setHomeView("detail");
-  setActiveTab("home");
+
+setHomeDetailFrom("wanted");
+setSelectedHomeCard(item.cards);
+loadCollection(item.cards.id);
+setHomeView("detail");
+setActiveTab("home");
   window.scrollTo({
   top: 0,
   behavior: "instant"
