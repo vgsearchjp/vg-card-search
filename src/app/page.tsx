@@ -3436,35 +3436,34 @@ className="
 
         </select>
         <div className="mt-2 mb-4 flex items-center gap-2">
-  <input
-  type="checkbox"
-  id="includeNationless"
-  checked={includeNationless}
-  onChange={(e) => {
-    const checked = e.target.checked;
-
-    setIncludeNationless(checked);
-
-    loadNationCards(
-      deckNation,
-      searchCardType,
-      searchGrade,
-      searchRarity,
-      searchParallel,
-      cardSearch,
-      checked
-    );
-  }}
-/>
-
 <label
-    htmlFor="includeNationless"
-    className="cursor-pointer"
-  >
-    無国家も表示
-  </label>
-<label className="flex items-center gap-2 mt-2">
+  htmlFor="includeNationless"
+  className="flex items-center gap-2 cursor-pointer"
+>
+  <input
+    type="checkbox"
+    id="includeNationless"
+    checked={includeNationless}
+    onChange={(e) => {
+      const checked = e.target.checked;
 
+      setIncludeNationless(checked);
+
+      loadNationCards(
+        deckNation,
+        searchCardType,
+        searchGrade,
+        searchRarity,
+        searchParallel,
+        cardSearch,
+        checked
+      );
+    }}
+  />
+  無国家も表示
+</label>
+
+<label className="flex items-center gap-2 mt-2">
 <input
 type="checkbox"
 checked={hideSameCard}
