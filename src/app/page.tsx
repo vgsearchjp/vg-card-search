@@ -3435,7 +3435,7 @@ className="
           )}
 
         </select>
-        <div className="mt-2 mb-4 flex items-center gap-2">
+       <div className="mt-2 mb-4 flex items-center gap-6">
 <label
   htmlFor="includeNationless"
   className="flex items-center gap-2 cursor-pointer"
@@ -3463,7 +3463,7 @@ className="
   無国家も表示
 </label>
 
-<label className="flex items-center gap-2 mt-2">
+<label className="flex items-center gap-2">
 <input
 type="checkbox"
 checked={hideSameCard}
