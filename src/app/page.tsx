@@ -3403,7 +3403,7 @@ className="
 
 </div>
 
-<div className="mb-3">
+<div className="mb-2">
 
 <div className="font-bold mb-2">
     国家選択
