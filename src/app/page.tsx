@@ -3374,7 +3374,7 @@ className="
 
 <div className="flex-1">
 
-  <div className="flex flex-row gap-3 mb-6 items-center flex-wrap">
+  <div className="flex flex-row gap-3 mb-2 items-center flex-wrap">
 
         <input
           className="border p-3 w-full md:w-[300px]"
