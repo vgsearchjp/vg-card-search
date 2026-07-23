@@ -3387,7 +3387,7 @@ className="
 
 <button
   onClick={saveDeck}
-  className="bg-green-600 text-white w-[80px] h-[50px] rounded shrink-0"
+  className="bg-green-600 text-white w-[70px] h-[42px] rounded text-sm shrink-0"
 >
   保存
 </button>
@@ -3396,7 +3396,7 @@ className="
   onClick={() => {
     setDeckView("list");
   }}
-  className="bg-gray-500 text-white w-[70px] h-[50px] rounded shrink-0"
+  className="bg-gray-500 text-white w-[60px] h-[42px] rounded text-sm shrink-0"
 >
   戻る
 </button>
