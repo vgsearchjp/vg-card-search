@@ -5119,6 +5119,14 @@ if (isSearchResult) {
 <>
   <button
 onClick={() => {
+  if (homeDetailFrom === "favorite") {
+    setActiveTab("favorite");
+  } else if (homeDetailFrom === "wanted") {
+    setActiveTab("wanted");
+  } else {
+    setActiveTab("home");
+  }
+
   setHomeView(homeDetailFrom);
   setSelectedHomeCard(null);
 }}
@@ -5752,8 +5760,17 @@ wanted
 
 <FloatingBackButton
   onClick={() => {
+    if (homeDetailFrom === "favorite") {
+      setActiveTab("favorite");
+    } else if (homeDetailFrom === "wanted") {
+      setActiveTab("wanted");
+    } else {
+      setActiveTab("home");
+    }
+
     setHomeView(homeDetailFrom);
     setSelectedHomeCard(null);
+
     window.scrollTo({
       top: 0,
       behavior: "instant",
