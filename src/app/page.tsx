@@ -6539,20 +6539,7 @@ OFF：新規登録後すぐに利用できます。
 
 {zoomCard && (
 
-<div
-className="
-fixed
-inset-0
-bg-black/70
-z-50
-flex
-items-center
-justify-center
-"
-onClick={()=>
-setZoomCard(null)
-}
->
+<div className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center"onClick={()=>setZoomCard(null)}>
 
 <div
 className="bg-white p-4 rounded"
