@@ -4088,42 +4088,47 @@ addToFinisherDeck(card);
 
     {rideG3 && (
       <img
-        src={getCardImage(rideG3)}
-        alt=""
-        className="w-[120px] border rounded"
-      />
+  src={getCardImage(rideG3)}
+  alt=""
+  className="w-[120px] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG3)}
+/>
     )}
 
     {rideG2 && (
-      <img
-        src={getCardImage(rideG2)}
-        alt=""
-        className="w-[120px] border rounded"
-      />
+     <img
+  src={getCardImage(rideG2)}
+  alt=""
+  className="w-[120px] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG2)}
+/>
     )}
 
     {rideG1 && (
       <img
-        src={getCardImage(rideG1)}
-        alt=""
-        className="w-[120px] border rounded"
-      />
+  src={getCardImage(rideG1)}
+  alt=""
+  className="w-[120px] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG1)}
+/>
     )}
 
     {rideG0 && (
-      <img
-        src={getCardImage(rideG0)}
-        alt=""
-        className="w-[120px] border rounded"
-      />
+<img
+  src={getCardImage(rideG0)}
+  alt=""
+  className="w-[120px] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG0)}
+/>
     )}
 
     {rideGenerator && (
-  <img
-    src={getCardImage(rideGenerator)}
-    alt=""
-    className="h-[150px] w-auto border rounded object-contain"
-  />
+ <img
+  src={getCardImage(rideGenerator)}
+  alt=""
+  className="w-[120px] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideGenerator)}
+/>
 )}
 
   </div>
@@ -4251,11 +4256,12 @@ addToFinisherDeck(card);
       className="w-[120px] relative"
     >
 
-      <img
-        src={getCardImage(item.card)}
-        alt=""
-        className="w-full border rounded"
-      />
+<img
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded cursor-pointer"
+  onClick={() => setZoomCard(item.card)}
+/>
 
       <div
         className="
@@ -4361,7 +4367,12 @@ item.card.card_no
   {finisherDeckGrouped.map((item:any)=>(
 
 <div key={item.card.id} className="w-[120px] relative">
-<img src={getCardImage(item.card)} alt="" className="w-full border rounded"/>
+<img
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded cursor-pointer"
+  onClick={() => setZoomCard(item.card)}
+/>
 <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-sm flex items-center justify-between px-1">
 <button className="px-1 font-bold" onClick={() => removeFromFinisherDeck(item.card.card_no)}>−</button>
 <span>{item.count}</span>
@@ -4481,42 +4492,47 @@ onClick={()=>addToFinisherDeck(item.card)}
 
   {rideG3 && (
     <img
-      src={getCardImage(rideG3)}
-      alt=""
-      className="w-[19%] border rounded"
-    />
+  src={getCardImage(rideG3)}
+  alt=""
+  className="w-[19%] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG3)}
+/>
   )}
 
   {rideG2 && (
-    <img
-      src={getCardImage(rideG2)}
-      alt=""
-      className="w-[19%] border rounded"
-    />
+   <img
+  src={getCardImage(rideG2)}
+  alt=""
+  className="w-[19%] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG2)}
+/>
   )}
 
   {rideG1 && (
     <img
-      src={getCardImage(rideG1)}
-      alt=""
-      className="w-[19%] border rounded"
-    />
+  src={getCardImage(rideG1)}
+  alt=""
+  className="w-[19%] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG1)}
+/>
   )}
 
   {rideG0 && (
-    <img
-      src={getCardImage(rideG0)}
-      alt=""
-      className="w-[19%] border rounded"
-    />
+<img
+  src={getCardImage(rideG0)}
+  alt=""
+  className="w-[19%] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideG0)}
+/>
   )}
 
   {rideGenerator && (
     <img
-      src={getCardImage(rideGenerator)}
-      alt=""
-      className="w-[19%] border rounded"
-    />
+  src={getCardImage(rideGenerator)}
+  alt=""
+  className="w-[19%] border rounded cursor-pointer"
+  onClick={() => setZoomCard(rideGenerator)}
+/>
   )}
 
 </div>
@@ -4602,9 +4618,10 @@ className="w-[19%] relative"
 >
 
 <img
-src={getCardImage(item.card)}
-alt=""
-className="w-full border rounded"
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded cursor-pointer"
+  onClick={() => setZoomCard(item.card)}
 />
 
 <div
@@ -4645,7 +4662,12 @@ finisherDeck.length > 16
 {finisherDeckGrouped.map((item:any)=>(
 
 <div key={item.card.id} className="w-[19%] relative">
-<img src={getCardImage(item.card)} alt="" className="w-full border rounded"/>
+<img
+  src={getCardImage(item.card)}
+  alt=""
+  className="w-full border rounded cursor-pointer"
+  onClick={() => setZoomCard(item.card)}
+/>
 
 <div
   className={`
