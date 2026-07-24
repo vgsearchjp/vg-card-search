@@ -4755,6 +4755,12 @@ onClick={()=>addToFinisherDeck(item.card)}
       placeholder="カード検索"
       value={cardSearch}
       onChange={(e) => setCardSearch(e.target.value)}
+      onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    e.currentTarget.blur();
+    searchCards();
+  }
+}}
     />
 {cardSearch && (
   <button
