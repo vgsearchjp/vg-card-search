@@ -5812,10 +5812,11 @@ role === "admin" &&
 activeTab === "manage" && (
 
 <>
+{/* 
   <h2 className="text-3xl font-bold mb-4">
     商品管理
   </h2>
-
+*/}
 <div className="flex flex-col md:flex-row gap-6">
 
 <div className="order-2 md:order-1 w-full md:w-[850px]">
