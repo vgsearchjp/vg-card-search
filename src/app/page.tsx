@@ -4747,26 +4747,29 @@ onClick={()=>addToFinisherDeck(item.card)}
 
 <div className="w-full">
 
-<div className="flex flex-col md:flex-row gap-2 mb-3">
+<div className="flex gap-2 mb-3">
 
-  <input
-    className="border p-3 w-full md:w-[500px]"
-    placeholder="カード検索"
-    value={cardSearch}
-    onChange={(e) => setCardSearch(e.target.value)}
-  />
+  <div className="relative flex-1">
 
-<button
-  className="border px-6 py-3 bg-blue-500 text-white w-full md:w-auto"
-  onClick={() => {
-    searchCards();
-  }}
->
-  検索
-</button>
+    <input
+      className="border p-3 w-full md:w-[500px] pr-10"
+      placeholder="カード検索"
+      value={cardSearch}
+      onChange={(e) => setCardSearch(e.target.value)}
+    />
+
+  </div>
+
+  <button
+    className="border px-6 py-3 bg-blue-500 text-white w-20 md:w-auto"
+    onClick={() => {
+      searchCards();
+    }}
+  >
+    検索
+  </button>
 
 </div>
-
 <div className="flex gap-4 mt-4 flex-wrap">
 
 
