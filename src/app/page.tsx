@@ -714,14 +714,15 @@ const saveProduct = async () => {
 } else {
   const result = await supabase
     .from("products")
-    .insert([
+.insert([
 {
   product_code: productCode,
   product_name: productName,
   normal_rarity: normalRarity,
   parallel_rarity: parallelRarity,
   official_url: officialUrl,
-  sort_order: products.length,
+  sort_order:
+    Math.min(...products.map(p => p.sort_order), 0) - 1,
 }
 ]);
 
