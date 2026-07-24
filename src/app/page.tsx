@@ -1242,8 +1242,7 @@ const searchProductsByCard = async () => {
 
 const searchCards = async () => {
 
-  const keyword = cardSearch.trim();
-
+const keyword = cardSearch.trim();
   let query = supabase
   .from("cards")
   .select(`
@@ -4760,10 +4759,14 @@ onClick={()=>addToFinisherDeck(item.card)}
 {cardSearch && (
   <button
     type="button"
-    onClick={() => {
-      setCardSearch("");
-      searchCards();
-    }}
+onClick={() => {
+  setCardSearch("");
+  setCards([]);
+  setSelectedHomeProduct(null);
+  setIsSearchResult(false);
+  setHomeView("products");
+  loadProducts();
+}}
     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 opacity-60 hover:opacity-100 text-xl leading-none"
   >
     ×
