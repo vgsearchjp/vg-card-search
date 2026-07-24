@@ -4757,7 +4757,18 @@ onClick={()=>addToFinisherDeck(item.card)}
       value={cardSearch}
       onChange={(e) => setCardSearch(e.target.value)}
     />
-
+{cardSearch && (
+  <button
+    type="button"
+    onClick={() => {
+      setCardSearch("");
+      searchCards();
+    }}
+    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 opacity-60 hover:opacity-100 text-xl leading-none"
+  >
+    ×
+  </button>
+)}
   </div>
 
   <button
