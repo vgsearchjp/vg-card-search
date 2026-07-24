@@ -3036,19 +3036,21 @@ setActiveTab("home");
 
 )}
 
-{user &&
-activeTab === "deck" && (
+{user &&activeTab === "deck" && (
 
 <div>
 
-  {deckView === "list" && (
+{deckView === "list" && (
 
     <>
 
-      <h2 className="text-2xl md:text-4xl font-bold">
-          デッキ一覧
-      </h2>
-      <div className="mb-4">
+{/* 
+<h2 className="text-2xl md:text-4xl font-bold">
+  デッキ一覧
+</h2>
+*/}
+
+<div className="mb-4">
 
   <input
     type="text"
