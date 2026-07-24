@@ -4747,7 +4747,7 @@ onClick={()=>addToFinisherDeck(item.card)}
 
 <div className="w-full">
 
-<div className="flex gap-2 mb-3">
+<div className="flex flex-row md:inline-flex gap-2 mb-3">
 
   <div className="relative flex-1">
 
@@ -4761,7 +4761,7 @@ onClick={()=>addToFinisherDeck(item.card)}
   </div>
 
   <button
-    className="border px-6 py-3 bg-blue-500 text-white w-20 md:w-auto"
+    className="border px-6 py-3 bg-blue-500 text-white w-24 md:w-[80px] whitespace-nowrap flex items-center justify-center"
     onClick={() => {
       searchCards();
     }}
