@@ -5012,7 +5012,135 @@ onClick={() => {
     {selectedHomeProduct?.product_name}
   </h2>
 
-  <div className="flex flex-wrap gap-2">
+<div className="space-y-4 my-4">
+
+  <div className="flex gap-2">
+    <input
+      type="text"
+      placeholder="カード検索"
+      value={cardSearch}
+      onChange={(e) => setCardSearch(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") searchCards();
+      }}
+      className="border p-2 flex-1"
+    />
+
+    <button
+      onClick={searchCards}
+      className="bg-blue-500 text-white px-5"
+    >
+      検索
+    </button>
+  </div>
+
+  <select
+    value={searchNation}
+    onChange={(e)=>{
+  setSearchNation(e.target.value);
+  setTimeout(searchCards, 0);
+}}
+    className="border p-2 w-full md:w-60"
+  >
+    <option value="">国家</option>
+    {nationList.map((nation)=>(
+      <option key={nation} value={nation}>
+        {nation}
+      </option>
+    ))}
+  </select>
+
+  <div className="grid grid-cols-2 gap-2">
+
+    <select
+      value={homeCardType}
+      onChange={(e)=>{
+  setHomeCardType(e.target.value);
+  setTimeout(searchCards, 0);
+}}
+      className="border p-2"
+    >
+      <option value="">カードタイプ</option>
+      <option value="ノーマルユニット">ノーマルユニット</option>
+      <option value="トリガーユニット">トリガーユニット</option>
+      <option value="ノーマルオーダー">ノーマルオーダー</option>
+      <option value="ブリッツオーダー">ブリッツオーダー</option>
+      <option value="セットオーダー">セットオーダー</option>
+      <option value="Gユニット">Gユニット</option>
+      <option value="ライドデッキクレスト">ライドデッキクレスト</option>
+      <option value="必殺技">必殺技</option>
+      <option value="その他">その他</option>
+    </select>
+
+    <select
+      value={homeGrade}
+      onChange={(e)=>{
+  setHomeGrade(e.target.value);
+  setTimeout(searchCards, 0);
+}}
+      className="border p-2"
+    >
+      <option value="">グレード</option>
+      {[0,1,2,3,4,5].map((grade)=>(
+        <option key={grade} value={grade}>
+          {grade}
+        </option>
+      ))}
+    </select>
+
+    <select
+      value={homeRarity}
+      onChange={(e)=>{
+  setHomeRarity(e.target.value);
+  setTimeout(searchCards, 0);
+}}
+      className="border p-2"
+    >
+      <option value="">レアリティ</option>
+      {rarityList.map((rarity)=>(
+        <option key={rarity} value={rarity}>
+          {rarity}
+        </option>
+      ))}
+    </select>
+
+    <select
+      value={homeTrigger}
+      onChange={(e)=>{
+  setHomeTrigger(e.target.value);
+  setTimeout(searchCards, 0);
+}}
+      className="border p-2"
+    >
+      <option value="">トリガー</option>
+      <option value="クリティカルトリガー＋10000">クリティカル</option>
+      <option value="フロントトリガー＋10000">フロント</option>
+      <option value="ドロートリガー＋10000">ドロー</option>
+      <option value="ヒールトリガー＋10000">ヒール</option>
+      <option value="オーバートリガー＋100000000">オーバー</option>
+      <option value="スタンドトリガー＋10000">スタンド</option>
+    </select>
+
+  </div>
+
+<button
+  onClick={() => {
+    setCardSearch("");
+    setSearchNation("");
+    setHomeCardType("");
+    setHomeGrade("");
+    setHomeRarity("");
+    setHomeTrigger("");
+    searchCards();
+  }}
+  className="bg-gray-500 text-white px-6 py-2 rounded"
+>
+  リセット
+</button>
+
+</div>
+
+<div className="flex flex-wrap gap-2">
 
     <button
       className="border px-4 py-2"
