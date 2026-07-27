@@ -5196,7 +5196,7 @@ onClick={()=>{
 </div>
 )}
 
-  <div className="grid grid-cols-2 md:grid-cols-10 gap-2">
+  <div className="grid grid-cols-2 md:grid-cols-10 gap-2 mt-6">
   {cards
     .filter((card) => {
 
