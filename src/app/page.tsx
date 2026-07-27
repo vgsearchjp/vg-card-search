@@ -2916,11 +2916,11 @@ className="bg-white text-black py-2 px-2 text-sm md:text-base whitespace-nowrap 
 activeTab === "favorite" && (
 
 <div>
-
+{/*
   <h2 className="text-3xl font-bold mb-6">
     お気に入り一覧
   </h2>
-
+*/}
   <div className="grid grid-cols-2 md:grid-cols-10 gap-4">
 
     {favoriteCards.map((item) => (
@@ -2976,11 +2976,11 @@ activeTab === "favorite" && (
 activeTab === "wanted" && (
 
 <div>
-
+{/*
   <h2 className="text-3xl font-bold mb-6">
     欲しいもの一覧
   </h2>
-
+*/}
   <div className="grid grid-cols-2 md:grid-cols-10 gap-4">
 
     {wantedCards.map((item) => (
