@@ -5004,13 +5004,14 @@ onClick={() => {
     戻る
   </button>
 
-  <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+<div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
 
   <h2 className="text-xl md:text-3xl font-bold">
-    {selectedHomeProduct?.product_code}
-    {" "}
+    {selectedHomeProduct?.product_code}{" "}
     {selectedHomeProduct?.product_name}
   </h2>
+
+</div>
 
 {isSearchResult && (
   <div className="space-y-4 my-4">
@@ -5138,10 +5139,6 @@ onClick={() => {
 >
   リセット
 </button>
-
-</div>
-)}
-
 <div className="flex flex-wrap gap-2">
 
     <button
@@ -5166,8 +5163,10 @@ onClick={() => {
     </button>
 
   </div>
-
 </div>
+
+)}
+
   <div className="grid grid-cols-2 md:grid-cols-10 gap-2">
   {cards
     .filter((card) => {
