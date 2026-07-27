@@ -2956,12 +2956,12 @@ activeTab === "favorite" && (
       />
     )}
 
-    <div className="text-sm mt-1">
-  所持：{item.owned_count || 0}
+<div className="font-semibold mt-2 line-clamp-2">
+  {item.cards?.card_name}
 </div>
 
-<div className="text-sm">
-  不足：{item.shortage_count || 0}
+<div className="text-sm mt-1">
+  所持：{item.owned_count || 0} / 不足：{item.shortage_count || 0}
 </div>
   </div>
 ))}
@@ -3018,13 +3018,13 @@ setActiveTab("home");
           />
         )}
 
-        <div className="text-sm mt-1">
-         所持：{item.owned_count || 0}
-        </div>
+<div className="font-semibold mt-2 line-clamp-2">
+  {item.cards?.card_name}
+</div>
 
-        <div className="text-sm">
-         不足：{item.shortage_count || 0}
-        </div>
+<div className="text-sm mt-1">
+  所持：{item.owned_count || 0} / 不足：{item.shortage_count || 0}
+</div>
 
       </div>
 
