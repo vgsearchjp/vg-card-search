@@ -5012,7 +5012,8 @@ onClick={() => {
     {selectedHomeProduct?.product_name}
   </h2>
 
-<div className="space-y-4 my-4">
+{isSearchResult && (
+  <div className="space-y-4 my-4">
 
   <div className="flex gap-2">
     <input
@@ -5139,6 +5140,7 @@ onClick={() => {
 </button>
 
 </div>
+)}
 
 <div className="flex flex-wrap gap-2">
 
