@@ -5014,132 +5014,161 @@ onClick={() => {
 </div>
 
 {isSearchResult && (
-  <div className="space-y-4 my-4">
+<div className="w-full">
 
-  <div className="flex gap-2">
+<div className="flex flex-row md:inline-flex gap-2 mb-3">
+
+  <div className="relative flex-1">
+
     <input
-      type="text"
+      className="border p-3 w-full md:w-[500px] pr-10"
       placeholder="カード検索"
       value={cardSearch}
-      onChange={(e) => setCardSearch(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") searchCards();
+      onChange={(e)=>setCardSearch(e.target.value)}
+      onKeyDown={(e)=>{
+        if(e.key==="Enter"){
+          e.currentTarget.blur();
+          searchCards();
+        }
       }}
-      className="border p-2 flex-1"
     />
 
-    <button
-      onClick={searchCards}
-      className="bg-blue-500 text-white px-5"
-    >
-      検索
-    </button>
-  </div>
-
-  <select
-    value={searchNation}
-    onChange={(e)=>{
-  setSearchNation(e.target.value);
-  setTimeout(searchCards, 0);
+{cardSearch && (
+<button
+type="button"
+onClick={()=>{
+  setCardSearch("");
+  setSearchNation("");
+  setHomeCardType("");
+  setHomeGrade("");
+  setHomeRarity("");
+  setHomeTrigger("");
+  searchCards();
 }}
-    className="border p-2 w-full md:w-60"
-  >
-    <option value="">国家</option>
-    {nationList.map((nation)=>(
-      <option key={nation} value={nation}>
-        {nation}
-      </option>
-    ))}
-  </select>
-
-  <div className="grid grid-cols-2 gap-2">
-
-    <select
-      value={homeCardType}
-      onChange={(e)=>{
-  setHomeCardType(e.target.value);
-  setTimeout(searchCards, 0);
-}}
-      className="border p-2"
-    >
-      <option value="">カードタイプ</option>
-      <option value="ノーマルユニット">ノーマルユニット</option>
-      <option value="トリガーユニット">トリガーユニット</option>
-      <option value="ノーマルオーダー">ノーマルオーダー</option>
-      <option value="ブリッツオーダー">ブリッツオーダー</option>
-      <option value="セットオーダー">セットオーダー</option>
-      <option value="Gユニット">Gユニット</option>
-      <option value="ライドデッキクレスト">ライドデッキクレスト</option>
-      <option value="必殺技">必殺技</option>
-      <option value="その他">その他</option>
-    </select>
-
-    <select
-      value={homeGrade}
-      onChange={(e)=>{
-  setHomeGrade(e.target.value);
-  setTimeout(searchCards, 0);
-}}
-      className="border p-2"
-    >
-      <option value="">グレード</option>
-      {[0,1,2,3,4,5].map((grade)=>(
-        <option key={grade} value={grade}>
-          {grade}
-        </option>
-      ))}
-    </select>
-
-    <select
-      value={homeRarity}
-      onChange={(e)=>{
-  setHomeRarity(e.target.value);
-  setTimeout(searchCards, 0);
-}}
-      className="border p-2"
-    >
-      <option value="">レアリティ</option>
-      {rarityList.map((rarity)=>(
-        <option key={rarity} value={rarity}>
-          {rarity}
-        </option>
-      ))}
-    </select>
-
-    <select
-      value={homeTrigger}
-      onChange={(e)=>{
-  setHomeTrigger(e.target.value);
-  setTimeout(searchCards, 0);
-}}
-      className="border p-2"
-    >
-      <option value="">トリガー</option>
-      <option value="クリティカルトリガー＋10000">クリティカル</option>
-      <option value="フロントトリガー＋10000">フロント</option>
-      <option value="ドロートリガー＋10000">ドロー</option>
-      <option value="ヒールトリガー＋10000">ヒール</option>
-      <option value="オーバートリガー＋100000000">オーバー</option>
-      <option value="スタンドトリガー＋10000">スタンド</option>
-    </select>
+className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 opacity-60 hover:opacity-100 text-xl leading-none"
+>
+×
+</button>
+)}
 
   </div>
 
 <button
-  onClick={() => {
-    setCardSearch("");
-    setSearchNation("");
-    setHomeCardType("");
-    setHomeGrade("");
-    setHomeRarity("");
-    setHomeTrigger("");
-    searchCards();
-  }}
-  className="bg-gray-500 text-white px-6 py-2 rounded"
+className="border px-6 py-3 bg-blue-500 text-white w-24 md:w-[80px] whitespace-nowrap flex items-center justify-center"
+onClick={searchCards}
 >
-  リセット
+検索
 </button>
-<div className="flex flex-wrap gap-2">
+
+</div>
+
+<div className="flex gap-4 mt-4 flex-wrap">
+
+<select
+value={searchNation}
+onChange={(e)=>{
+  setSearchNation(e.target.value);
+  setTimeout(searchCards,0);
+}}
+className="border p-2 w-[170px]"
+>
+<option value="">国家</option>
+{nationList.map((nation)=>(
+<option key={nation} value={nation}>
+{nation}
+</option>
+))}
+</select>
+
+<select
+value={homeCardType}
+onChange={(e)=>{
+  setHomeCardType(e.target.value);
+  setTimeout(searchCards,0);
+}}
+className="border p-2 w-[165px]"
+>
+<option value="">カードタイプ</option>
+<option value="ノーマルユニット">ノーマルユニット</option>
+<option value="トリガーユニット">トリガーユニット</option>
+<option value="Gユニット">Gユニット</option>
+<option value="ノーマルオーダー">ノーマルオーダー</option>
+<option value="ブリッツオーダー">ブリッツオーダー</option>
+<option value="セットオーダー">セットオーダー</option>
+<option value="トリガーオーダー">トリガーオーダー</option>
+<option value="ライドデッキクレスト">ライドデッキクレスト</option>
+<option value="必殺技">必殺技</option>
+<option value="その他">その他</option>
+</select>
+
+<select
+value={homeGrade}
+onChange={(e)=>{
+  setHomeGrade(e.target.value);
+  setTimeout(searchCards,0);
+}}
+className="border p-2 w-[120px]"
+>
+<option value="">グレード</option>
+<option value="0">G0</option>
+<option value="1">G1</option>
+<option value="2">G2</option>
+<option value="3">G3</option>
+<option value="4">G4</option>
+<option value="5">G5以上</option>
+</select>
+
+<select
+value={homeRarity}
+onChange={(e)=>{
+  setHomeRarity(e.target.value);
+  setTimeout(searchCards,0);
+}}
+className="border p-2 w-[140px]"
+>
+<option value="">レアリティ</option>
+{rarityList.map((r)=>(
+<option key={r} value={r}>
+{r}
+</option>
+))}
+</select>
+
+<select
+value={homeTrigger}
+onChange={(e)=>{
+  setHomeTrigger(e.target.value);
+  setTimeout(searchCards,0);
+}}
+className="border p-2 w-[140px]"
+>
+<option value="">トリガー</option>
+<option value="クリティカルトリガー＋10000">クリティカル</option>
+<option value="ドロートリガー＋10000">ドロー</option>
+<option value="フロントトリガー＋10000">フロント</option>
+<option value="ヒールトリガー＋10000">ヒール</option>
+<option value="オーバートリガー＋100000000">オーバー</option>
+<option value="スタンドトリガー＋10000">スタンド</option>
+</select>
+
+<button
+className="bg-gray-500 text-white px-4 rounded"
+onClick={()=>{
+  setCardSearch("");
+  setSearchNation("");
+  setHomeCardType("");
+  setHomeGrade("");
+  setHomeRarity("");
+  setHomeTrigger("");
+  searchCards();
+}}
+>
+リセット
+</button>
+
+</div>
+
+  <div className="flex flex-wrap gap-2 mt-4">
 
     <button
       className="border px-4 py-2"
@@ -5163,8 +5192,8 @@ onClick={() => {
     </button>
 
   </div>
-</div>
 
+</div>
 )}
 
   <div className="grid grid-cols-2 md:grid-cols-10 gap-2">
