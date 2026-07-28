@@ -4922,7 +4922,12 @@ className="border p-2 w-[140px]"
     通常レアリティ
   </button>
 
-
+  <button
+    className="border px-4 py-2"
+    onClick={() => setRarityView("parallel")}
+  >
+    パラレル
+  </button>
 
 </div>
 
