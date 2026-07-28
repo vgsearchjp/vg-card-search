@@ -200,15 +200,15 @@ if (isHorizontal) {
 } else {
 
 ctx.fillRect(
-  x + mainCardWidth - 80,
-  y + mainCardHeight - 55,
-  80,
-  55
+  x + mainCardWidth - 90,
+  y + mainCardHeight - 65,
+  90,
+  65
 );
 
 }
 ctx.fillStyle = "#ffffff";
-ctx.font = "bold 48px sans-serif";
+ctx.font = "bold 64px sans-serif";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
@@ -216,8 +216,8 @@ if (isHorizontal) {
 
 ctx.fillText(
   `×${group.count}`,
-  x + mainCardWidth - 40,
-  y + mainCardHeight - 26
+  x + mainCardWidth - 45,
+  y + mainCardHeight - 33
 );
 
 } else {
