@@ -199,26 +199,26 @@ if (isHorizontal) {
 
 } else {
 
-  ctx.fillRect(
-    x + mainCardWidth - 60,
-    y + mainCardHeight - 40,
-    60,
-    40
-  );
+ctx.fillRect(
+  x + mainCardWidth - 80,
+  y + mainCardHeight - 55,
+  80,
+  55
+);
 
 }
 ctx.fillStyle = "#ffffff";
-ctx.font = "bold 36px sans-serif";
+ctx.font = "bold 48px sans-serif";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
 if (isHorizontal) {
 
-  ctx.fillText(
-    `×${group.count}`,
-    x + mainCardHeight - 34,
-    y + mainCardWidth - 18
-  );
+ctx.fillText(
+  `×${group.count}`,
+  x + mainCardWidth - 40,
+  y + mainCardHeight - 26
+);
 
 } else {
 
