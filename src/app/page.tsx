@@ -5014,30 +5014,32 @@ onClick={() => {
 
 </div>
 
-<div className="flex flex-wrap gap-2 mt-4 mb-6">
+{!isSearchResult && (
+  <div className="flex flex-wrap gap-2 mt-4 mb-6">
 
-  <button
-    className="border px-4 py-2"
-    onClick={() => setRarityView("all")}
-  >
-    全て
-  </button>
+    <button
+      className="border px-4 py-2"
+      onClick={() => setRarityView("all")}
+    >
+      全て
+    </button>
 
-  <button
-    className="border px-4 py-2"
-    onClick={() => setRarityView("normal")}
-  >
-    通常レアリティ
-  </button>
+    <button
+      className="border px-4 py-2"
+      onClick={() => setRarityView("normal")}
+    >
+      通常レアリティ
+    </button>
 
-  <button
-    className="border px-4 py-2"
-    onClick={() => setRarityView("parallel")}
-  >
-    パラレル
-  </button>
+    <button
+      className="border px-4 py-2"
+      onClick={() => setRarityView("parallel")}
+    >
+      パラレル
+    </button>
 
-</div>
+  </div>
+)}
 
 
 {isSearchResult && (
