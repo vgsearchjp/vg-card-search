@@ -58,6 +58,16 @@ const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
 const [showManageMenu, setShowManageMenu] = useState(false);
 const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
+const [limitSearch, setLimitSearch] = useState("");
+const [limitCards, setLimitCards] = useState<any[]>([]);
+const [selectedLimitCard, setSelectedLimitCard] = useState<any | null>(null);
+const [banCards, setBanCards] = useState<any[]>([]);
+const [limit1Cards, setLimit1Cards] = useState<any[]>([]);
+const [limit2Cards, setLimit2Cards] = useState<any[]>([]);
+const [limit3Cards, setLimit3Cards] = useState<any[]>([]);
+const [selectionCard1, setSelectionCard1] = useState<any | null>(null);
+const [selectionCard2, setSelectionCard2] = useState<any | null>(null);
+const [selectionLimits, setSelectionLimits] = useState<any[]>([]);
 const [deckView, setDeckView] = useState("list");
 const [deckName, setDeckName] = useState("");
 const [savingDeckImage, setSavingDeckImage] = useState(false);
@@ -1329,6 +1339,195 @@ const { data, error, count } =
 
 };
 
+const searchLimitCards = async () => {
+
+  const keyword = limitSearch.trim();
+
+  if (!keyword) {
+    setLimitCards([]);
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("cards")
+    .select("*")
+    .or(
+      `card_name.ilike.%${keyword}%,card_no.ilike.%${keyword}%`
+    )
+    .order("card_no");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  setLimitCards(data || []);
+
+};
+
+const saveLimitCard = async (cardId: number, limitType: string) => {
+
+const { data: exists } = await supabase
+  .from("limit_cards")
+  .select("id")
+  .eq("card_id", cardId)
+  .maybeSingle();
+
+if (exists) {
+  alert("既に登録されています");
+  return;
+}
+
+const { error } = await supabase
+  .from("limit_cards")
+  .insert({
+    card_id: cardId,
+    limit_type: limitType
+  });
+
+  if (error) {
+    console.log(error);
+    alert("保存失敗");
+    return;
+  }
+await loadBanCards();
+
+alert("登録しました");
+
+};
+
+const loadBanCards = async () => {
+
+  const { data, error } = await supabase
+    .from("limit_cards")
+    .select(`
+      *,
+      cards(*)
+    `);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  const list = data || [];
+
+  setBanCards(list.filter(x => x.limit_type === "ban"));
+  setLimit1Cards(list.filter(x => x.limit_type === "limit1"));
+  setLimit2Cards(list.filter(x => x.limit_type === "limit2"));
+  setLimit3Cards(list.filter(x => x.limit_type === "limit3"));
+
+};
+
+const loadSelectionLimits = async () => {
+
+  const { data, error } = await supabase
+    .from("selection_limits")
+    .select(`
+      *,
+      card1:cards!selection_limits_card1_id_fkey(*),
+      card2:cards!selection_limits_card2_id_fkey(*)
+    `);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  setSelectionLimits(data || []);
+
+};
+
+const deleteLimitCard = async (id: number) => {
+
+  const ok = confirm("この制限カードを削除しますか？");
+
+  if (!ok) return;
+
+  const { error } = await supabase
+    .from("limit_cards")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.log(error);
+    alert("削除失敗");
+    return;
+  }
+
+  await loadBanCards();
+
+};
+
+const saveSelectionLimit = async () => {
+
+  if (!selectionCard1 || !selectionCard2) {
+    alert("カードを2枚選択してください");
+    return;
+  }
+
+if (selectionCard1.id === selectionCard2.id) {
+  alert("同じカードは選択できません");
+  return;
+}
+
+const { data: exists } = await supabase
+  .from("selection_limits")
+  .select("id")
+  .or(
+    `and(card1_id.eq.${selectionCard1.id},card2_id.eq.${selectionCard2.id}),and(card1_id.eq.${selectionCard2.id},card2_id.eq.${selectionCard1.id})`
+  )
+  .maybeSingle();
+
+if (exists) {
+  alert("既に登録されています");
+  return;
+}
+
+const { error } = await supabase
+  .from("selection_limits")
+  .insert({
+    card1_id: selectionCard1.id,
+    card2_id: selectionCard2.id
+  });
+
+  if (error) {
+    console.log(error);
+    alert("登録失敗");
+    return;
+  }
+
+await loadSelectionLimits();
+
+setSelectionCard1(null);
+setSelectionCard2(null);
+setSelectedLimitCard(null);
+
+alert("登録しました");
+
+};
+
+const deleteSelectionLimit = async (id: number) => {
+
+  const ok = confirm("この選抜制限を削除しますか？");
+
+  if (!ok) return;
+
+  const { error } = await supabase
+    .from("selection_limits")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.log(error);
+    alert("削除失敗");
+    return;
+  }
+
+  await loadSelectionLimits();
+
+};
+
 const resequenceCards = async () => {
 
   const { data, error } = await supabase
@@ -2329,7 +2528,7 @@ if (setting) {
 
   };
 
-  getUser();
+getUser();
 
 loadProducts();
 loadAllRarities();
@@ -2337,6 +2536,8 @@ loadAllNations();
 searchProductsByCard();
 loadDecks();
 loadPendingUsers();
+loadBanCards();
+loadSelectionLimits();
 }, []);
 
 useEffect(() => {
@@ -6712,13 +6913,410 @@ return (
 {manageView === "manage2" && (
 
 <div className="p-6">
-  <h2 className="text-2xl font-bold mb-4">
-    制限カード管理
-  </h2>
 
-  <div className="border rounded p-6 bg-gray-50">
-    準備中
+<h2 className="text-2xl font-bold mb-6">
+制限カード管理
+</h2>
+
+<div className="flex flex-col md:flex-row gap-2 mb-6">
+
+<input
+  className="border p-2 flex-1"
+  placeholder="カード名・カード番号検索"
+  value={limitSearch}
+  onChange={(e)=>setLimitSearch(e.target.value)}
+/>
+
+<button
+  onClick={searchLimitCards}
+  className="bg-blue-600 text-white px-4 py-2 rounded"
+>
+検索
+</button>
+
+</div>
+
+<div className="space-y-6">
+
+<div className="border rounded p-4">
+<h3 className="text-xl font-bold mb-2">禁止カード</h3>
+
+<div className="space-y-2">
+
+{banCards.map((item) => (
+
+<div
+key={item.id}
+className="flex items-center gap-3 border rounded p-2"
+>
+
+<img
+src={getCardImage(item.cards)}
+className="w-12 border"
+alt={item.cards.card_name}
+/>
+
+<div className="flex-1">
+
+<div className="font-bold">
+{item.cards.card_name}
+</div>
+
+<div className="text-sm text-gray-500">
+{item.cards.card_no}
+</div>
+
+</div>
+
+<button
+  onClick={() => deleteLimitCard(item.id)}
+  className="bg-red-600 text-white px-3 py-1 rounded"
+>
+削除
+</button>
+</div>
+
+))}
+</div>
+</div>
+
+<div className="border rounded p-4">
+<h3 className="text-xl font-bold mb-2">1枚制限</h3>
+<div className="space-y-2">
+
+{limit1Cards.map((item) => (
+
+<div
+key={item.id}
+className="flex items-center gap-3 border rounded p-2"
+>
+
+<img
+src={getCardImage(item.cards)}
+className="w-12 border"
+alt={item.cards.card_name}
+/>
+
+<div className="flex-1">
+
+<div className="font-bold">
+{item.cards.card_name}
+</div>
+
+<div className="text-sm text-gray-500">
+{item.cards.card_no}
+</div>
+
+</div>
+
+<button
+  onClick={() => deleteLimitCard(item.id)}
+  className="bg-red-600 text-white px-3 py-1 rounded"
+>
+削除
+</button>
+
+</div>
+
+))}
+
+</div>
+</div>
+
+<div className="border rounded p-4">
+<h3 className="text-xl font-bold mb-2">2枚制限</h3>
+<div className="space-y-2">
+
+{limit2Cards.map((item) => (
+
+<div
+key={item.id}
+className="flex items-center gap-3 border rounded p-2"
+>
+
+<img
+src={getCardImage(item.cards)}
+className="w-12 border"
+alt={item.cards.card_name}
+/>
+
+<div className="flex-1">
+
+<div className="font-bold">
+{item.cards.card_name}
+</div>
+
+<div className="text-sm text-gray-500">
+{item.cards.card_no}
+</div>
+
+</div>
+
+<button
+  onClick={() => deleteLimitCard(item.id)}
+  className="bg-red-600 text-white px-3 py-1 rounded"
+>
+削除
+</button>
+
+</div>
+
+))}
+
+</div>
+</div>
+
+<div className="border rounded p-4">
+<h3 className="text-xl font-bold mb-2">3枚制限</h3>
+<div className="space-y-2">
+
+{limit3Cards.map((item) => (
+
+<div
+key={item.id}
+className="flex items-center gap-3 border rounded p-2"
+>
+
+<img
+src={getCardImage(item.cards)}
+className="w-12 border"
+alt={item.cards.card_name}
+/>
+
+<div className="flex-1">
+
+<div className="font-bold">
+{item.cards.card_name}
+</div>
+
+<div className="text-sm text-gray-500">
+{item.cards.card_no}
+</div>
+
+</div>
+
+<button
+  onClick={() => deleteLimitCard(item.id)}
+  className="bg-red-600 text-white px-3 py-1 rounded"
+>
+削除
+</button>
+
+</div>
+
+))}
+
+</div>
+</div>
+
+<div className="border rounded p-4">
+<h3 className="text-xl font-bold mb-2">選抜制限</h3>
+<div className="space-y-3">
+
+  <div className="flex gap-2">
+
+    <button
+      onClick={() => {
+        if (!selectedLimitCard) return;
+        setSelectionCard1(selectedLimitCard);
+      }}
+      className="bg-blue-600 text-white px-3 py-1 rounded"
+      disabled={!selectedLimitCard}
+    >
+      ①に設定
+    </button>
+
+    <button
+      onClick={() => {
+        if (!selectedLimitCard) return;
+        setSelectionCard2(selectedLimitCard);
+      }}
+      className="bg-green-600 text-white px-3 py-1 rounded"
+      disabled={!selectedLimitCard}
+    >
+      ②に設定
+    </button>
+
+    <button
+      onClick={saveSelectionLimit}
+      className="bg-purple-600 text-white px-3 py-1 rounded"
+    >
+      登録
+    </button>
+
   </div>
+
+  <div className="border rounded p-2">
+
+    <div>
+      ①：
+      {selectionCard1 ? `${selectionCard1.card_no} ${selectionCard1.card_name}` : "未選択"}
+    </div>
+
+    <div>
+      ②：
+      {selectionCard2 ? `${selectionCard2.card_no} ${selectionCard2.card_name}` : "未選択"}
+    </div>
+<div className="mt-4 space-y-2">
+
+{selectionLimits.map((item) => (
+
+<div
+key={item.id}
+className="border rounded p-2 flex items-center justify-between"
+>
+
+<div className="flex items-center gap-6 flex-1">
+
+  <div className="flex items-center gap-3">
+
+    <img
+      src={getCardImage(item.card1)}
+      className="w-12 border"
+      alt={item.card1.card_name}
+    />
+
+    <div>
+
+      <div className="font-bold">
+        {item.card1.card_name}
+      </div>
+
+      <div className="text-sm text-gray-500">
+        {item.card1.card_no}
+      </div>
+
+    </div>
+
+  </div>
+
+  <div className="text-2xl font-bold">
+    ⇔
+  </div>
+
+  <div className="flex items-center gap-3">
+
+    <img
+      src={getCardImage(item.card2)}
+      className="w-12 border"
+      alt={item.card2.card_name}
+    />
+
+    <div>
+
+      <div className="font-bold">
+        {item.card2.card_name}
+      </div>
+
+      <div className="text-sm text-gray-500">
+        {item.card2.card_no}
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<button
+onClick={() => deleteSelectionLimit(item.id)}
+className="bg-red-600 text-white px-3 py-1 rounded"
+>
+削除
+</button>
+
+</div>
+
+))}
+
+</div>
+</div>
+
+</div>
+</div>
+
+{limitCards.length > 0 && (
+
+<div className="mt-8">
+
+<h3 className="text-xl font-bold mb-4">
+検索結果
+</h3>
+
+<div className="space-y-2 max-h-[500px] overflow-y-auto">
+
+{limitCards.map(card=>(
+
+<div
+key={card.id}
+onClick={() => setSelectedLimitCard(card)}
+className={`border rounded p-2 flex items-center gap-3 cursor-pointer ${
+  selectedLimitCard?.id === card.id ? "border-blue-600 border-4" : ""
+}`}
+>
+
+<img
+src={getCardImage(card)}
+className="w-12 border"
+alt={card.card_name}
+/>
+
+<div className="flex-1">
+
+<div className="font-bold">
+{card.card_name}
+</div>
+
+<div className="text-sm text-gray-500">
+{card.card_no}
+</div>
+
+</div>
+
+<button
+  onClick={() => saveLimitCard(card.id, "ban")}
+  className="border px-3 py-1"
+>
+禁止
+</button>
+
+<button 
+onClick={() => saveLimitCard(card.id, "limit1")}
+className="border px-3 py-1">
+1枚
+</button>
+
+<button 
+onClick={() => saveLimitCard(card.id, "limit2")}
+className="border px-3 py-1">
+2枚
+</button>
+
+<button
+onClick={() => saveLimitCard(card.id, "limit3")}
+className="border px-3 py-1">
+3枚
+</button>
+
+<button
+className="border px-3 py-1"
+disabled
+>
+選抜
+</button>
+
+</div>
+
+))}
+
+</div>
+
+</div>
+
+)}
+
+</div>
+
 </div>
 
 )}
