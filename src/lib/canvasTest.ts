@@ -125,9 +125,9 @@ const ctx = canvas.getContext("2d")!;
     canvas.height
     );
     
-    ctx.fillStyle = "#000";
-    ctx.font = "bold 42px sans-serif";
-    ctx.fillText("テストデッキ", 30, 60);
+ctx.fillStyle = "#000";
+ctx.font = "bold 42px sans-serif";
+ctx.fillText(deckName, 30, 60);
 
     ctx.font = "bold 36px sans-serif";
     ctx.fillText("ライドデッキ", 30, 120);
