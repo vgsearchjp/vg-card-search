@@ -4906,6 +4906,31 @@ className="border p-2 w-[140px]"
 
 </div>
 
+<div className="flex flex-wrap gap-2 mt-4 mb-6">
+
+  <button
+    className="border px-4 py-2"
+    onClick={() => setRarityView("all")}
+  >
+    全て
+  </button>
+
+  <button
+    className="border px-4 py-2"
+    onClick={() => setRarityView("normal")}
+  >
+    通常レアリティ
+  </button>
+
+  <button
+    className="border px-4 py-2"
+    onClick={() => setRarityView("parallel")}
+  >
+    パラレル
+  </button>
+
+</div>
+
 <div className="grid grid-cols-2 md:grid-cols-10 gap-4 mt-6">
 
   {products
