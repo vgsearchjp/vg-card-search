@@ -56,6 +56,8 @@ const [searchParallel,setSearchParallel]=useState("");
 const [rarityList, setRarityList] = useState<string[]>([]);
 const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
+const [showManageMenu, setShowManageMenu] = useState(false);
+const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
 const [deckView, setDeckView] = useState("list");
 const [deckName, setDeckName] = useState("");
 const [savingDeckImage, setSavingDeckImage] = useState(false);
@@ -2747,17 +2749,44 @@ className="bg-white text-black py-2 px-6 border hover:bg-gray-200"
 
 {role === "admin" && (
 
+<div className="relative">
+
 <button
-onClick={() => {
-setActiveTab("manage");
-setHomeView("products");
-setSelectedHomeProduct(null);
-setSelectedHomeCard(null);
-}}
+onClick={() => setShowManageMenu(!showManageMenu)}
 className="bg-white text-black py-2 px-6 border hover:bg-gray-200"
 >
-管理
+管理 ▼
 </button>
+
+{showManageMenu && (
+<div className="absolute right-0 mt-1 w-36 bg-white border shadow-lg z-50 text-black">
+
+<button
+className="w-full text-left px-4 py-2 hover:bg-gray-100"
+onClick={()=>{
+  setManageView("manage1");
+  setActiveTab("manage");
+  setShowManageMenu(false);
+}}
+>
+管理1
+</button>
+
+<button
+className="w-full text-left px-4 py-2 hover:bg-gray-100"
+onClick={()=>{
+  setManageView("manage2");
+  setActiveTab("manage");
+  setShowManageMenu(false);
+}}
+>
+管理2
+</button>
+
+</div>
+)}
+
+</div>
 
 )}
 </div>
@@ -2842,18 +2871,44 @@ className="bg-white text-black py-2 px-2 text-sm md:text-base whitespace-nowrap 
      マイページ 
   </button>
 
-  <button
-    onClick={() => {
-      setActiveTab("manage");
-      setHomeView("products");
-      setSelectedHomeProduct(null);
-      setSelectedHomeCard(null);
-    }}
-    className="bg-white text-black py-2 px-2 text-sm md:text-base whitespace-nowrap border hover:bg-gray-200"
-  >
-    　管理　
-  </button>
+<div className="relative">
 
+<button
+  onClick={() => setShowManageMenu(!showManageMenu)}
+  className="bg-white text-black py-2 px-2 text-sm md:text-base whitespace-nowrap border hover:bg-gray-200"
+>
+  管理 ▼
+</button>
+
+{showManageMenu && (
+<div className="absolute right-0 mt-1 w-36 bg-white border shadow-lg z-50 text-black">
+
+<button
+className="w-full text-left px-4 py-2 text-black hover:bg-gray-100"
+onClick={()=>{
+  setManageView("manage1");
+  setActiveTab("manage");
+  setShowManageMenu(false);
+}}
+>
+管理1
+</button>
+
+<button
+className="w-full text-left px-4 py-2 text-black hover:bg-gray-100"
+onClick={()=>{
+  setManageView("manage2");
+  setActiveTab("manage");
+  setShowManageMenu(false);
+}}
+>
+管理2
+</button>
+
+</div>
+)}
+
+</div>
 </div>
 
 ) : (
@@ -5999,11 +6054,9 @@ role === "admin" &&
 activeTab === "manage" && (
 
 <>
-{/* 
-  <h2 className="text-3xl font-bold mb-4">
-    商品管理
-  </h2>
-*/}
+
+{manageView === "manage1" && (
+<>
 <div className="flex flex-col md:flex-row gap-6">
 
 <div className="order-2 md:order-1 w-full md:w-[850px]">
@@ -6653,7 +6706,27 @@ return (
 </div>
 
 </>
+
 )}
+
+{manageView === "manage2" && (
+
+<div className="p-6">
+  <h2 className="text-2xl font-bold mb-4">
+    制限カード管理
+  </h2>
+
+  <div className="border rounded p-6 bg-gray-50">
+    準備中
+  </div>
+</div>
+
+)}
+
+</>
+
+)}
+
 
 {user &&
 activeTab === "mypage" && (
