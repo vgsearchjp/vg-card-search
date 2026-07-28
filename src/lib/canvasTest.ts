@@ -215,18 +215,18 @@ ctx.textBaseline = "middle";
 if (isHorizontal) {
 
 ctx.fillText(
-  `×${group.count}`,
+  `${group.count}`,
   x + mainCardWidth - 45,
-  y + mainCardHeight - 33
+  y + mainCardHeight - 28
 );
 
 } else {
 
-  ctx.fillText(
-    `×${group.count}`,
-    x + mainCardWidth - 34,
-    y + mainCardHeight - 18
-  );
+ctx.fillText(
+  `${group.count}`,
+  x + mainCardWidth - 45,
+  y + mainCardHeight - 28
+);
 
 }
 
