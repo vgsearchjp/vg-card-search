@@ -190,12 +190,12 @@ rowHeight = Math.max(rowHeight, drawHeight);
 ctx.fillStyle = "#000000";
 if (isHorizontal) {
 
-  ctx.fillRect(
-    x + mainCardHeight - 60,
-    y + mainCardWidth - 40,
-    60,
-    40
-  );
+ctx.fillRect(
+  x + mainCardHeight - 90,
+  y + mainCardWidth - 65,
+  90,
+  65
+);
 
 } else {
 
@@ -216,8 +216,8 @@ if (isHorizontal) {
 
 ctx.fillText(
   `${group.count}`,
-  x + mainCardWidth - 45,
-  y + mainCardHeight - 28
+  x + mainCardHeight - 45,
+  y + mainCardWidth - 28
 );
 
 } else {
@@ -285,21 +285,21 @@ ctx.drawImage(
 );
 ctx.fillStyle = "#000";
 ctx.fillRect(
-    x + gCardWidth - 60,
-    y + gCardHeight - 40,
-    60,
-    40
+  x + gCardWidth - 90,
+  y + gCardHeight - 65,
+  90,
+  65
 );
 
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 36px sans-serif";
+  ctx.font = "bold 64px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
 ctx.fillText(
-    `×${group.count}`,
-    x + gCardWidth - 34,
-    y + gCardHeight - 18
+  `${group.count}`,
+  x + gCardWidth - 45,
+  y + gCardHeight - 28
 );
 ctx.textAlign = "start";
 ctx.textBaseline = "alphabetic";
@@ -351,21 +351,21 @@ ctx.drawImage(
 );
 
   ctx.fillStyle = "#000";
-  ctx.fillRect(
-  x + finisherWidth - 60,
-y + finisherHeight - 40,
-  60,
-  40
+ctx.fillRect(
+  x + finisherWidth - 90,
+  y + finisherHeight - 65,
+  90,
+  65
 );
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 36px sans-serif";
+  ctx.font = "bold 64px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
 ctx.fillText(
-  `×${group.count}`,
-  x + finisherWidth - 34,
-  y + finisherHeight - 18
+  `${group.count}`,
+  x + finisherWidth - 45,
+  y + finisherHeight - 28
 );
 
 ctx.textAlign = "start";
