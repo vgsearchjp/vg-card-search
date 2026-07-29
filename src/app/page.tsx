@@ -6910,7 +6910,7 @@ return (
 
 )}
 
-{manageView === "manage2" && (
+{manageView === "manage1" && (
 
 <div className="p-6">
 
