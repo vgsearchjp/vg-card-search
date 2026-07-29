@@ -6271,7 +6271,6 @@ activeTab === "manage" && (
   placeholder="商品コード検索"
   value={productCodeSearch}
   onChange={(e) => setProductCodeSearch(e.target.value)}
-  onFocus={() => console.log("manage1 focus")}
 />
 
 <input
@@ -6920,8 +6919,7 @@ return (
 </h2>
 
 <div className="flex flex-row md:inline-flex gap-2 mb-3">
-
-  <div className="relative flex-1">
+<>
 
 <input
   type="text"
@@ -6933,16 +6931,15 @@ return (
   placeholder="カード名・カード番号検索"
   value={limitSearch}
   onChange={(e) => setLimitSearch(e.target.value)}
-// onKeyDown={(e) => {
-//   if (e.key === "Enter") {
-//     e.currentTarget.blur();
-//     searchLimitCards();
-//   }
-// }}
-onFocus={() => console.log("manage2 focus")}
+  onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.currentTarget.blur();
+          searchLimitCards();
+        }
+      }}
     />
 
-  </div>
+</>
 
   <button
     onClick={searchLimitCards}
