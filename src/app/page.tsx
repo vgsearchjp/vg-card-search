@@ -6918,7 +6918,7 @@ return (
 制限カード管理
 </h2>
 
-<div className="flex flex-row md:inline-flex gap-2 mb-3">
+<div　className="flex flex-row gap-2 mb-3">
 
   <div className="relative flex-1">
 
