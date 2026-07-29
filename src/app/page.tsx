@@ -59,6 +59,7 @@ const [activeTab, setActiveTab] = useState("manage");
 const [showManageMenu, setShowManageMenu] = useState(false);
 const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
+const [focusState, setFocusState] = useState("");
 const [limitCards, setLimitCards] = useState<any[]>([]);
 const [selectedLimitCard, setSelectedLimitCard] = useState<any | null>(null);
 const [banCards, setBanCards] = useState<any[]>([]);
@@ -6938,9 +6939,12 @@ return (
   spellCheck={false}
   className="border p-3 w-full md:w-[500px] pr-10"
   placeholder="② カード名・カード番号検索"
-    onFocus={() => alert("focus")}
-  onBlur={() => alert("blur")}
+onFocus={() => setFocusState("focus")}
+onBlur={() => setFocusState("blur")}
 />
+<div className="text-red-500 text-sm">
+  {focusState}
+</div>
 </>
 
   <button
