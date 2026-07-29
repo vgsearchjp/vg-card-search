@@ -6922,8 +6922,13 @@ return (
 <>
 
 <input
-  placeholder="①"
-  className="border p-3 w-full"
+  type="text"
+  autoComplete="off"
+  autoCorrect="off"
+  autoCapitalize="off"
+  spellCheck={false}
+  className="border p-3 w-full md:w-[500px] pr-10"
+  placeholder="② カード名・カード番号検索"
  />
 
 <input
