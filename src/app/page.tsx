@@ -6921,10 +6921,11 @@ return (
 <div className="flex flex-col md:flex-row gap-2 mb-6">
 
 <input
-  className="border p-2 flex-1"
-  placeholder="カード名・カード番号検索"
+  type="text"
   value={limitSearch}
-  onChange={(e)=>setLimitSearch(e.target.value)}
+  onChange={(e) => setLimitSearch(e.target.value)}
+  placeholder="カード名・カード番号検索"
+  autoComplete="off"
 />
 
 <button
