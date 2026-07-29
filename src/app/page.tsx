@@ -6938,6 +6938,8 @@ return (
   spellCheck={false}
   className="border p-3 w-full md:w-[500px] pr-10"
   placeholder="② カード名・カード番号検索"
+    onFocus={() => alert("focus")}
+  onBlur={() => alert("blur")}
 />
 </>
 
