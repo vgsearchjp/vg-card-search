@@ -6271,6 +6271,7 @@ activeTab === "manage" && (
   placeholder="商品コード検索"
   value={productCodeSearch}
   onChange={(e) => setProductCodeSearch(e.target.value)}
+  onFocus={() => console.log("manage1 focus")}
 />
 
 <input
@@ -6938,6 +6939,7 @@ return (
 //     searchLimitCards();
 //   }
 // }}
+onFocus={() => console.log("manage2 focus")}
     />
 
   </div>
