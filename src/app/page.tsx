@@ -2987,9 +2987,7 @@ onClick={()=>{
 </div>
 )}
 
-<div className="text-red-500">
-  showManageMenu : {String(showManageMenu)}
-</div>
+
 
 </div>
 
@@ -3112,7 +3110,9 @@ onClick={()=>{
 
 </div>
 )}
-
+<div className="text-red-500">
+  showManageMenu : {String(showManageMenu)}
+</div>
 </div>
 </div>
 
