@@ -6930,6 +6930,11 @@ return (
  />
 
 <input
+  type="text"
+  autoComplete="off"
+  autoCorrect="off"
+  autoCapitalize="off"
+  spellCheck={false}
   placeholder="②"
   className="border p-3 w-full md:w-[500px] pr-10"
 />
