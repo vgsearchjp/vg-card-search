@@ -6934,8 +6934,6 @@ return (
   spellCheck={false}
   className="border p-3 w-full md:w-[500px] pr-10"
   placeholder="② カード名・カード番号検索"
-  value={limitSearch}
-  onChange={(e) => setLimitSearch(e.target.value)}
 />
 </>
 
@@ -6947,12 +6945,6 @@ return (
   </button>
 
 </div>
-<button
-  className="border p-2"
-  onClick={() => alert("test")}
->
-  テスト
-</button>
 
 <div className="space-y-6">
 
