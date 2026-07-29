@@ -6930,19 +6930,9 @@ return (
  />
 
 <input
-  type="text"
-  autoComplete="off"
-  autoCorrect="off"
-  autoCapitalize="off"
-  spellCheck={false}
-  className="border p-3 w-full md:w-[500px] pr-10"
-  placeholder="② カード名・カード番号検索"
-onFocus={() => setFocusState("focus")}
-onBlur={() => setFocusState("blur")}
+  placeholder="②"
+  className="border p-3 w-full"
 />
-<div className="text-red-500 text-sm">
-  {focusState}
-</div>
 </>
 
   <button
