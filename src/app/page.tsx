@@ -6922,23 +6922,21 @@ return (
 <>
 
 <input
+  placeholder="①"
+  className="border p-3 w-full"
+ />
+
+<input
   type="text"
   autoComplete="off"
   autoCorrect="off"
   autoCapitalize="off"
   spellCheck={false}
   className="border p-3 w-full md:w-[500px] pr-10"
-  placeholder="カード名・カード番号検索"
+  placeholder="② カード名・カード番号検索"
   value={limitSearch}
   onChange={(e) => setLimitSearch(e.target.value)}
-  onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.currentTarget.blur();
-          searchLimitCards();
-        }
-      }}
-    />
-
+/>
 </>
 
   <button
@@ -6955,6 +6953,7 @@ return (
 >
   テスト
 </button>
+
 <div className="space-y-6">
 
 <div className="border rounded p-4">
