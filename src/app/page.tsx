@@ -6921,6 +6921,11 @@ return (
 <div className="flex flex-col md:flex-row gap-2 mb-6">
 
 <input
+  type="text"
+  autoComplete="off"
+  autoCorrect="off"
+  autoCapitalize="off"
+  spellCheck={false}
   className="border p-2 flex-1"
   placeholder="カード名・カード番号検索"
   value={limitSearch}
