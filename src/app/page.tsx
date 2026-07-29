@@ -6925,11 +6925,6 @@ return (
 <>
 
 <input
-  placeholder="①"
-  className="border p-3 w-full"
- />
-
-<input
   type="text"
   autoComplete="off"
   autoCorrect="off"
