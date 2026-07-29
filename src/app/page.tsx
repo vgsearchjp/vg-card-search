@@ -2987,6 +2987,10 @@ onClick={()=>{
 </div>
 )}
 
+<div className="text-red-500">
+  showManageMenu : {String(showManageMenu)}
+</div>
+
 </div>
 
 )}
@@ -6922,13 +6926,8 @@ return (
 <>
 
 <input
-  type="text"
-  autoComplete="off"
-  autoCorrect="off"
-  autoCapitalize="off"
-  spellCheck={false}
-  className="border p-3 w-full md:w-[500px] pr-10"
-  placeholder="② カード名・カード番号検索"
+  placeholder="①"
+  className="border p-3 w-full"
  />
 
 <input
