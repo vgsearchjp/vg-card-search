@@ -6918,26 +6918,31 @@ return (
 制限カード管理
 </h2>
 
-<div className="flex flex-col md:flex-row gap-2 mb-6">
+<div className="flex flex-row md:inline-flex gap-2 mb-3">
 
-<input
-  type="text"
-  autoComplete="off"
-  autoCorrect="off"
-  autoCapitalize="off"
-  spellCheck={false}
-  className="border p-2 flex-1"
-  placeholder="カード名・カード番号検索"
-  value={limitSearch}
-  onChange={(e)=>setLimitSearch(e.target.value)}
-/>
+  <div className="relative flex-1">
 
-<button
-  onClick={searchLimitCards}
-  className="bg-blue-600 text-white px-4 py-2 rounded"
->
-検索
-</button>
+    <input
+      className="border p-3 w-full md:w-[500px] pr-10"
+      placeholder="カード名・カード番号検索"
+      value={limitSearch}
+      onChange={(e) => setLimitSearch(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.currentTarget.blur();
+          searchLimitCards();
+        }
+      }}
+    />
+
+  </div>
+
+  <button
+    onClick={searchLimitCards}
+    className="bg-blue-600 text-white px-4 py-2 rounded"
+  >
+    検索
+  </button>
 
 </div>
 
