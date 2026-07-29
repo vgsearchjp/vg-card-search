@@ -6949,7 +6949,12 @@ return (
   </button>
 
 </div>
-
+<button
+  className="border p-2"
+  onClick={() => alert("test")}
+>
+  テスト
+</button>
 <div className="space-y-6">
 
 <div className="border rounded p-4">
