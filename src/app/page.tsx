@@ -6912,7 +6912,10 @@ return (
 
 {manageView === "manage2" && (
 
-<div className="p-6">
+<div
+  className="p-6"
+  style={{ zIndex: 9999, position: "relative", background: "white" }}
+>
 
 <h2 className="text-2xl font-bold mb-6">
 制限カード管理
