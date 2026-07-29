@@ -6937,7 +6937,6 @@ return (
   spellCheck={false}
   placeholder="②"
   className="border p-3 w-full md:w-[500px] pr-10"
-  value={limitSearch}
 />
 
 </>
