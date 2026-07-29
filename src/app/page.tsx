@@ -6918,16 +6918,21 @@ return (
 制限カード管理
 </h2>
 
-<div　className="flex flex-row gap-2 mb-3">
+<div className="flex flex-row md:inline-flex gap-2 mb-3">
 
   <div className="relative flex-1">
 
-    <input
-      className="border p-3 w-full md:w-[500px] pr-10"
-      placeholder="カード名・カード番号検索"
-      value={limitSearch}
-      onChange={(e) => setLimitSearch(e.target.value)}
-      onKeyDown={(e) => {
+<input
+  type="text"
+  autoComplete="off"
+  autoCorrect="off"
+  autoCapitalize="off"
+  spellCheck={false}
+  className="border p-3 w-full md:w-[500px] pr-10"
+  placeholder="カード名・カード番号検索"
+  value={limitSearch}
+  onChange={(e) => setLimitSearch(e.target.value)}
+  onKeyDown={(e) => {
         if (e.key === "Enter") {
           e.currentTarget.blur();
           searchLimitCards();
