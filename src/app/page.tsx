@@ -3111,9 +3111,7 @@ onClick={()=>{
 
 </div>
 )}
-<div className="text-red-500">
-  showManageMenu : {String(showManageMenu)}
-</div>
+
 </div>
 </div>
 
@@ -6919,9 +6917,7 @@ return (
 
 <div className="p-6">
 
-<h2 className="text-2xl font-bold mb-6">
-制限カード管理
-</h2>
+
 
 <div className="flex flex-row md:inline-flex gap-2 mb-3">
 <>
@@ -6955,7 +6951,9 @@ onBlur={() => setFocusState("blur")}
   </button>
 
 </div>
-
+<h2 className="text-2xl font-bold mb-6">
+制限カード管理
+</h2>
 <div className="space-y-6">
 
 <div className="border rounded p-4">
