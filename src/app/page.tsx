@@ -6912,10 +6912,7 @@ return (
 
 {manageView === "manage2" && (
 
-<div
-  className="p-6"
-  style={{ zIndex: 9999, position: "relative", background: "white" }}
->
+<div className="p-6">
 
 <h2 className="text-2xl font-bold mb-6">
 制限カード管理
@@ -6935,12 +6932,12 @@ return (
   placeholder="カード名・カード番号検索"
   value={limitSearch}
   onChange={(e) => setLimitSearch(e.target.value)}
-  onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.currentTarget.blur();
-          searchLimitCards();
-        }
-      }}
+// onKeyDown={(e) => {
+//   if (e.key === "Enter") {
+//     e.currentTarget.blur();
+//     searchLimitCards();
+//   }
+// }}
     />
 
   </div>
