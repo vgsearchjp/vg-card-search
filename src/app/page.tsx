@@ -7177,7 +7177,7 @@ key={item.id}
 className="border rounded p-2 flex items-center justify-between"
 >
 
-<div className="flex flex-col md:flex-row items-center gap-4 flex-1">
+<div className="flex flex-col md:flex-row items-start md:items-center gap-4 flex-1">
 
   <div className="flex items-center gap-3">
 
@@ -7206,7 +7206,7 @@ className="border rounded p-2 flex items-center justify-between"
   <span className="hidden md:inline">⇔</span>
 </div>
 
-  <div className="flex items-center gap-3 justify-center">
+  <div className="flex items-center gap-3">
 
     <img
       src={getCardImage(item.card2)}
