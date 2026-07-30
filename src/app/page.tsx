@@ -7168,6 +7168,8 @@ alt={item.cards.card_name}
       ②：
       {selectionCard2 ? `${selectionCard2.card_no} ${selectionCard2.card_name}` : "未選択"}
     </div>
+
+</div>
 <div className="mt-4 space-y-2">
 
 {selectionLimits.map((item) => (
@@ -7242,8 +7244,6 @@ className="bg-red-600 text-white px-3 py-1 rounded"
 ))}
 
 </div>
-</div>
-
 </div>
 </div>
 
