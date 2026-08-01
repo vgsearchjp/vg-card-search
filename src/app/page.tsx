@@ -7850,40 +7850,42 @@ className="max-h-[90vh] max-w-[90vw]"
 
 <div
   key={item.id}
-  className="flex flex-row justify-center items-center gap-2 md:gap-8 w-full"
+  className="w-full flex flex-col items-center gap-2"
 >
 
-      <div className="flex flex-col items-center w-[90px] md:w-[180px]">
+  <div className="flex flex-row justify-center items-center gap-3 md:gap-8">
 
-        <img
-          src={getCardImage(item.card1)}
-          className="w-24 md:w-28 rounded shadow"
-        />
+    <img
+      src={getCardImage(item.card1)}
+      className="w-24 md:w-28 rounded shadow"
+    />
 
-        <div className="mt-2 h-20 md:h-auto text-center text-sm break-words">
-          {item.card1.card_name}
-        </div>
-
-      </div>
-
-<div className="flex items-center justify-center w-10 self-center">
-  <span className="text-4xl font-bold">⇔</span>
-</div>
-
-      <div className="flex flex-col items-center w-[90px] md:w-[180px]">
-
-        <img
-          src={getCardImage(item.card2)}
-          className="w-24 md:w-28 rounded shadow"
-        />
-
-        <div className="mt-2 h-20 md:h-auto text-center text-sm break-words">
-          {item.card2.card_name}
-        </div>
-
-      </div>
-
+    <div className="text-4xl font-bold">
+      ⇔
     </div>
+
+    <img
+      src={getCardImage(item.card2)}
+      className="w-24 md:w-28 rounded shadow"
+    />
+
+  </div>
+
+  <div className="flex flex-row justify-center gap-3 md:gap-8">
+
+    <div className="w-24 md:w-28 text-center text-sm break-words">
+      {item.card1.card_name}
+    </div>
+
+    <div className="w-10" />
+
+    <div className="w-24 md:w-28 text-center text-sm break-words">
+      {item.card2.card_name}
+    </div>
+
+  </div>
+
+</div>
 
   ))}
 
