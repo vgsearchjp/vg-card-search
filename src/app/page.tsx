@@ -7850,7 +7850,7 @@ className="max-h-[90vh] max-w-[90vw]"
 
     <div
       key={item.id}
-      className="flex flex-col md:flex-row items-center gap-8"
+      className="flex flex-row items-center gap-4"
     >
 
       <div className="flex flex-col items-center w-[180px]">
@@ -7866,13 +7866,9 @@ className="max-h-[90vh] max-w-[90vw]"
 
       </div>
 
-      <div className="text-4xl font-bold hidden md:block">
-        ⇔
-      </div>
-
-      <div className="text-4xl font-bold md:hidden">
-        ↕
-      </div>
+<div className="text-4xl font-bold">
+  ⇔
+</div>
 
       <div className="flex flex-col items-center w-[180px]">
 
