@@ -7051,7 +7051,7 @@ return (
   autoCorrect="off"
   autoCapitalize="off"
   spellCheck={false}
-  placeholder="②"
+  placeholder=""
   className="border p-3 w-full md:w-[500px] pr-10"
   value={limitSearch}
   onChange={(e) => setLimitSearch(e.target.value)}
