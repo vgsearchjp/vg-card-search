@@ -7850,14 +7850,14 @@ className="max-h-[90vh] max-w-[90vw]"
 
     <div
       key={item.id}
-      className="flex flex-row items-center gap-4"
+      className="flex flex-row items-center gap-2 md:gap-8"
     >
 
-      <div className="flex flex-col items-center w-[180px]">
+      <div className="flex flex-col items-center w-[90px] md:w-[180px]">
 
         <img
           src={getCardImage(item.card1)}
-          className="w-28 rounded shadow"
+          className="w-20 md:w-28 rounded shadow"
         />
 
         <div className="mt-2 text-center text-sm break-words">
@@ -7870,11 +7870,11 @@ className="max-h-[90vh] max-w-[90vw]"
   ⇔
 </div>
 
-      <div className="flex flex-col items-center w-[180px]">
+      <div className="flex flex-col items-center w-[90px] md:w-[180px]">
 
         <img
           src={getCardImage(item.card2)}
-          className="w-28 rounded shadow"
+          className="w-20 md:w-28 rounded shadow"
         />
 
         <div className="mt-2 text-center text-sm break-words">
