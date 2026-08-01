@@ -7844,14 +7844,14 @@ className="max-h-[90vh] max-w-[90vw]"
   🔄 選抜制限
 </h3>
 
-<div className="flex flex-col items-start gap-10">
+<div className="flex flex-col items-center gap-10">
 
   {selectionLimits.map((item:any)=>(
 
-    <div
-      key={item.id}
-      className="flex flex-row items-start gap-2 md:gap-8"
-    >
+<div
+  key={item.id}
+  className="flex flex-row justify-center items-start gap-2 md:gap-8 w-full"
+>
 
       <div className="flex flex-col items-center w-[90px] md:w-[180px]">
 
