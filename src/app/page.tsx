@@ -69,6 +69,11 @@ const [limit3Cards, setLimit3Cards] = useState<any[]>([]);
 const [selectionCard1, setSelectionCard1] = useState<any | null>(null);
 const [selectionCard2, setSelectionCard2] = useState<any | null>(null);
 const [selectionLimits, setSelectionLimits] = useState<any[]>([]);
+const [banCardNames,setBanCardNames]=useState<string[]>([]);
+const [limit1CardNames,setLimit1CardNames]=useState<string[]>([]);
+const [limit2CardNames,setLimit2CardNames]=useState<string[]>([]);
+const [limit3CardNames,setLimit3CardNames]=useState<string[]>([]);
+const [selectionLimitNames,setSelectionLimitNames]=useState<any[]>([]);
 const [deckView, setDeckView] = useState("list");
 const [deckName, setDeckName] = useState("");
 const [savingDeckImage, setSavingDeckImage] = useState(false);
@@ -233,8 +238,73 @@ Object.values(
   )
 ) as any[];
 
+const checkDeckLimit = (card:any) => {
+
+  // ライド＋メインを対象
+const deckCards = [
+  ...mainDeck,
+  ...gDeck,
+  ...(rideG3 ? [rideG3] : []),
+  ...(rideG2 ? [rideG2] : []),
+  ...(rideG1 ? [rideG1] : []),
+  ...(rideG0 ? [rideG0] : []),
+  ...(rideGenerator ? [rideGenerator] : [])
+];
+  const sameCount = deckCards.filter(
+    c => c.card_name === card.card_name
+  ).length;
+
+  // 禁止
+  if (banCardNames.includes(card.card_name)) {
+    return { ok:false, message:"禁止カードです" };
+  }
+
+  // 1枚制限
+  if (limit1CardNames.includes(card.card_name) && sameCount >= 1) {
+    return { ok:false, message:"1枚制限カードです" };
+  }
+
+  // 2枚制限
+  if (limit2CardNames.includes(card.card_name) && sameCount >= 2) {
+    return { ok:false, message:"2枚制限カードです" };
+  }
+
+  // 3枚制限
+  if (limit3CardNames.includes(card.card_name) && sameCount >= 3) {
+    return { ok:false, message:"3枚制限カードです" };
+  }
+
+  // 選抜制限
+  for (const limit of selectionLimitNames) {
+
+    if (
+      limit.card1 === card.card_name &&
+      deckCards.some(c=>c.card_name===limit.card2)
+    ) {
+      return { ok:false, message:"選抜制限カードです" };
+    }
+
+    if (
+      limit.card2 === card.card_name &&
+      deckCards.some(c=>c.card_name===limit.card1)
+    ) {
+      return { ok:false, message:"選抜制限カードです" };
+    }
+
+  }
+
+  return { ok:true };
+
+};
 
 const addToMainDeck = (card:any) => {
+
+const result = checkDeckLimit(card);
+
+if (!result.ok) {
+  alert(result.message);
+  return;
+}
 
 const sameCards=
 mainDeck.filter(
@@ -262,6 +332,14 @@ c.card_no===card.card_no
 };
 
 const addToGDeck = (card: any) => {
+
+  const result = checkDeckLimit(card);
+
+if (!result.ok) {
+  alert(result.message);
+  return;
+}
+
   const sameCards =
     gDeck.filter(
       (c) =>
@@ -393,6 +471,7 @@ const [allNormalRarities,setAllNormalRarities]=useState<string[]>([]);
 const [allParallelRarities,setAllParallelRarities]=useState<string[]>([]);
 const [zoomCard,setZoomCard] =useState<any>(null);
 const [showDeckModal, setShowDeckModal] = useState(false);
+const [showLimitModal,setShowLimitModal]=useState(false);
 const [deckImagesLoaded, setDeckImagesLoaded] = useState(false);
 const [newPassword,setNewPassword] =useState("");
 const [previousTab, setPreviousTab] =useState("");
@@ -1418,6 +1497,22 @@ const loadBanCards = async () => {
   setLimit2Cards(list.filter(x => x.limit_type === "limit2"));
   setLimit3Cards(list.filter(x => x.limit_type === "limit3"));
 
+ setBanCardNames(
+  list.filter(x=>x.limit_type==="ban").map(x=>x.cards.card_name)
+);
+
+setLimit1CardNames(
+  list.filter(x=>x.limit_type==="limit1").map(x=>x.cards.card_name)
+);
+
+setLimit2CardNames(
+  list.filter(x=>x.limit_type==="limit2").map(x=>x.cards.card_name)
+);
+
+setLimit3CardNames(
+  list.filter(x=>x.limit_type==="limit3").map(x=>x.cards.card_name)
+);
+
 };
 
 const loadSelectionLimits = async () => {
@@ -1436,6 +1531,13 @@ const loadSelectionLimits = async () => {
   }
 
   setSelectionLimits(data || []);
+
+  setSelectionLimitNames(
+  (data || []).map(x=>({
+    card1:x.card1.card_name,
+    card2:x.card2.card_name
+  }))
+);
 
 };
 
@@ -3613,6 +3715,13 @@ className="
   戻る
 </button>
 
+<button
+  onClick={() => setShowLimitModal(true)}
+  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+>
+  制限カード
+</button>
+
 </div>
 
 <div className="mb-2">
@@ -4190,10 +4299,22 @@ md:overflow-y-auto
       className="w-[100px] cursor-pointer hover:opacity-80"
       onClick={() => {
 
-        if (rideSelectMode === "g3") {
-            setRideG3(card);
-            setRideSelectMode(null);
-         }
+  if (deckMode === "ride") {
+
+    const result = checkDeckLimit(card);
+
+    if (!result.ok) {
+      alert(result.message);
+      return;
+    }
+
+  }
+
+  if (rideSelectMode === "g3") {
+    setRideG3(card);
+    setRideSelectMode(null);
+  }
+
 
         if (rideSelectMode === "g2") {
            setRideG2(card);
@@ -7571,6 +7692,214 @@ className="max-h-[90vh] max-w-[90vw]"
       （タップすると閉じます）
     </div>
   </div>
+)}
+
+{showLimitModal && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    onClick={() => setShowLimitModal(false)}
+  >
+    <div
+  className="bg-white rounded-lg shadow-lg w-[95%] max-w-5xl max-h-[90vh] overflow-y-auto"
+  onClick={(e)=>e.stopPropagation()}
+>
+
+      <div className="flex items-center justify-between border-b p-4">
+        <h2 className="text-xl font-bold">
+          制限カード一覧
+        </h2>
+
+      </div>
+<div className="p-4">
+
+  <h3 className="text-lg font-bold mb-3">
+    🚫 禁止カード
+  </h3>
+
+  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+    {banCards.map((item:any)=>(
+
+      <div
+        key={item.id}
+        className="text-center"
+      >
+
+        <img
+          src={getCardImage(item.cards)}
+          className="w-24 mx-auto rounded"
+        />
+
+        <div className="text-sm mt-2 break-words">
+          {item.cards.card_name}
+        </div>
+
+      </div>
+
+    ))}
+
+    {banCards.length===0&&(
+      <div className="text-gray-500">
+        登録されていません
+      </div>
+    )}
+
+  </div>
+
+<h3 className="text-lg font-bold mt-8 mb-3">
+  ① 1枚制限
+</h3>
+
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+  {limit1Cards.map((item:any)=>(
+
+    <div key={item.id} className="text-center">
+
+      <img
+        src={getCardImage(item.cards)}
+        className="w-24 mx-auto rounded"
+      />
+
+      <div className="text-sm mt-2 break-words">
+        {item.cards.card_name}
+      </div>
+
+    </div>
+
+  ))}
+
+  {limit1Cards.length===0&&(
+    <div className="text-gray-500">
+      登録されていません
+    </div>
+  )}
+
+</div>
+
+<h3 className="text-lg font-bold mt-8 mb-3">
+  ② 2枚制限
+</h3>
+
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+  {limit2Cards.map((item:any)=>(
+
+    <div key={item.id} className="text-center">
+
+      <img
+        src={getCardImage(item.cards)}
+        className="w-24 mx-auto rounded"
+      />
+
+      <div className="text-sm mt-2 break-words">
+        {item.cards.card_name}
+      </div>
+
+    </div>
+
+  ))}
+
+  {limit2Cards.length===0&&(
+    <div className="text-gray-500">
+      登録されていません
+    </div>
+  )}
+
+</div>
+
+<h3 className="text-lg font-bold mt-8 mb-3">
+  ③ 3枚制限
+</h3>
+
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+  {limit3Cards.map((item:any)=>(
+
+    <div key={item.id} className="text-center">
+
+      <img
+        src={getCardImage(item.cards)}
+        className="w-24 mx-auto rounded"
+      />
+
+      <div className="text-sm mt-2 break-words">
+        {item.cards.card_name}
+      </div>
+
+    </div>
+
+  ))}
+
+  {limit3Cards.length===0&&(
+    <div className="text-gray-500">
+      登録されていません
+    </div>
+  )}
+
+</div>
+
+</div>
+<h3 className="text-lg font-bold mt-8 mb-4">
+  🔄 選抜制限
+</h3>
+
+<div className="flex flex-col items-start gap-10">
+
+  {selectionLimits.map((item:any)=>(
+
+    <div
+      key={item.id}
+      className="flex flex-col md:flex-row items-center gap-8"
+    >
+
+      <div className="flex flex-col items-center w-[180px]">
+
+        <img
+          src={getCardImage(item.card1)}
+          className="w-28 rounded shadow"
+        />
+
+        <div className="mt-2 text-center text-sm break-words">
+          {item.card1.card_name}
+        </div>
+
+      </div>
+
+      <div className="text-4xl font-bold hidden md:block">
+        ⇔
+      </div>
+
+      <div className="text-4xl font-bold md:hidden">
+        ↕
+      </div>
+
+      <div className="flex flex-col items-center w-[180px]">
+
+        <img
+          src={getCardImage(item.card2)}
+          className="w-28 rounded shadow"
+        />
+
+        <div className="mt-2 text-center text-sm break-words">
+          {item.card2.card_name}
+        </div>
+
+      </div>
+
+    </div>
+
+  ))}
+
+  {selectionLimits.length===0&&(
+    <div className="text-gray-500">
+      登録されていません
+    </div>
+  )}
+
+</div>
+</div>
+</div>
 )}
 
 </main>
