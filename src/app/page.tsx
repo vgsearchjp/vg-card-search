@@ -1137,7 +1137,6 @@ setStorageResults(result);
 
 const loadAllCardsCache = async () => {
 
-
 const cache = await getAllCardsCache();
 
 if (cache && cache.length === 0) {
@@ -1145,7 +1144,19 @@ if (cache && cache.length === 0) {
 }
 
 if (cache && cache.length > 0) {
-  return cache;
+
+  const { count, error: countError } = await supabase
+    .from("cards")
+    .select("id", { count: "exact", head: true });
+
+  if (countError) {
+    console.log(countError);
+    return cache;
+  }
+
+  if (count === cache.length) {
+    return cache;
+  }
 }
 
 const { data, error } = await supabase
