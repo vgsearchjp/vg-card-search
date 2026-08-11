@@ -720,25 +720,65 @@ const deleteStorageImages = async (product: any) => {
 
 
 const deleteProduct = async (id: number) => {
-  const ok = confirm("この商品を削除しますか？");
+  const ok = confirm("この商品と登録されているカード・コレクション情報を削除しますか？");
 
   if (!ok) return;
 
-  const { error } = await supabase
+  const { data: cards, error: cardsLoadError } = await supabase
+    .from("cards")
+    .select("id")
+    .eq("product_id", id);
+
+  if (cardsLoadError) {
+    console.log(cardsLoadError);
+    alert("カード取得失敗");
+    return;
+  }
+
+  const cardIds = (cards || []).map((card) => card.id);
+
+  if (cardIds.length > 0) {
+    const { error: collectionError } = await supabase
+      .from("card_collection")
+      .delete()
+      .in("card_id", cardIds);
+
+    if (collectionError) {
+      console.log(collectionError);
+      alert("コレクション情報削除失敗");
+      return;
+    }
+  }
+
+  const { error: cardsError } = await supabase
+    .from("cards")
+    .delete()
+    .eq("product_id", id);
+
+  if (cardsError) {
+    console.log(cardsError);
+    alert("カード削除失敗");
+    return;
+  }
+
+  const { error: productError } = await supabase
     .from("products")
     .delete()
     .eq("id", id);
 
-  if (error) {
-    console.log(error);
-    alert("削除失敗");
+  if (productError) {
+    console.log(productError);
+    alert("商品削除失敗");
     return;
   }
 
   alert("削除成功");
 
+  await deleteAllCardsCache();
+
   loadProducts();
 };
+
 const moveProductUp = async (product: any) => {
   const currentIndex =
   products.findIndex(
