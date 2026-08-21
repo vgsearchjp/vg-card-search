@@ -1163,7 +1163,17 @@ if (cache && cache.length > 0) {
 const { data, error } = await supabase
   .from("cards")
   .select(`
-    *,
+    id,
+    card_no,
+    card_name,
+    image_url,
+    nation,
+    grade,
+    rarity,
+    card_type,
+    trigger_type,
+    sort_order,
+
     products (
       sort_order
     )
@@ -1935,6 +1945,65 @@ setNationList(list);
 
 };
 
+const getNationCardsCache = async (
+  nation: string,
+  includeNationless: boolean
+) => {
+  const cache = await getAllCardsCache();
+
+  if (!cache || cache.length === 0) {
+    return null;
+  }
+
+  const nations = includeNationless
+    ? [nation, "-"]
+    : [nation];
+
+  const result = cache.filter(
+    (card: any) => nations.includes(card.nation)
+  );
+
+  return result.length > 0 ? result : null;
+};
+
+const loadCardsByNation = async (
+  nation: string,
+  includeNationless: boolean
+) => {
+  const { data, error } = await supabase
+    .from("cards")
+    .select(`
+      id,
+      card_no,
+      card_name,
+      image_url,
+      nation,
+      grade,
+      rarity,
+      card_type,
+      trigger_type,
+      sort_order,
+      products (
+        sort_order
+      )
+    `)
+    .in(
+      "nation",
+      includeNationless ? [nation, "-"] : [nation]
+    )
+    .order("sort_order", {
+      referencedTable: "products",
+    })
+    .order("sort_order");
+
+  if (error) {
+    console.log("NATION CARDS LOAD ERROR", error);
+    return [];
+  }
+
+  return data || [];
+};
+
 const loadNationCards = async (
   nation: string,
   cardType?: string,
@@ -1954,7 +2023,7 @@ const k = keyword ?? cardSearch;
 const i = include ?? includeNationless;
 const t = trigger ?? searchTrigger;
 
-const cards = await loadAllCardsCache();
+const cards = await loadCardsByNation(nation, i);
 
 const data = filterDeckCards(
   cards,
