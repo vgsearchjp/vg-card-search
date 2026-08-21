@@ -441,6 +441,7 @@ const [cardSearch,setCardSearch] = useState("");
 const [homeRarity,setHomeRarity] = useState("");
 const [searchNation, setSearchNation] = useState("");
 const [nationList, setNationList] = useState<string[]>([]);
+const [productNation, setProductNation] = useState("");
 const [searchCardType,setSearchCardType]=useState("");
 const [homeView, setHomeView] = useState("products");
 const [selectedHomeCard, setSelectedHomeCard] = useState<any>(null);
@@ -5469,7 +5470,27 @@ onClick={() => {
       パラレル
     </button>
 
-  </div>
+<div className="flex flex-wrap gap-2 mt-2">
+  {[...new Set(cards.map((card) => card.nation).filter(Boolean))].map((nation) => (
+    <button
+      key={nation}
+      className={`border px-4 py-2 ${
+        productNation === nation ? "bg-yellow-300" : ""
+      }`}
+      onClick={() => {
+        if (productNation === nation) {
+          setProductNation("");
+        } else {
+          setProductNation(nation);
+        }
+      }}
+    >
+      {nation}
+    </button>
+  ))}
+</div>
+
+</div>
 )}
 
 
@@ -5661,9 +5682,12 @@ onClick={()=>{
     .filter((card) => {
 
 
-  if (rarityView === "all") {
-    return true;
-  }
+if (
+  productNation !== "" &&
+  card.nation !== productNation
+) {
+  return false;
+}
       const normalList =
   card.products?.normal_rarity
     ?.split(",")
