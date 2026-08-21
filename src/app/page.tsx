@@ -5449,34 +5449,34 @@ onClick={() => {
 {!isSearchResult && (
   <div className="flex flex-wrap gap-2 mt-4 mb-6">
 
-    <button
-      className="border px-4 py-2"
-      onClick={() => setRarityView("all")}
-    >
-      全て
-    </button>
+<button
+  className="border px-3 py-2 text-sm md:text-base"
+  onClick={() => setRarityView("all")}
+>
+  全て
+</button>
 
-    <button
-      className="border px-4 py-2"
-      onClick={() => setRarityView("normal")}
-    >
-      通常レアリティ
-    </button>
+<button
+  className="border px-3 py-2 text-sm md:text-base"
+  onClick={() => setRarityView("normal")}
+>
+  通常レアリティ
+</button>
 
-    <button
-      className="border px-4 py-2"
-      onClick={() => setRarityView("parallel")}
-    >
-      パラレル
-    </button>
+<button
+  className="border px-3 py-2 text-sm md:text-base"
+  onClick={() => setRarityView("parallel")}
+>
+  パラレル
+</button>
 
 <div className="flex flex-wrap gap-2 mt-2">
   {[...new Set(cards.map((card) => card.nation).filter(Boolean))].map((nation) => (
     <button
       key={nation}
-      className={`border px-4 py-2 ${
-        productNation === nation ? "bg-yellow-300" : ""
-      }`}
+className={`border px-3 py-2 text-sm md:text-base ${
+  productNation === nation ? "bg-yellow-300" : ""
+}`}
       onClick={() => {
         if (productNation === nation) {
           setProductNation("");
