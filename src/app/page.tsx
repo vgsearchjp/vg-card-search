@@ -75,6 +75,7 @@ const [limit2CardNames,setLimit2CardNames]=useState<string[]>([]);
 const [limit3CardNames,setLimit3CardNames]=useState<string[]>([]);
 const [selectionLimitNames,setSelectionLimitNames]=useState<any[]>([]);
 const [deckView, setDeckView] = useState("list");
+const [onePlayerMode, setOnePlayerMode] = useState(false);
 const [deckName, setDeckName] = useState("");
 const [savingDeckImage, setSavingDeckImage] = useState(false);
 const [savedImageUrl, setSavedImageUrl] = useState<string | null>(null);
@@ -1970,6 +1971,16 @@ const loadCardsByNation = async (
   nation: string,
   includeNationless: boolean
 ) => {
+
+  const cachedCards = await getNationCardsCache(
+    nation,
+    includeNationless
+  );
+
+  if (cachedCards) {
+    return cachedCards;
+  }
+
   const { data, error } = await supabase
     .from("cards")
     .select(`
@@ -1996,12 +2007,33 @@ const loadCardsByNation = async (
     })
     .order("sort_order");
 
-  if (error) {
-    console.log("NATION CARDS LOAD ERROR", error);
-    return [];
-  }
+if (error) {
+  console.log("NATION CARDS LOAD ERROR", error);
+  return [];
+}
 
-  return data || [];
+const result = data || [];
+
+if (result.length > 0) {
+  const allCache = (await getAllCardsCache()) ?? [];
+
+  const existingIds = new Set(
+    allCache.map((card: any) => card.id)
+  );
+
+  const newCards = result.filter(
+    (card: any) => !existingIds.has(card.id)
+  );
+
+  if (newCards.length > 0) {
+    await saveAllCardsCache([
+      ...allCache,
+      ...newCards,
+    ]);
+  }
+}
+
+return result;
 };
 
 const loadNationCards = async (
@@ -3577,6 +3609,14 @@ className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl 
 >
   ＋ 新規デッキ
 </button>
+<button
+  onClick={() => {
+    setOnePlayerMode(true);
+  }}
+  className="bg-green-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded ml-2"
+>
+  1人回し
+</button>
 
 <div className="mt-6 grid grid-cols-2 md:flex md:flex-wrap gap-4 w-full">
 
@@ -3619,9 +3659,15 @@ md:h-[150px]
     
 onClick={async () => {
 
-setCardSearch("");
-setSearchCardType("");
-setSearchGrade("");
+  if (onePlayerMode) {
+    setSelectedDeck(deck);
+    setDeckView("onePlayer");
+    return;
+  }
+
+  setCardSearch("");
+  setSearchCardType("");
+  setSearchGrade("");
 setSearchRarity("");
 setSearchTrigger("");
 setSearchParallel("");
@@ -3798,11 +3844,101 @@ className="
 
 </div>
 
-    </>
+</>
 
-  )}
+)}
 
-  {deckView === "edit" && (
+{deckView === "onePlayer" && (
+  <div className="p-4">
+
+    <button
+      onClick={() => {
+        setOnePlayerMode(false);
+        setSelectedDeck(null);
+        setDeckView("list");
+      }}
+      className="border rounded px-3 py-2 mb-4"
+    >
+      ← デッキ一覧
+    </button>
+
+    <h2 className="text-2xl font-bold mb-4">
+      1人回し
+    </h2>
+
+ <div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative">
+
+  {/* オーダー */}
+  <div className="absolute top-[5%] left-[5%]">
+    オーダー
+  </div>
+
+  {/* トリガー */}
+  <div className="absolute top-[5%] right-[5%]">
+    トリガー
+  </div>
+
+  {/* 左前列リアガード */}
+  <div className="absolute top-[30%] left-[28%]">
+    R
+  </div>
+
+  {/* ヴァンガード */}
+  <div className="absolute top-[30%] left-1/2 -translate-x-1/2">
+    V
+  </div>
+
+  {/* 右前列リアガード */}
+  <div className="absolute top-[30%] right-[28%]">
+    R
+  </div>
+
+  {/* ダメージ */}
+  <div className="absolute top-[30%] left-[5%]">
+    ダメージ
+  </div>
+
+  {/* 山札 */}
+  <div className="absolute top-[30%] right-[12%]">
+    山札
+  </div>
+
+  {/* ライドデッキ */}
+  <div className="absolute top-[30%] right-[3%]">
+    ライドデッキ
+  </div>
+
+  {/* 左後列リアガード */}
+  <div className="absolute top-[55%] left-[28%]">
+    R
+  </div>
+
+  {/* 中央後列リアガード */}
+  <div className="absolute top-[55%] left-1/2 -translate-x-1/2">
+    R
+  </div>
+
+  {/* 右後列リアガード */}
+  <div className="absolute top-[55%] right-[28%]">
+    R
+  </div>
+
+  {/* ドロップ */}
+  <div className="absolute top-[55%] right-[8%]">
+    ドロップ
+  </div>
+
+  {/* 手札 */}
+  <div className="absolute bottom-[5%] left-[15%] right-[15%] text-center">
+    手札
+  </div>
+
+</div>
+
+</div>
+)}
+
+{deckView === "edit" && (
 
     <>
 <div className="flex flex-col md:flex-row gap-6 items-start">
