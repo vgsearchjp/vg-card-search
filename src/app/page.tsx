@@ -3868,7 +3868,7 @@ className="
   </h2>
 </div>
 
-<div className="w-screen h-[100dvh] max-w-none aspect-auto mx-0 border-0 rounded-none bg-gray-100 relative md:w-full md:h-auto md:max-w-[1000px] md:mx-auto md:aspect-[16/10] md:border-2 md:rounded-lg">
+<div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative landscape:fixed landscape:inset-0 landscape:z-[9999] landscape:w-screen landscape:h-[100dvh] landscape:max-w-none landscape:aspect-auto landscape:mx-0 landscape:border-0 landscape:rounded-none">
 
   {/* オーダー */}
   <div className="absolute top-[5%] left-[5%]">
