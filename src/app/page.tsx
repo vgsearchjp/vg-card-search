@@ -3866,7 +3866,7 @@ className="
       1人回し
     </h2>
 
- <div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative">
+<div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-0 rounded-none bg-gray-100 relative md:border-2 md:rounded-lg">
 
   {/* オーダー */}
   <div className="absolute top-[5%] left-[5%]">
