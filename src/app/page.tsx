@@ -3564,7 +3564,7 @@ setActiveTab("home");
 </h2>
 */}
 
-<div className="mb-4">
+<div className="p-0 md:p-4">
 
   <input
     type="text"
@@ -3901,11 +3901,6 @@ className="
   {/* 山札 */}
   <div className="absolute top-[30%] right-[12%]">
     山札
-  </div>
-
-  {/* ライドデッキ */}
-  <div className="absolute top-[30%] right-[3%]">
-    ライドデッキ
   </div>
 
   {/* 左後列リアガード */}
