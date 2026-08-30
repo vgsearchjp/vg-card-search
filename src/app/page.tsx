@@ -3851,20 +3851,22 @@ className="
 {deckView === "onePlayer" && (
   <div className="p-4">
 
-    <button
-      onClick={() => {
-        setOnePlayerMode(false);
-        setSelectedDeck(null);
-        setDeckView("list");
-      }}
-      className="border rounded px-3 py-2 mb-4"
-    >
-      ← デッキ一覧
-    </button>
+<div className="landscape:hidden">
+  <button
+    onClick={() => {
+      setOnePlayerMode(false);
+      setSelectedDeck(null);
+      setDeckView("list");
+    }}
+    className="border rounded px-3 py-2 mb-4"
+  >
+    ← デッキ一覧
+  </button>
 
-    <h2 className="text-2xl font-bold mb-4">
-      1人回し
-    </h2>
+  <h2 className="text-2xl font-bold mb-4">
+    1人回し
+  </h2>
+</div>
 
 <div className="w-screen h-[100dvh] max-w-none aspect-auto mx-0 border-0 rounded-none bg-gray-100 relative md:w-full md:h-auto md:max-w-[1000px] md:mx-auto md:aspect-[16/10] md:border-2 md:rounded-lg">
 
