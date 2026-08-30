@@ -136,6 +136,7 @@ const map = new Map(data.map(card => [card.id, card]));return cards.map(card => 
 const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
+const [damageCards, setDamageCards] = useState<any[]>(Array(6).fill(null));
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -3851,7 +3852,7 @@ className="
 {deckView === "onePlayer" && (
   <div className="p-4">
 
-<div className="landscape:hidden">
+<div className="max-md:landscape:hidden">
   <button
     onClick={() => {
       setOnePlayerMode(false);
@@ -3868,66 +3869,100 @@ className="
   </h2>
 </div>
 
-<div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative landscape:fixed landscape:inset-0 landscape:z-[9999] landscape:w-screen landscape:h-[100dvh] landscape:max-w-none landscape:aspect-auto landscape:mx-0 landscape:border-0 landscape:rounded-none">
+<div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
 
   {/* オーダー */}
-  <div className="absolute top-[5%] left-[5%]">
-    オーダー
+  <div className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">オーダー</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* トリガー */}
-  <div className="absolute top-[5%] right-[5%]">
-    トリガー
+  <div className="absolute top-[5%] right-[5%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">トリガー</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
-  {/* 左前列リアガード */}
-  <div className="absolute top-[30%] left-[28%]">
-    R
-  </div>
-
-  {/* ヴァンガード */}
-  <div className="absolute top-[30%] left-1/2 -translate-x-1/2">
-    V
-  </div>
-
-  {/* 右前列リアガード */}
-  <div className="absolute top-[30%] right-[28%]">
-    R
-  </div>
-
-  {/* ダメージ */}
-  <div className="absolute top-[30%] left-[5%]">
+{/* ダメージ */}
+<div className="absolute top-[30%] left-[4%] flex flex-col items-center">
+  <span className="text-sm md:text-lg mb-3">
     ダメージ
+  </span>
+
+  <div className="relative w-[110px] h-[80px] md:w-[135px] md:h-[100px]">
+    {damageCards.map((card, i) => (
+      <div
+        key={i}
+        className="absolute left-1/2 top-1/2 w-[65px] h-[90px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white"
+        style={{
+          transform: `translate(-50%, -50%) rotate(90deg) translateX(${(i - 1) * 22}px)`,
+          zIndex: i,
+        }}
+      />
+    ))}
+  </div>
+</div>
+
+  {/* 前列左R */}
+  <div className="absolute top-[30%] left-[28%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">R</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
+  </div>
+
+  {/* V */}
+  <div className="absolute top-[30%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">V</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
+  </div>
+
+  {/* 前列右R */}
+  <div className="absolute top-[30%] right-[28%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">R</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* 山札 */}
-  <div className="absolute top-[30%] right-[12%]">
-    山札
+  <div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">山札</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
-  {/* 左後列リアガード */}
-  <div className="absolute top-[55%] left-[28%]">
-    R
+  {/* 後列左R */}
+  <div className="absolute top-[55%] left-[28%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">R</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
-  {/* 中央後列リアガード */}
-  <div className="absolute top-[55%] left-1/2 -translate-x-1/2">
-    R
+  {/* 後列中央R */}
+  <div className="absolute top-[55%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">R</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
-  {/* 右後列リアガード */}
-  <div className="absolute top-[55%] right-[28%]">
-    R
+  {/* 後列右R */}
+  <div className="absolute top-[55%] right-[28%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">R</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* ドロップ */}
-  <div className="absolute top-[55%] right-[8%]">
-    ドロップ
+  <div className="absolute top-[55%] right-[5%] flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">ドロップ</span>
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* 手札 */}
-  <div className="absolute bottom-[5%] left-[15%] right-[15%] text-center">
-    手札
+  <div className="absolute bottom-[2%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <span className="text-sm md:text-lg">手札</span>
+
+    <div className="flex gap-1 md:gap-2">
+      {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+        <div
+          key={i}
+          className="w-[40px] h-[58px] md:w-[65px] md:h-[90px] border-2 border-dashed border-gray-400 rounded bg-white"
+        />
+      ))}
+    </div>
   </div>
 
 </div>
