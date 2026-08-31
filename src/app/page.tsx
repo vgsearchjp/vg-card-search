@@ -3894,7 +3894,7 @@ className="
   {/* トリガー */}
   <div className="absolute top-[5%] right-[5%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">トリガー</span>
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
+    <div className="w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
 {/* ダメージ */}
