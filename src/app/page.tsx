@@ -134,6 +134,7 @@ const { data, error } = await supabase
   }
 const map = new Map(data.map(card => [card.id, card]));return cards.map(card => map.get(card.id) || card);};
 const [mainDeck, setMainDeck] = useState<any[]>([]);
+const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>(Array(6).fill(null));
@@ -3669,14 +3670,20 @@ if (onePlayerMode) {
   const g1Card = await loadCardById(deck.ride_g1);
   const g0Card = await loadCardById(deck.ride_g0);
 
-  setRideG3(g3Card);
-  setRideG2(g2Card);
-  setRideG1(g1Card);
-  setRideG0(g0Card);
+setRideG3(g3Card);
+setRideG2(g2Card);
+setRideG1(g1Card);
+setRideG0(g0Card);
 
-  setRideGrade(0);
+const refreshedOnePlayerDeck = await refreshDeckCards(
+  deck.main_deck || []
+);
 
-  setDeckView("onePlayer");
+setOnePlayerDeck(refreshedOnePlayerDeck);
+
+setRideGrade(0);
+
+setDeckView("onePlayer");
   return;
 }
 
