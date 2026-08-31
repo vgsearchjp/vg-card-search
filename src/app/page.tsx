@@ -3960,7 +3960,6 @@ className="
       />
     )}
   </div>
-</div>
 
 <button
   onClick={() => {
@@ -3969,10 +3968,13 @@ className="
     }
   }}
   disabled={rideGrade >= 3}
-  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+  className="absolute left-full top-1/2 -translate-y-1/2 ml-2 w-[32px] h-[80px] md:w-[40px] md:h-[105px] bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400 flex items-center justify-center"
 >
-  ライド
+  <span className="[writing-mode:vertical-rl]">ライド</span>
 </button>
+</div>
+
+
 
   {/* 前列右R */}
   <div className="absolute top-[30%] right-[28%] flex flex-col items-center gap-2">
@@ -3987,19 +3989,19 @@ className="
   </div>
 
   {/* 後列左R */}
-  <div className="absolute top-[55%] left-[28%] flex flex-col items-center gap-2">
+  <div className="absolute top-[50%] left-[28%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* 後列中央R */}
-  <div className="absolute top-[55%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+  <div className="absolute top-[50%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* 後列右R */}
-  <div className="absolute top-[55%] right-[28%] flex flex-col items-center gap-2">
+  <div className="absolute top-[50%] right-[28%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
