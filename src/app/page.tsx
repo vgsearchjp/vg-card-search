@@ -4021,7 +4021,7 @@ className="
   </div>
 
   {/* ドロップ */}
-  <div className="absolute top-[55%] right-[5%] flex flex-col items-center gap-2">
+  <div className="absolute top-[65%] right-[5%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">ドロップ</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
