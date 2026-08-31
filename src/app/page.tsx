@@ -3918,13 +3918,13 @@ className="
 </div>
 
   {/* 前列左R */}
-  <div className="absolute top-[25%] left-[28%] flex flex-col items-center gap-2">
+  <div className="absolute top-[15%] left-[28%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
 {/* V */}
-<div className="absolute top-[25%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+<div className="absolute top-[15%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
   <span className="text-sm md:text-lg">V</span>
 
   <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
@@ -3977,7 +3977,7 @@ className="
 
 
   {/* 前列右R */}
-  <div className="absolute top-[25%] right-[28%] flex flex-col items-center gap-2">
+  <div className="absolute top-[15%] right-[28%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
@@ -3989,19 +3989,19 @@ className="
   </div>
 
   {/* 後列左R */}
-  <div className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2">
+  <div className="absolute top-[40%] left-[28%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* 後列中央R */}
-  <div className="absolute top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+  <div className="absolute top-[40%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
   {/* 後列右R */}
-  <div className="absolute top-[45%] right-[28%] flex flex-col items-center gap-2">
+  <div className="absolute top-[40%] right-[28%] flex flex-col items-center gap-2">
     <span className="text-sm md:text-lg">R</span>
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
