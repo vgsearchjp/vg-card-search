@@ -3898,7 +3898,7 @@ className="
   </div>
 
 {/* ダメージ */}
-<div className="absolute top-[30%] left-[4%] flex flex-col items-center">
+<div className="absolute top-[34%] left-[2%] flex flex-col items-center">
   <span className="text-sm md:text-lg mb-3">
     ダメージ
   </span>
