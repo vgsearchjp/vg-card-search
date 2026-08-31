@@ -3909,7 +3909,7 @@ className="
         key={i}
         className="absolute left-1/2 top-1/2 w-[65px] h-[90px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white"
         style={{
-          transform: `translate(-50%, -50%) rotate(90deg) translateX(${(i - 1) * 22}px)`,
+          transform: `translate(-50%, -50%) rotate(90deg) translateX(${(i - 1) * 26}px)`,
           zIndex: i,
         }}
       />
