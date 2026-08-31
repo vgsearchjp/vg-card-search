@@ -137,6 +137,7 @@ const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>(Array(6).fill(null));
+const [rideGrade, setRideGrade] = useState(0);
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -3660,11 +3661,24 @@ md:h-[150px]
     
 onClick={async () => {
 
-  if (onePlayerMode) {
-    setSelectedDeck(deck);
-    setDeckView("onePlayer");
-    return;
-  }
+if (onePlayerMode) {
+  setSelectedDeck(deck);
+
+  const g3Card = await loadCardById(deck.ride_g3);
+  const g2Card = await loadCardById(deck.ride_g2);
+  const g1Card = await loadCardById(deck.ride_g1);
+  const g0Card = await loadCardById(deck.ride_g0);
+
+  setRideG3(g3Card);
+  setRideG2(g2Card);
+  setRideG1(g1Card);
+  setRideG0(g0Card);
+
+  setRideGrade(0);
+
+  setDeckView("onePlayer");
+  return;
+}
 
   setCardSearch("");
   setSearchCardType("");
@@ -3909,11 +3923,56 @@ className="
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
-  {/* V */}
-  <div className="absolute top-[30%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-    <span className="text-sm md:text-lg">V</span>
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
+{/* V */}
+<div className="absolute top-[30%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+  <span className="text-sm md:text-lg">V</span>
+
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+ {rideGrade === 0 && rideG0 && (
+  <img
+    src={getCardImage(rideG0)}
+    alt=""
+    className="w-full h-full object-cover"
+  />
+)}
+
+    {rideGrade === 1 && rideG1 && (
+      <img
+        src={getCardImage(rideG1)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    )}
+
+    {rideGrade === 2 && rideG2 && (
+      <img
+        src={getCardImage(rideG2)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    )}
+
+    {rideGrade === 3 && rideG3 && (
+      <img
+        src={getCardImage(rideG3)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    )}
   </div>
+</div>
+
+<button
+  onClick={() => {
+    if (rideGrade < 3) {
+      setRideGrade(rideGrade + 1);
+    }
+  }}
+  disabled={rideGrade >= 3}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+>
+  ライド
+</button>
 
   {/* 前列右R */}
   <div className="absolute top-[30%] right-[28%] flex flex-col items-center gap-2">
