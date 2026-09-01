@@ -135,6 +135,15 @@ const { data, error } = await supabase
 const map = new Map(data.map(card => [card.id, card]));return cards.map(card => map.get(card.id) || card);};
 const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
+const [handCards, setHandCards] = useState<any[]>([]);
+const drawCard = () => {
+  if (onePlayerDeck.length === 0) return;
+
+  const [drawnCard, ...remainingDeck] = onePlayerDeck;
+
+  setOnePlayerDeck(remainingDeck);
+  setHandCards((prev) => [...prev, drawnCard]);
+};
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>(Array(6).fill(null));
@@ -3679,7 +3688,14 @@ const refreshedOnePlayerDeck = await refreshDeckCards(
   deck.main_deck || []
 );
 
-setOnePlayerDeck(refreshedOnePlayerDeck);
+const shuffledDeck = [...refreshedOnePlayerDeck];
+
+for (let i = shuffledDeck.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [shuffledDeck[i], shuffledDeck[j]] = [shuffledDeck[j], shuffledDeck[i]];
+}
+
+setOnePlayerDeck(shuffledDeck);
 
 setRideGrade(0);
 
@@ -4007,7 +4023,14 @@ className="
   alt="山札"
   className="w-full h-full object-cover"
 />
-  </div>
+</div>
+<button
+  onClick={drawCard}
+  disabled={onePlayerDeck.length === 0}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+>
+  ドロー
+</button>
 </div>
 
   {/* 後列左R */}
@@ -4040,19 +4063,23 @@ className="
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
   </div>
 
-  {/* 手札 */}
-  <div className="absolute bottom-[2%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-    <span className="text-sm md:text-lg">手札</span>
-
-    <div className="flex gap-1 md:gap-2">
-      {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-        <div
-          key={i}
-          className="w-[40px] h-[58px] md:w-[65px] md:h-[90px] border-2 border-dashed border-gray-400 rounded bg-white"
+{/* 手札 */}
+<div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
+  <div className="flex items-end justify-center gap-1 overflow-visible">
+    {handCards.map((card, index) => (
+      <div
+        key={`${card.id}-${index}`}
+        className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0"
+      >
+        <img
+          src={getCardImage(card)}
+          alt=""
+          className="w-full h-full object-cover"
         />
-      ))}
-    </div>
+      </div>
+    ))}
   </div>
+</div>
 
 </div>
 
