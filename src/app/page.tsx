@@ -4020,19 +4020,18 @@ className="
 
 {/* 山札 */}
 <div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
-  <span className="text-sm md:text-lg">山札</span>
+  <div className="flex items-center gap-1">
+    <span className="text-sm md:text-lg">山札</span>
+    <span className="text-xs md:text-sm">({onePlayerDeck.length}枚)</span>
+  </div>
 
-<div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden">
- <img
-  src="/images/vanguard-card-back.jpg"
-  alt="山札"
-  className="w-full h-full object-cover"
-/>
-</div>
-
-<div className="text-xs md:text-sm">
-  残り {onePlayerDeck.length}枚
-</div>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden">
+    <img
+      src="/images/vanguard-card-back.jpg"
+      alt="山札"
+      className="w-full h-full object-cover"
+    />
+  </div>
 
 <button
   onClick={drawCard}
@@ -4068,7 +4067,7 @@ className="
   </div>
 
 {/* ドロップ */}
-<div className="absolute top-[65%] right-[1%] flex items-center gap-3">
+<div className="absolute top-[70%] right-[1%] flex items-center gap-3">
   <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
 
   <span className="text-sm md:text-lg [writing-mode:vertical-rl]">
