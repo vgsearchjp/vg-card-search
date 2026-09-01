@@ -3998,7 +3998,7 @@ className="
   </div>
 
 {/* 山札 */}
-<div className="absolute top-[30%] right-[12%] flex flex-col items-center gap-2">
+<div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
   <span className="text-sm md:text-lg">山札</span>
 
 <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden">
