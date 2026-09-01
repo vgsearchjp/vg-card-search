@@ -136,6 +136,7 @@ const map = new Map(data.map(card => [card.id, card]));return cards.map(card => 
 const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
 const [handCards, setHandCards] = useState<any[]>([]);
+const [selectedHandCardIndex, setSelectedHandCardIndex] = useState<number | null>(null);
 const drawCard = () => {
   if (onePlayerDeck.length === 0) return;
 
@@ -3695,7 +3696,11 @@ for (let i = shuffledDeck.length - 1; i > 0; i--) {
   [shuffledDeck[i], shuffledDeck[j]] = [shuffledDeck[j], shuffledDeck[i]];
 }
 
-setOnePlayerDeck(shuffledDeck);
+const initialHand = shuffledDeck.slice(0, 5);
+const remainingDeck = shuffledDeck.slice(5);
+
+setHandCards(initialHand);
+setOnePlayerDeck(remainingDeck);
 
 setRideGrade(0);
 
@@ -4024,6 +4029,11 @@ className="
   className="w-full h-full object-cover"
 />
 </div>
+
+<div className="text-xs md:text-sm">
+  残り {onePlayerDeck.length}枚
+</div>
+
 <button
   onClick={drawCard}
   disabled={onePlayerDeck.length === 0}
@@ -4057,19 +4067,26 @@ className="
 </span>
   </div>
 
-  {/* ドロップ */}
-  <div className="absolute top-[65%] right-[5%] flex flex-col items-center gap-2">
-    <span className="text-sm md:text-lg">ドロップ</span>
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-  </div>
+{/* ドロップ */}
+<div className="absolute top-[65%] right-[1%] flex items-center gap-3">
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
 
+  <span className="text-sm md:text-lg [writing-mode:vertical-rl]">
+    ドロップ
+  </span>
+</div>
 {/* 手札 */}
 <div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
   <div className="flex items-end justify-center gap-1 overflow-visible">
     {handCards.map((card, index) => (
       <div
         key={`${card.id}-${index}`}
-        className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0"
+        onClick={() => setSelectedHandCardIndex(index)}
+        className={`w-[45px] h-[65px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0 cursor-pointer ${
+          selectedHandCardIndex === index
+            ? "ring-4 ring-blue-500"
+            : ""
+        }`}
       >
         <img
           src={getCardImage(card)}
@@ -4080,7 +4097,6 @@ className="
     ))}
   </div>
 </div>
-
 </div>
 
 </div>
