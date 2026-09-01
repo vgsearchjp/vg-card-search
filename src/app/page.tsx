@@ -4067,7 +4067,7 @@ className="
   </div>
 
 {/* ドロップ */}
-<div className="absolute top-[70%] right-[1%] flex items-center gap-3">
+<div className="absolute top-[75%] right-[1%] flex items-center gap-3">
   <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
 
   <span className="text-sm md:text-lg [writing-mode:vertical-rl]">
