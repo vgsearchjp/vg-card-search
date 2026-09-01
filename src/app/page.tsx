@@ -3997,11 +3997,18 @@ className="
 </span>
   </div>
 
-  {/* 山札 */}
-  <div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
-    <span className="text-sm md:text-lg">山札</span>
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
+{/* 山札 */}
+<div className="absolute top-[30%] right-[12%] flex flex-col items-center gap-2">
+  <span className="text-sm md:text-lg">山札</span>
+
+<div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden">
+ <img
+  src="/images/vanguard-card-back.jpg"
+  alt="山札"
+  className="w-full h-full object-cover"
+/>
   </div>
+</div>
 
   {/* 後列左R */}
   <div className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2">
