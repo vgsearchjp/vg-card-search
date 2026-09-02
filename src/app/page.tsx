@@ -4976,8 +4976,8 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 </div>
 
 {isDeckViewerOpen && (
-  <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-    <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+  <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 max-md:landscape:p-2">
+    <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col max-md:landscape:max-w-none max-md:landscape:w-full max-md:landscape:h-full max-md:landscape:max-h-none">
       <div className="flex items-center justify-between p-3 border-b">
         <div className="font-bold text-lg">
           山札 ({onePlayerDeck.length}枚)
@@ -5030,25 +5030,47 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 >
   ダメージ
 </button>
-      </div>
 
-      <div className="overflow-y-auto p-3">
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-          {onePlayerDeck.map((card, index) => (
-  <div
-    key={`${card.id ?? card.card_no}-${index}`}
-    onClick={() =>
-      setSelectedDeckCardIndex((prev) => prev === index ? null : index)
-    }
-    className={`flex flex-col items-center cursor-pointer rounded p-1 ${
-      selectedDeckCardIndex === index ? "ring-4 ring-blue-500" : ""
-    }`}
+<button
+  onClick={() => {
+    if (selectedDeckCardIndex === null) return;
+
+    const card = onePlayerDeck[selectedDeckCardIndex];
+    if (!card) return;
+
+    setOrderCard(card);
+    setOnePlayerDeck((prev) =>
+      prev.filter((_, index) => index !== selectedDeckCardIndex)
+    );
+
+    setSelectedDeckCardIndex(null);
+    setIsDeckViewerOpen(false);
+  }}
+  disabled={selectedDeckCardIndex === null}
+  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  オーダー
+</button>
+
+</div>
+
+<div className="overflow-y-auto p-3">
+  <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+    {onePlayerDeck.map((card, index) => (
+
+<div
+  key={`${card.id ?? card.card_no}-${index}`}
+  onClick={() =>
+  setSelectedDeckCardIndex((prev) => prev === index ? null : index)}
+  className={`flex flex-col items-center cursor-pointer rounded p-1 ${
+  selectedDeckCardIndex === index ? "ring-4 ring-blue-500" : ""
+  }`}
   >
-              <img
-                src={getCardImage(card)}
-                alt=""
-                className="w-full rounded object-cover"
-              />
+  <img
+    src={getCardImage(card)}
+    alt=""
+    className="w-full rounded object-cover"
+     />
             </div>
           ))}
         </div>
