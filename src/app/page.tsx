@@ -167,6 +167,7 @@ const [orderCard, setOrderCard] = useState<any | null>(null);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
+const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -4422,9 +4423,18 @@ onClick={() => {
       <div className="flex flex-wrap gap-2 justify-center">
         {dropCards.map((card, index) => (
           <div
-            key={`${card.id}-${index}`}
-            className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden"
-          >
+  key={`${card.id}-${index}`}
+  onClick={() =>
+    setSelectedDropIndex((prev) =>
+      prev === index ? null : index
+    )
+  }
+  className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden cursor-pointer ${
+    selectedDropIndex === index
+      ? "ring-4 ring-blue-500"
+      : ""
+  }`}
+>
             <img
               src={getCardImage(card)}
               alt=""
@@ -4433,8 +4443,77 @@ onClick={() => {
           </div>
         ))}
       </div>
-    </div>
+      {selectedDropIndex !== null && (
+  <div className="mt-4 flex flex-wrap gap-2 justify-center">
+    <button
+      onClick={() => selectMoveTarget("hand")}
+      className={`px-3 py-2 rounded text-white ${
+        selectedMoveTarget === "hand"
+          ? "bg-green-600"
+          : "bg-blue-500"
+      }`}
+    >
+      手札
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("damage")}
+      className={`px-3 py-2 rounded text-white ${
+        selectedMoveTarget === "damage"
+          ? "bg-green-600"
+          : "bg-blue-500"
+      }`}
+    >
+      ダメージ
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("order")}
+      className={`px-3 py-2 rounded text-white ${
+        selectedMoveTarget === "order"
+          ? "bg-green-600"
+          : "bg-blue-500"
+      }`}
+    >
+      オーダー
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("deckTop")}
+      className={`px-3 py-2 rounded text-white ${
+        selectedMoveTarget === "deckTop"
+          ? "bg-green-600"
+          : "bg-blue-500"
+      }`}
+    >
+      山札上
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("deckBottom")}
+      className={`px-3 py-2 rounded text-white ${
+        selectedMoveTarget === "deckBottom"
+          ? "bg-green-600"
+          : "bg-blue-500"
+      }`}
+    >
+      山札下
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("waiting")}
+      className={`px-3 py-2 rounded text-white ${
+        selectedMoveTarget === "waiting"
+          ? "bg-green-600"
+          : "bg-blue-500"
+      }`}
+    >
+      待機領域
+    </button>
   </div>
+)}
+</div>
+</div>
 )}
 
 {/* 手札 */}
