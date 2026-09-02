@@ -137,6 +137,11 @@ const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
 const [handCards, setHandCards] = useState<any[]>([]);
 const [selectedHandCardIndex, setSelectedHandCardIndex] = useState<number | null>(null);
+const [frontLeftRCard, setFrontLeftRCard] = useState<any | null>(null);
+const [frontRightRCard, setFrontRightRCard] = useState<any | null>(null);
+const [backLeftRCard, setBackLeftRCard] = useState<any | null>(null);
+const [backCenterRCard, setBackCenterRCard] = useState<any | null>(null);
+const [backRightRCard, setBackRightRCard] = useState<any | null>(null);
 const drawCard = () => {
   if (onePlayerDeck.length === 0) return;
 
@@ -3945,13 +3950,39 @@ className="
   </div>
 </div>
 
-  {/* 前列左R */}
-  <div className="absolute top-[20%] left-[28%] flex flex-col items-center gap-2">
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-    <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
-  R
-</span>
+{/* 前列左R */}
+<div
+  className="absolute top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setFrontLeftRCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {frontLeftRCard ? (
+      <img
+        src={getCardImage(frontLeftRCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+        R
+      </span>
+    )}
   </div>
+</div>
 
 {/* V */}
 <div className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
@@ -4008,15 +4039,39 @@ className="
 </button>
 </div>
 
+{/* 前列右R */}
+<div
+  className="absolute top-[20%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
 
+    const card = handCards[selectedHandCardIndex];
 
-  {/* 前列右R */}
-  <div className="absolute top-[20%] right-[28%] flex flex-col items-center gap-2">
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-    <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
-  R
-</span>
+    if (!card) return;
+
+    setFrontRightRCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {frontRightRCard ? (
+      <img
+        src={getCardImage(frontRightRCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+        R
+      </span>
+    )}
   </div>
+</div>
 
 {/* 山札 */}
 <div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
@@ -4042,29 +4097,107 @@ className="
 </button>
 </div>
 
-  {/* 後列左R */}
-  <div className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2">
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-    <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
-  R
-</span>
-  </div>
+{/* 後列左R */}
+<div
+  className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
 
-  {/* 後列中央R */}
-  <div className="absolute top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-    <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
-  R
-</span>
-  </div>
+    const card = handCards[selectedHandCardIndex];
 
-  {/* 後列右R */}
-  <div className="absolute top-[45%] right-[28%] flex flex-col items-center gap-2">
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-    <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
-  R
-</span>
+    if (!card) return;
+
+    setBackLeftRCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {backLeftRCard ? (
+      <img
+        src={getCardImage(backLeftRCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+        R
+      </span>
+    )}
   </div>
+</div>
+
+{/* 後列中央R */}
+<div
+  className="absolute top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setBackCenterRCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {backCenterRCard ? (
+      <img
+        src={getCardImage(backCenterRCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+        R
+      </span>
+    )}
+  </div>
+</div>
+
+{/* 後列右R */}
+<div
+  className="absolute top-[45%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setBackRightRCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {backRightRCard ? (
+      <img
+        src={getCardImage(backRightRCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+        R
+      </span>
+    )}
+  </div>
+</div>
 
 {/* ドロップ */}
 <div className="absolute top-[75%] right-[1%] flex items-center gap-3">
@@ -4080,7 +4213,7 @@ className="
     {handCards.map((card, index) => (
       <div
         key={`${card.id}-${index}`}
-        onClick={() => setSelectedHandCardIndex(index)}
+        onClick={() => setSelectedHandCardIndex((prev) => (prev === index ? null : index))}
         className={`w-[45px] h-[65px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
