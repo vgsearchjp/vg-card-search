@@ -141,7 +141,121 @@ const [selectedRZone, setSelectedRZone] = useState<string | null>(null);
 const [selectedMoveSource, setSelectedMoveSource] = useState<string | null>(null);
 const [selectedMoveTarget, setSelectedMoveTarget] = useState<string | null>(null);
 const selectMoveTarget = (target: string) => {
-  if (!selectedMoveSource) return;
+
+  // 待機領域 → 手札
+  if (target === "hand" && selectedMoveSource === "waiting") {
+    if (waitingCards.length === 0) return;
+
+    const card = waitingCards[waitingCards.length - 1];
+    if (!card) return;
+
+    setHandCards((prev) => [card, ...prev]);
+    setWaitingCards((prev) => prev.slice(0, -1));
+
+    setSelectedMoveSource(null);
+    setSelectedMoveTarget(null);
+    return;
+  }
+
+  // ドロップのカードが選択されていない場合
+  if (selectedDropIndex === null) return;
+
+  // ドロップ → 手札
+  if (target === "hand") {
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setHandCards((prev) => [card, ...prev]);
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
+  // ドロップ → ダメージ
+  if (target === "damage") {
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setDamageCards((prev) => [...prev, card]);
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
+  // ドロップ → オーダー
+  if (target === "order") {
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setOrderCard(card);
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
+  // ドロップ → 山札上
+  if (target === "deckTop") {
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setOnePlayerDeck((prev) => [card, ...prev]);
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
+  // ドロップ → 山札下
+  if (target === "deckBottom") {
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setOnePlayerDeck((prev) => [...prev, card]);
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
+  // ドロップ → 待機領域
+  if (target === "waiting") {
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setWaitingCards((prev) => [...prev, card]);
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
   setSelectedMoveTarget(target);
 };
 const [selectedDamageIndex, setSelectedDamageIndex] = useState<number | null>(null);
@@ -166,6 +280,7 @@ const [vanguardCard, setVanguardCard] = useState<any | null>(null);
 const [orderCard, setOrderCard] = useState<any | null>(null);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
+const [waitingCards, setWaitingCards] = useState<any[]>([]);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
@@ -3936,6 +4051,18 @@ className="
 <div
   className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  if (selectedMoveSource === "waiting") {
+    if (waitingCards.length === 0) return;
+
+    const card = waitingCards[waitingCards.length - 1];
+    if (!card) return;
+
+    setOrderCard(card);
+    setWaitingCards((prev) => prev.slice(0, -1));
+    setSelectedMoveSource(null);
+    return;
+  }
+
   if (orderCard) {
     setSelectedMoveSource((prev) => prev === "order" ? null : "order");
     return;
@@ -3969,6 +4096,31 @@ onClick={() => {
 </div>
 
 {/* トリガー */}
+
+{/* 待機領域 */}
+<div className="absolute top-[3%] right-[18%] flex flex-col items-center gap-2">
+  <div className="text-sm md:text-lg font-bold">待機領域</div>
+
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""}`}>
+{waitingCards.length > 0 ? (
+  <div
+    onClick={() =>
+      setSelectedMoveSource((prev) =>
+        prev === "waiting" ? null : "waiting"
+      )
+    }
+className="w-full h-full cursor-pointer"
+  >
+    <img
+      src={getCardImage(waitingCards[waitingCards.length - 1])}
+      alt=""
+      className="w-full h-full object-cover"
+    />
+  </div>
+) : null}
+  </div>
+</div>
+
 <div className="absolute top-[3%] right-[5%] flex flex-col items-center gap-2">
   <button
     onClick={() => {
@@ -4016,8 +4168,20 @@ onClick={() => {
 {/* ダメージ */}
 <div
   className="absolute top-[40%] left-[2%] flex flex-col items-center cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (selectedMoveSource === "waiting") {
+    if (waitingCards.length === 0) return;
+
+    const card = waitingCards[waitingCards.length - 1];
+    if (!card) return;
+
+    setDamageCards((prev) => [...prev, card]);
+    setWaitingCards((prev) => prev.slice(0, -1));
+    setSelectedMoveSource(null);
+    return;
+  }
+
+  if (selectedHandCardIndex === null) return;
 
     const card = handCards[selectedHandCardIndex];
 
@@ -4521,8 +4685,17 @@ onClick={() => {
 <div className="flex items-end justify-center gap-1 overflow-visible">
 <button
   onClick={() => {
-    if (!selectedRZone && selectedMoveSource !== "damage") return;
-
+    if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting") return;
+    
+    if (selectedMoveSource === "waiting") {
+    if (waitingCards.length === 0) return;
+    const card = waitingCards[waitingCards.length - 1];
+    if (!card) return;
+    setHandCards((prev) => [card, ...prev]);
+    setWaitingCards((prev) => prev.slice(0, -1));
+    setSelectedMoveSource(null);
+    return;
+    }
     if (selectedRZone === "frontLeft" && frontLeftRCard) {
       setHandCards((prev) => [frontLeftRCard, ...prev]);
       setFrontLeftRCard(null);
