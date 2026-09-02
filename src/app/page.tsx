@@ -152,8 +152,12 @@ const drawCard = () => {
 };
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
-const [damageCards, setDamageCards] = useState<any[]>(Array(6).fill(null));
+const [damageCards, setDamageCards] = useState<any[]>([]);
 const [rideGrade, setRideGrade] = useState(0);
+const [vanguardCard, setVanguardCard] = useState<any | null>(null);
+const [orderCard, setOrderCard] = useState<any | null>(null);
+const [triggerCard, setTriggerCard] = useState<any | null>(null);
+const [dropCards, setDropCards] = useState<any[]>([]);
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -3918,35 +3922,124 @@ className="
 
 <div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
 
-  {/* オーダー */}
-  <div className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2">
-    <span className="text-sm md:text-lg">オーダー</span>
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
-  </div>
+{/* オーダー */}
+<div
+  className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
 
-  {/* トリガー */}
-  <div className="absolute top-[5%] right-[5%] flex flex-col items-center gap-2">
-    <span className="text-sm md:text-lg">トリガー</span>
-    <div className="w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed border-gray-400 rounded bg-white" />
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setOrderCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <span className="text-sm md:text-lg">オーダー</span>
+
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {orderCard ? (
+      <img
+        src={getCardImage(orderCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+        オーダー
+      </span>
+    )}
   </div>
+</div>
+
+{/* トリガー */}
+<div
+  className="absolute top-[5%] right-[5%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setTriggerCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <span className="text-sm md:text-lg">トリガー</span>
+
+  <div className="w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {triggerCard && (
+      <img
+        src={getCardImage(triggerCard)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    )}
+  </div>
+</div>
 
 {/* ダメージ */}
-<div className="absolute top-[40%] left-[2%] flex flex-col items-center">
+<div
+  className="absolute top-[40%] left-[2%] flex flex-col items-center cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setDamageCards((prev) => [...prev, card]);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
   <span className="text-sm md:text-lg mb-3">
     ダメージ
   </span>
 
-  <div className="relative w-[110px] h-[80px] md:w-[135px] md:h-[100px]">
-    {damageCards.map((card, i) => (
-      <div
-        key={i}
-        className="absolute left-1/2 top-1/2 w-[65px] h-[90px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white"
-        style={{
-          transform: `translate(-50%, -50%) rotate(90deg) translateX(${(i - 1) * 26}px)`,
-          zIndex: i,
-        }}
+  <div className="relative w-[110px] h-[235px] md:w-[135px] md:h-[255px]">
+{damageCards.map((card, i) => (
+  <div
+    key={i}
+    className="absolute left-1/2"
+    style={{
+      top: `${i * 26}px`,
+      width: "75px",
+      height: "105px",
+      transform: "translateX(-50%)",
+      zIndex: i,
+    }}
+  >
+    <div
+      className="absolute left-1/2 top-1/2 w-[65px] h-[90px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden"
+      style={{
+        transform: "translate(-50%, -50%) rotate(270deg)",
+      }}
+    >
+      <img
+        src={getCardImage(card)}
+        alt=""
+        className="w-full h-full object-cover"
       />
-    ))}
+    </div>
+  </div>
+))}
   </div>
 </div>
 
@@ -3985,13 +4078,38 @@ className="
 </div>
 
 {/* V */}
-<div className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+<div
+  className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setVanguardCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
 
 <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden relative">
 
+{vanguardCard ? (
+  <img
+    src={getCardImage(vanguardCard)}
+    alt=""
+    className="w-full h-full object-cover"
+  />
+) : (
   <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
     V
   </span>
+)}
     
  {rideGrade === 0 && rideG0 && (
   <img
@@ -4200,13 +4318,40 @@ className="
 </div>
 
 {/* ドロップ */}
-<div className="absolute top-[75%] right-[1%] flex items-center gap-3">
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white" />
+<div
+  className="absolute top-[75%] right-[1%] flex items-center gap-3 cursor-pointer"
+  onClick={() => {
+    if (selectedHandCardIndex === null) return;
 
-  <span className="text-sm md:text-lg [writing-mode:vertical-rl]">
-    ドロップ
-  </span>
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setDropCards((prev) => [...prev, card]);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
+    );
+
+    setSelectedHandCardIndex(null);
+  }}
+>
+  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    {dropCards.length > 0 && (
+      <img
+        src={getCardImage(dropCards[dropCards.length - 1])}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+    )}
+  </div>
+
+<span className="w-[32px] h-[110px] text-sm md:text-lg [writing-mode:vertical-rl] bg-blue-500 text-white rounded flex items-center justify-center">
+  ドロップ
+</span>
+
 </div>
+
 {/* 手札 */}
 <div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
   <div className="flex items-end justify-center gap-1 overflow-visible">
