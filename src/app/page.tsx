@@ -4406,7 +4406,7 @@ onClick={() => {
 {/* 山札 */}
 <div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
   <div className="flex items-center gap-2">
-    <div className="flex flex-row items-center gap-2">
+    <div className="flex flex-col items-center gap-2">
   <button
    onClick={() => {
   if (selectedMoveSource === "waiting") {
