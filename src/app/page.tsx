@@ -137,6 +137,9 @@ const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
 const [handCards, setHandCards] = useState<any[]>([]);
 const [selectedHandCardIndex, setSelectedHandCardIndex] = useState<number | null>(null);
+const [selectedRZone, setSelectedRZone] = useState<string | null>(null);
+const [selectedMoveSource, setSelectedMoveSource] = useState<string | null>(null);
+const [selectedDamageIndex, setSelectedDamageIndex] = useState<number | null>(null);
 const [frontLeftRCard, setFrontLeftRCard] = useState<any | null>(null);
 const [frontRightRCard, setFrontRightRCard] = useState<any | null>(null);
 const [backLeftRCard, setBackLeftRCard] = useState<any | null>(null);
@@ -3925,25 +3928,25 @@ className="
 {/* オーダー */}
 <div
   className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (orderCard) {
+    setSelectedMoveSource((prev) => prev === "order" ? null : "order");
+    return;
+  }
 
-    const card = handCards[selectedHandCardIndex];
+  if (selectedHandCardIndex === null) return;
 
-    if (!card) return;
+  const card = handCards[selectedHandCardIndex];
+  if (!card) return;
 
-    setOrderCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  setOrderCard(card);
+  setHandCards((prev) => prev.filter((_, index) => index !== selectedHandCardIndex));
+  setSelectedHandCardIndex(null);
+}}
 >
   <span className="text-sm md:text-lg">オーダー</span>
 
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedMoveSource === "order" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {orderCard ? (
       <img
         src={getCardImage(orderCard)}
@@ -3959,34 +3962,47 @@ className="
 </div>
 
 {/* トリガー */}
+<div className="absolute top-[3%] right-[5%] flex flex-col items-center gap-2">
+  <button
+    onClick={() => {
+      if (triggerCard) return;
+      if (onePlayerDeck.length === 0) return;
+
+      const [drawnCard, ...remainingDeck] = onePlayerDeck;
+
+      setTriggerCard(drawnCard);
+      setOnePlayerDeck(remainingDeck);
+      setSelectedMoveSource(null);
+    }}
+    disabled={!!triggerCard || onePlayerDeck.length === 0}
+    className="text-sm md:text-lg bg-blue-500 text-white px-3 py-1 rounded disabled:bg-gray-400"
+  >
+    トリガー
+  </button>
+
 <div
-  className="absolute top-[5%] right-[5%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
-    if (selectedHandCardIndex === null) return;
+    if (!triggerCard) return;
 
-    const card = handCards[selectedHandCardIndex];
-
-    if (!card) return;
-
-    setTriggerCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
+    setSelectedMoveSource((prev) =>
+      prev === "trigger" ? null : "trigger"
     );
-
-    setSelectedHandCardIndex(null);
   }}
+  className={`w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
+    selectedMoveSource === "trigger"
+      ? "ring-4 ring-blue-500"
+      : "border-gray-400"
+  }`}
 >
-  <span className="text-sm md:text-lg">トリガー</span>
-
-  <div className="w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
-    {triggerCard && (
-      <img
-        src={getCardImage(triggerCard)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    )}
+{triggerCard ? (
+  <div className="w-full h-full flex items-center justify-center overflow-hidden">
+    <img
+      src={getCardImage(triggerCard)}
+      alt=""
+      className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] object-cover rotate-270"
+    />
+  </div>
+) : null}
   </div>
 </div>
 
@@ -4017,14 +4033,30 @@ className="
 {damageCards.map((card, i) => (
   <div
     key={i}
-    className="absolute left-1/2"
-    style={{
-      top: `${i * 26}px`,
-      width: "75px",
-      height: "105px",
-      transform: "translateX(-50%)",
-      zIndex: i,
+    onClick={(e) => {
+      e.stopPropagation();
+
+      if (selectedDamageIndex === i) {
+        setSelectedDamageIndex(null);
+        setSelectedMoveSource(null);
+        return;
+      }
+
+      setSelectedDamageIndex(i);
+      setSelectedMoveSource("damage");
     }}
+    className={`absolute left-1/2 cursor-pointer ${
+  selectedMoveSource === "damage" && selectedDamageIndex === i
+    ? "ring-4 ring-blue-500 rounded"
+    : ""
+}`}
+style={{
+  top: `${i * 26}px`,
+  width: "105px",
+  height: "75px",
+  transform: "translateX(-50%)",
+  zIndex: i,
+}}
   >
     <div
       className="absolute left-1/2 top-1/2 w-[65px] h-[90px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden"
@@ -4046,23 +4078,22 @@ className="
 {/* 前列左R */}
 <div
   className="absolute top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (frontLeftRCard) {
+    setSelectedRZone((prev) => prev === "frontLeft" ? null : "frontLeft");
+    return;
+  }
 
-    const card = handCards[selectedHandCardIndex];
+  if (selectedHandCardIndex === null) return;
+  const card = handCards[selectedHandCardIndex];
+  if (!card) return;
 
-    if (!card) return;
-
-    setFrontLeftRCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  setFrontLeftRCard(card);
+  setHandCards((prev) => prev.filter((_, index) => index !== selectedHandCardIndex));
+  setSelectedHandCardIndex(null);
+}}
 >
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "frontLeft" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {frontLeftRCard ? (
       <img
         src={getCardImage(frontLeftRCard)}
@@ -4160,23 +4191,30 @@ className="
 {/* 前列右R */}
 <div
   className="absolute top-[20%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
-
-    const card = handCards[selectedHandCardIndex];
-
-    if (!card) return;
-
-    setFrontRightRCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
+onClick={() => {
+  if (frontRightRCard) {
+    setSelectedRZone((prev) =>
+      prev === "frontRight" ? null : "frontRight"
     );
+    return;
+  }
 
-    setSelectedHandCardIndex(null);
-  }}
+  if (selectedHandCardIndex === null) return;
+
+  const card = handCards[selectedHandCardIndex];
+
+  if (!card) return;
+
+  setFrontRightRCard(card);
+
+  setHandCards((prev) =>
+    prev.filter((_, index) => index !== selectedHandCardIndex)
+  );
+
+  setSelectedHandCardIndex(null);
+}}
 >
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {frontRightRCard ? (
       <img
         src={getCardImage(frontRightRCard)}
@@ -4218,23 +4256,22 @@ className="
 {/* 後列左R */}
 <div
   className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (backLeftRCard) {
+    setSelectedRZone((prev) => prev === "backLeft" ? null : "backLeft");
+    return;
+  }
 
-    const card = handCards[selectedHandCardIndex];
+  if (selectedHandCardIndex === null) return;
+  const card = handCards[selectedHandCardIndex];
+  if (!card) return;
 
-    if (!card) return;
-
-    setBackLeftRCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  setBackLeftRCard(card);
+  setHandCards((prev) => prev.filter((_, index) => index !== selectedHandCardIndex));
+  setSelectedHandCardIndex(null);
+}}
 >
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {backLeftRCard ? (
       <img
         src={getCardImage(backLeftRCard)}
@@ -4252,23 +4289,22 @@ className="
 {/* 後列中央R */}
 <div
   className="absolute top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (backCenterRCard) {
+    setSelectedRZone((prev) => prev === "backCenter" ? null : "backCenter");
+    return;
+  }
 
-    const card = handCards[selectedHandCardIndex];
+  if (selectedHandCardIndex === null) return;
+  const card = handCards[selectedHandCardIndex];
+  if (!card) return;
 
-    if (!card) return;
-
-    setBackCenterRCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  setBackCenterRCard(card);
+  setHandCards((prev) => prev.filter((_, index) => index !== selectedHandCardIndex));
+  setSelectedHandCardIndex(null);
+}}
 >
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "backCenter" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {backCenterRCard ? (
       <img
         src={getCardImage(backCenterRCard)}
@@ -4286,23 +4322,22 @@ className="
 {/* 後列右R */}
 <div
   className="absolute top-[45%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (backRightRCard) {
+    setSelectedRZone((prev) => prev === "backRight" ? null : "backRight");
+    return;
+  }
 
-    const card = handCards[selectedHandCardIndex];
+  if (selectedHandCardIndex === null) return;
+  const card = handCards[selectedHandCardIndex];
+  if (!card) return;
 
-    if (!card) return;
-
-    setBackRightRCard(card);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  setBackRightRCard(card);
+  setHandCards((prev) => prev.filter((_, index) => index !== selectedHandCardIndex));
+  setSelectedHandCardIndex(null);
+}}
 >
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "backRight" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {backRightRCard ? (
       <img
         src={getCardImage(backRightRCard)}
@@ -4354,7 +4389,58 @@ className="
 
 {/* 手札 */}
 <div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
-  <div className="flex items-end justify-center gap-1 overflow-visible">
+<div className="flex items-end justify-center gap-1 overflow-visible">
+<button
+  onClick={() => {
+    if (!selectedRZone && selectedMoveSource !== "damage") return;
+
+    if (selectedRZone === "frontLeft" && frontLeftRCard) {
+      setHandCards((prev) => [frontLeftRCard, ...prev]);
+      setFrontLeftRCard(null);
+    }
+
+    if (selectedRZone === "frontRight" && frontRightRCard) {
+      setHandCards((prev) => [frontRightRCard, ...prev]);
+      setFrontRightRCard(null);
+    }
+
+    if (selectedRZone === "backLeft" && backLeftRCard) {
+      setHandCards((prev) => [backLeftRCard, ...prev]);
+      setBackLeftRCard(null);
+    }
+
+    if (selectedRZone === "backCenter" && backCenterRCard) {
+      setHandCards((prev) => [backCenterRCard, ...prev]);
+      setBackCenterRCard(null);
+    }
+
+    if (selectedRZone === "backRight" && backRightRCard) {
+      setHandCards((prev) => [backRightRCard, ...prev]);
+      setBackRightRCard(null);
+    }
+
+    setSelectedRZone(null);
+
+    if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
+  const card = damageCards[selectedDamageIndex];
+
+  if (card) {
+    setHandCards((prev) => [card, ...prev]);
+
+    setDamageCards((prev) =>
+      prev.filter((_, index) => index !== selectedDamageIndex)
+    );
+  }
+
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+}
+  }}
+
+className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+>
+  手札
+</button>
     {handCards.map((card, index) => (
       <div
         key={`${card.id}-${index}`}
