@@ -139,6 +139,11 @@ const [handCards, setHandCards] = useState<any[]>([]);
 const [selectedHandCardIndex, setSelectedHandCardIndex] = useState<number | null>(null);
 const [selectedRZone, setSelectedRZone] = useState<string | null>(null);
 const [selectedMoveSource, setSelectedMoveSource] = useState<string | null>(null);
+const [selectedMoveTarget, setSelectedMoveTarget] = useState<string | null>(null);
+const selectMoveTarget = (target: string) => {
+  if (!selectedMoveSource) return;
+  setSelectedMoveTarget(target);
+};
 const [selectedDamageIndex, setSelectedDamageIndex] = useState<number | null>(null);
 const [frontLeftRCard, setFrontLeftRCard] = useState<any | null>(null);
 const [frontRightRCard, setFrontRightRCard] = useState<any | null>(null);
@@ -161,6 +166,7 @@ const [vanguardCard, setVanguardCard] = useState<any | null>(null);
 const [orderCard, setOrderCard] = useState<any | null>(null);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
+const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -4354,38 +4360,82 @@ onClick={() => {
 
 {/* ドロップ */}
 <div
-  className="absolute top-[75%] right-[1%] flex items-center gap-3 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
-
-    const card = handCards[selectedHandCardIndex];
-
-    if (!card) return;
-
-    setDropCards((prev) => [...prev, card]);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  className="absolute top-[75%] right-[1%] z-20 flex items-center gap-3"
 >
-  <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
-    {dropCards.length > 0 && (
-      <img
-        src={getCardImage(dropCards[dropCards.length - 1])}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    )}
+<button
+  onClick={() => setIsDropViewerOpen(true)}
+  disabled={dropCards.length === 0}
+  className="w-[32px] h-[80px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center disabled:bg-gray-400"
+>
+  <span className="[writing-mode:vertical-rl]">見る</span>
+</button>
+
+  <div
+    onClick={() => {
+      if (selectedHandCardIndex === null) return;
+
+      const card = handCards[selectedHandCardIndex];
+      if (!card) return;
+
+      setDropCards((prev) => [...prev, card]);
+
+      setHandCards((prev) =>
+        prev.filter((_, index) => index !== selectedHandCardIndex)
+      );
+
+      setSelectedHandCardIndex(null);
+    }}
+    className="flex items-center gap-3 cursor-pointer"
+  >
+    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+      {dropCards.length > 0 && (
+        <img
+          src={getCardImage(dropCards[dropCards.length - 1])}
+          alt=""
+          className="w-full h-full object-cover"
+        />
+      )}
+    </div>
+
+    <span className="w-[32px] h-[110px] text-sm md:text-lg [writing-mode:vertical-rl] bg-blue-500 text-white rounded flex items-center justify-center">
+      ドロップ
+    </span>
   </div>
-
-<span className="w-[32px] h-[110px] text-sm md:text-lg [writing-mode:vertical-rl] bg-blue-500 text-white rounded flex items-center justify-center">
-  ドロップ
-</span>
-
 </div>
+
+{isDropViewerOpen && (
+  <div className="absolute inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-lg p-4 w-[90%] max-w-[700px] max-h-[80%] overflow-y-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg md:text-2xl font-bold">
+          ドロップ（{dropCards.length}枚）
+        </h3>
+
+        <button
+          onClick={() => setIsDropViewerOpen(false)}
+          className="px-3 py-1 bg-gray-500 text-white rounded"
+        >
+          閉じる
+        </button>
+      </div>
+
+      <div className="flex flex-wrap gap-2 justify-center">
+        {dropCards.map((card, index) => (
+          <div
+            key={`${card.id}-${index}`}
+            className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden"
+          >
+            <img
+              src={getCardImage(card)}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 
 {/* 手札 */}
 <div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
