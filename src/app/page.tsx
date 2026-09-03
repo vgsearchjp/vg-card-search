@@ -145,120 +145,472 @@ const [selectedMoveSource, setSelectedMoveSource] = useState<string | null>(null
 const [selectedMoveTarget, setSelectedMoveTarget] = useState<string | null>(null);
 const selectMoveTarget = (target: string) => {
 
-  // 待機領域 → 手札
-  if (target === "hand" && selectedMoveSource === "waiting") {
-    if (waitingCards.length === 0) return;
+  // =========================
+  // 待機領域
+  // =========================
+  if (selectedMoveSource === "waiting") {
 
     const card = waitingCards[waitingCards.length - 1];
     if (!card) return;
 
-    setHandCards((prev) => [card, ...prev]);
-    setWaitingCards((prev) => prev.slice(0, -1));
+    // 待機領域 → 手札
+    if (target === "hand") {
+      setHandCards((prev) => [card, ...prev]);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    // 待機領域 → ダメージ
+    else if (target === "damage") {
+      setDamageCards((prev) => [...prev, card]);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    // 待機領域 → オーダー
+    else if (target === "order") {
+      if (orderCard) return;
+
+      setOrderCard(card);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    // 待機領域 → 山札上
+    else if (target === "deckTop") {
+      setOnePlayerDeck((prev) => [card, ...prev]);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    // 待機領域 → 山札下
+    else if (target === "deckBottom") {
+      setOnePlayerDeck((prev) => [...prev, card]);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    // 待機領域 → ドロップ
+    else if (target === "drop") {
+      setDropCards((prev) => [...prev, card]);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+   // 待機領域 → トリガー
+else if (target === "trigger") {
+  if (triggerCard) return;
+
+  setTriggerCard(card);
+  setWaitingCards((prev) => prev.slice(0, -1));
+}
+
+// 待機領域 → V
+else if (target === "vanguard") {
+  if (vanguardCard) return;
+
+  setVanguardCard(card);
+  setWaitingCards((prev) => prev.slice(0, -1));
+}
+
+// 待機領域 → R
+else if (target === "frontLeft") {
+      if (frontLeftRCard) return;
+
+      setFrontLeftRCard(card);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    else if (target === "frontRight") {
+      if (frontRightRCard) return;
+
+      setFrontRightRCard(card);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    else if (target === "backLeft") {
+      if (backLeftRCard) return;
+
+      setBackLeftRCard(card);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    else if (target === "backCenter") {
+      if (backCenterRCard) return;
+
+      setBackCenterRCard(card);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    else if (target === "backRight") {
+      if (backRightRCard) return;
+
+      setBackRightRCard(card);
+      setWaitingCards((prev) => prev.slice(0, -1));
+    }
+
+    else {
+      return;
+    }
 
     setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
     return;
   }
 
-  // ドロップのカードが選択されていない場合
-  if (selectedDropIndex === null) return;
 
-  // ドロップ → 手札
+  // =========================
+  // ドロップ
+  // =========================
+  if (selectedMoveSource === "drop" && selectedDropIndex !== null) {
+
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    if (target === "hand") {
+      setHandCards((prev) => [card, ...prev]);
+    }
+
+    else if (target === "trigger") {
+    if (triggerCard) return;
+
+    setTriggerCard(card);
+    }
+
+    else if (target === "damage") {
+      setDamageCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "trigger") {
+    if (triggerCard) return;
+
+    setTriggerCard(card);
+    }
+
+    else if (target === "order") {
+      if (orderCard) return;
+
+      setOrderCard(card);
+    }
+
+    else if (target === "deckTop") {
+      setOnePlayerDeck((prev) => [card, ...prev]);
+    }
+
+    else if (target === "deckBottom") {
+      setOnePlayerDeck((prev) => [...prev, card]);
+    }
+
+    else if (target === "waiting") {
+      setWaitingCards((prev) => [...prev, card]);
+    }
+
+    else {
+      return;
+    }
+
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+    setSelectedMoveSource(null);
+    setSelectedMoveTarget(null);
+    setIsDropViewerOpen(false);
+    return;
+  }
+
+
+  // =========================
+  // ダメージ
+  // =========================
+if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
+  const card = damageCards[selectedDamageIndex];
+  if (!card) return;
+
   if (target === "hand") {
-    const card = dropCards[selectedDropIndex];
-    if (!card) return;
-
     setHandCards((prev) => [card, ...prev]);
-    setDropCards((prev) =>
-      prev.filter((_, index) => index !== selectedDropIndex)
-    );
-
-    setSelectedDropIndex(null);
-    setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
-    return;
   }
 
-  // ドロップ → ダメージ
-  if (target === "damage") {
-    const card = dropCards[selectedDropIndex];
-    if (!card) return;
-
-    setDamageCards((prev) => [...prev, card]);
-    setDropCards((prev) =>
-      prev.filter((_, index) => index !== selectedDropIndex)
-    );
-
-    setSelectedDropIndex(null);
-    setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
-    return;
+  else if (target === "waiting") {
+    setWaitingCards((prev) => [...prev, card]);
   }
 
-  // ドロップ → オーダー
-  if (target === "order") {
-    const card = dropCards[selectedDropIndex];
-    if (!card) return;
+  else if (target === "drop") {
+    setDropCards((prev) => [...prev, card]);
+  }
+
+  else if (target === "trigger") {
+  if (triggerCard) return;
+
+  setTriggerCard(card);
+}
+  else if (target === "deckTop") {
+    setOnePlayerDeck((prev) => [card, ...prev]);
+  }
+
+  else if (target === "deckBottom") {
+    setOnePlayerDeck((prev) => [...prev, card]);
+  }
+
+  else if (target === "order") {
+    if (orderCard) return;
 
     setOrderCard(card);
-    setDropCards((prev) =>
-      prev.filter((_, index) => index !== selectedDropIndex)
-    );
+  }
 
-    setSelectedDropIndex(null);
-    setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
+  else {
     return;
   }
 
-  // ドロップ → 山札上
-  if (target === "deckTop") {
-    const card = dropCards[selectedDropIndex];
+  setDamageCards((prev) =>
+    prev.filter((_, index) => index !== selectedDamageIndex)
+  );
+
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+
+  // =========================
+  // トリガー
+  // =========================
+  if (selectedMoveSource === "trigger" && triggerCard) {
+
+    const card = triggerCard;
+
+    if (target === "hand") {
+      setHandCards((prev) => [card, ...prev]);
+    }
+
+    else if (target === "waiting") {
+      setWaitingCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "damage") {
+      setDamageCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "drop") {
+      setDropCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "deckTop") {
+      setOnePlayerDeck((prev) => [card, ...prev]);
+    }
+
+    else if (target === "deckBottom") {
+      setOnePlayerDeck((prev) => [...prev, card]);
+    }
+
+    else if (target === "order") {
+      if (orderCard) return;
+
+      setOrderCard(card);
+    }
+
+    else {
+      return;
+    }
+
+    setTriggerCard(null);
+    setSelectedMoveSource(null);
+    setSelectedMoveTarget(null);
+    return;
+  }
+
+
+  // =========================
+  // オーダー
+  // =========================
+  if (selectedMoveSource === "order" && orderCard) {
+
+    const card = orderCard;
+
+    if (target === "hand") {
+      setHandCards((prev) => [card, ...prev]);
+    }
+
+    else if (target === "waiting") {
+      setWaitingCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "damage") {
+      setDamageCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "drop") {
+      setDropCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "deckTop") {
+      setOnePlayerDeck((prev) => [card, ...prev]);
+    }
+
+    else if (target === "deckBottom") {
+      setOnePlayerDeck((prev) => [...prev, card]);
+    }
+
+    else {
+      return;
+    }
+
+    setOrderCard(null);
+    setSelectedMoveSource(null);
+    setSelectedMoveTarget(null);
+    return;
+  }
+
+
+  // =========================
+  // R → 各領域
+  // =========================
+  if (selectedRZone) {
+
+    const rCards: Record<string, any> = {
+      frontLeft: frontLeftRCard,
+      frontRight: frontRightRCard,
+      backLeft: backLeftRCard,
+      backCenter: backCenterRCard,
+      backRight: backRightRCard,
+    };
+
+    const card = rCards[selectedRZone];
     if (!card) return;
 
-    setOnePlayerDeck((prev) => [card, ...prev]);
-    setDropCards((prev) =>
-      prev.filter((_, index) => index !== selectedDropIndex)
-    );
+    if (target === "hand") {
+      setHandCards((prev) => [card, ...prev]);
+    }
 
-    setSelectedDropIndex(null);
+    else if (target === "waiting") {
+      setWaitingCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "damage") {
+      setDamageCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "drop") {
+      setDropCards((prev) => [...prev, card]);
+    }
+
+    else if (target === "deckTop") {
+      setOnePlayerDeck((prev) => [card, ...prev]);
+    }
+
+    else if (target === "deckBottom") {
+      setOnePlayerDeck((prev) => [...prev, card]);
+    }
+
+    else if (target === "order") {
+      if (orderCard) return;
+
+      setOrderCard(card);
+    }
+
+    else {
+      return;
+    }
+
+    if (selectedRZone === "frontLeft") setFrontLeftRCard(null);
+    if (selectedRZone === "frontRight") setFrontRightRCard(null);
+    if (selectedRZone === "backLeft") setBackLeftRCard(null);
+    if (selectedRZone === "backCenter") setBackCenterRCard(null);
+    if (selectedRZone === "backRight") setBackRightRCard(null);
+
+    setSelectedRZone(null);
+    setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
     return;
   }
 
-  // ドロップ → 山札下
-  if (target === "deckBottom") {
-    const card = dropCards[selectedDropIndex];
+
+  // =========================
+  // 手札
+  // =========================
+  if (selectedHandCardIndex !== null) {
+
+    const card = handCards[selectedHandCardIndex];
     if (!card) return;
 
-    setOnePlayerDeck((prev) => [...prev, card]);
-    setDropCards((prev) =>
-      prev.filter((_, index) => index !== selectedDropIndex)
+    if (target === "waiting") {
+  setWaitingCards((prev) => [...prev, card]);
+}
+
+else if (target === "damage") {
+  setDamageCards((prev) => [...prev, card]);
+}
+
+else if (target === "trigger") {
+  if (triggerCard) return;
+  setTriggerCard(card);
+}
+
+else if (target === "drop") {
+  setDropCards((prev) => [...prev, card]);
+}
+
+    else if (target === "deckTop") {
+      setOnePlayerDeck((prev) => [card, ...prev]);
+    }
+
+    else if (target === "deckBottom") {
+      setOnePlayerDeck((prev) => [...prev, card]);
+    }
+
+    else if (target === "order") {
+      if (orderCard) return;
+
+      setOrderCard(card);
+    }
+
+    else if (
+      target === "frontLeft" ||
+      target === "frontRight" ||
+      target === "backLeft" ||
+      target === "backCenter" ||
+      target === "backRight"
+    ) {
+
+      if (target === "frontLeft") {
+        if (frontLeftRCard) return;
+        setFrontLeftRCard(card);
+      }
+
+      if (target === "frontRight") {
+        if (frontRightRCard) return;
+        setFrontRightRCard(card);
+      }
+
+      if (target === "backLeft") {
+        if (backLeftRCard) return;
+        setBackLeftRCard(card);
+      }
+
+      if (target === "backCenter") {
+        if (backCenterRCard) return;
+        setBackCenterRCard(card);
+      }
+
+      if (target === "backRight") {
+        if (backRightRCard) return;
+        setBackRightRCard(card);
+      }
+
+    }
+
+    else {
+      return;
+    }
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
     );
 
-    setSelectedDropIndex(null);
+    setSelectedHandCardIndex(null);
+    setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
     return;
   }
 
-  // ドロップ → 待機領域
-  if (target === "waiting") {
-    const card = dropCards[selectedDropIndex];
-    if (!card) return;
 
-    setWaitingCards((prev) => [...prev, card]);
-    setDropCards((prev) =>
-      prev.filter((_, index) => index !== selectedDropIndex)
-    );
-
-    setSelectedDropIndex(null);
-    setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
-    return;
-  }
-
+  // 移動先を記憶
   setSelectedMoveTarget(target);
 };
 const [selectedDamageIndex, setSelectedDamageIndex] = useState<number | null>(null);
@@ -4054,31 +4406,30 @@ className="
 <div
   className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  // 待機領域から選択中なら、移動先としてオーダーを指定
   if (selectedMoveSource === "waiting") {
-    if (waitingCards.length === 0) return;
-
-    const card = waitingCards[waitingCards.length - 1];
-    if (!card) return;
-
-    setOrderCard(card);
-    setWaitingCards((prev) => prev.slice(0, -1));
-    setSelectedMoveSource(null);
+    selectMoveTarget("order");
     return;
   }
 
+  // ダメージからオーダーへ
+  if (selectedMoveSource === "damage") {
+    selectMoveTarget("order");
+    return;
+  }
+
+  // オーダーにカードがある場合は、オーダーを移動元として選択
   if (orderCard) {
-    setSelectedMoveSource((prev) => prev === "order" ? null : "order");
+    setSelectedMoveSource((prev) =>
+      prev === "order" ? null : "order"
+    );
     return;
   }
 
-  if (selectedHandCardIndex === null) return;
-
-  const card = handCards[selectedHandCardIndex];
-  if (!card) return;
-
-  setOrderCard(card);
-  setHandCards((prev) => prev.filter((_, index) => index !== selectedHandCardIndex));
-  setSelectedHandCardIndex(null);
+  // 手札からオーダーへ
+  if (selectedHandCardIndex !== null) {
+    selectMoveTarget("order");
+  }
 }}
 >
   <span className="text-sm md:text-lg">オーダー</span>
@@ -4104,23 +4455,38 @@ onClick={() => {
 <div className="absolute top-[3%] right-[18%] flex flex-col items-center gap-2">
   <div className="text-sm md:text-lg font-bold">待機領域</div>
 
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""}`}>
-{waitingCards.length > 0 ? (
   <div
-    onClick={() =>
-      setSelectedMoveSource((prev) =>
-        prev === "waiting" ? null : "waiting"
-      )
-    }
-className="w-full h-full cursor-pointer"
+    className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""}`}
+    onClick={() => {
+      // ダメージ → 待機領域
+      if (selectedMoveSource === "damage") {
+        selectMoveTarget("waiting");
+        return;
+      }
+
+      // 手札 → 待機領域
+      if (selectedHandCardIndex !== null) {
+        selectMoveTarget("waiting");
+        return;
+      }
+
+      // 待機領域を移動元として選択
+      if (waitingCards.length > 0) {
+        setSelectedMoveSource((prev) =>
+          prev === "waiting" ? null : "waiting"
+        );
+      }
+    }}
   >
-    <img
-      src={getCardImage(waitingCards[waitingCards.length - 1])}
-      alt=""
-      className="w-full h-full object-cover"
-    />
-  </div>
-) : null}
+    {waitingCards.length > 0 ? (
+      <div className="w-full h-full cursor-pointer">
+        <img
+          src={getCardImage(waitingCards[waitingCards.length - 1])}
+          alt=""
+          className="w-full h-full object-cover"
+        />
+      </div>
+    ) : null}
   </div>
 </div>
 
@@ -4143,13 +4509,31 @@ className="w-full h-full cursor-pointer"
   </button>
 
 <div
-  onClick={() => {
-    if (!triggerCard) return;
+onClick={() => {
+// ダメージ → トリガー
+if (selectedMoveSource === "damage") {
+  selectMoveTarget("trigger");
+  return;
+}
 
-    setSelectedMoveSource((prev) =>
-      prev === "trigger" ? null : "trigger"
-    );
-  }}
+// ドロップ → トリガー
+if (selectedMoveSource === "drop") {
+  selectMoveTarget("trigger");
+  return;
+}
+
+// 手札 → トリガー
+if (selectedHandCardIndex !== null) {
+  selectMoveTarget("trigger");
+  return;
+}
+
+if (!triggerCard) return;
+
+setSelectedMoveSource((prev) =>
+  prev === "trigger" ? null : "trigger"
+);
+}}
   className={`w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
     selectedMoveSource === "trigger"
       ? "ring-4 ring-blue-500"
@@ -4172,32 +4556,23 @@ className="w-full h-full cursor-pointer"
 <div
   className="absolute top-[40%] left-[2%] flex flex-col items-center cursor-pointer"
 onClick={() => {
+  // 待機領域 → ダメージ
   if (selectedMoveSource === "waiting") {
-    if (waitingCards.length === 0) return;
-
-    const card = waitingCards[waitingCards.length - 1];
-    if (!card) return;
-
-    setDamageCards((prev) => [...prev, card]);
-    setWaitingCards((prev) => prev.slice(0, -1));
-    setSelectedMoveSource(null);
+    selectMoveTarget("damage");
     return;
   }
 
-  if (selectedHandCardIndex === null) return;
+  // トリガー → ダメージ
+if (selectedMoveSource === "trigger") {
+  selectMoveTarget("damage");
+  return;
+}
 
-    const card = handCards[selectedHandCardIndex];
-
-    if (!card) return;
-
-    setDamageCards((prev) => [...prev, card]);
-
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
-
-    setSelectedHandCardIndex(null);
-  }}
+  // 手札 → ダメージ
+  if (selectedHandCardIndex !== null) {
+    selectMoveTarget("damage");
+  }
+}}
 >
   <span className="text-sm md:text-lg mb-3">
     ダメージ
@@ -4285,21 +4660,26 @@ onClick={() => {
 {/* V */}
 <div
   className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
-  onClick={() => {
-    if (selectedHandCardIndex === null) return;
+onClick={() => {
+  if (selectedMoveSource === "waiting") {
+    selectMoveTarget("vanguard");
+    return;
+  }
 
-    const card = handCards[selectedHandCardIndex];
+  if (selectedHandCardIndex === null) return;
 
-    if (!card) return;
+  const card = handCards[selectedHandCardIndex];
 
-    setVanguardCard(card);
+  if (!card) return;
 
-    setHandCards((prev) =>
-      prev.filter((_, index) => index !== selectedHandCardIndex)
-    );
+  setVanguardCard(card);
 
-    setSelectedHandCardIndex(null);
-  }}
+  setHandCards((prev) =>
+    prev.filter((_, index) => index !== selectedHandCardIndex)
+  );
+
+  setSelectedHandCardIndex(null);
+}}
 >
 
 <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden relative">
@@ -4747,20 +5127,24 @@ onClick={() => {
 </button>
 
   <div
-    onClick={() => {
-      if (selectedHandCardIndex === null) return;
+onClick={() => {
+  // ダメージ → ドロップ
+  if (selectedMoveSource === "damage") {
+    selectMoveTarget("drop");
+    return;
+  }
 
-      const card = handCards[selectedHandCardIndex];
-      if (!card) return;
+  // トリガー → ドロップ
+if (selectedMoveSource === "trigger") {
+  selectMoveTarget("drop");
+  return;
+}
 
-      setDropCards((prev) => [...prev, card]);
-
-      setHandCards((prev) =>
-        prev.filter((_, index) => index !== selectedHandCardIndex)
-      );
-
-      setSelectedHandCardIndex(null);
-    }}
+  // 手札 → ドロップ
+  if (selectedHandCardIndex !== null) {
+    selectMoveTarget("drop");
+  }
+}}
     className="flex items-center gap-3 cursor-pointer"
   >
     <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
@@ -4799,11 +5183,12 @@ onClick={() => {
         {dropCards.map((card, index) => (
           <div
   key={`${card.id}-${index}`}
-  onClick={() =>
-    setSelectedDropIndex((prev) =>
-      prev === index ? null : index
-    )
-  }
+onClick={() => {
+  setSelectedDropIndex((prev) =>
+    prev === index ? null : index
+  );
+  setSelectedMoveSource("drop");
+}}
   className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden cursor-pointer ${
     selectedDropIndex === index
       ? "ring-4 ring-blue-500"
@@ -4854,6 +5239,17 @@ onClick={() => {
     </button>
 
     <button
+  onClick={() => selectMoveTarget("trigger")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "trigger"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  トリガー
+</button>
+
+    <button
       onClick={() => selectMoveTarget("deckTop")}
       className={`px-3 py-2 rounded text-white ${
         selectedMoveTarget === "deckTop"
@@ -4896,59 +5292,50 @@ onClick={() => {
 <div className="flex items-end justify-center gap-1 overflow-visible">
 <button
   onClick={() => {
-    if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting") return;
-    
-    if (selectedMoveSource === "waiting") {
-    if (waitingCards.length === 0) return;
-    const card = waitingCards[waitingCards.length - 1];
-    if (!card) return;
-    setHandCards((prev) => [card, ...prev]);
-    setWaitingCards((prev) => prev.slice(0, -1));
-    setSelectedMoveSource(null);
+  if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting" && selectedMoveSource !== "trigger") return;
+
+  if (selectedMoveSource === "damage") {
+    selectMoveTarget("hand");
     return;
-    }
-    if (selectedRZone === "frontLeft" && frontLeftRCard) {
-      setHandCards((prev) => [frontLeftRCard, ...prev]);
-      setFrontLeftRCard(null);
-    }
-
-    if (selectedRZone === "frontRight" && frontRightRCard) {
-      setHandCards((prev) => [frontRightRCard, ...prev]);
-      setFrontRightRCard(null);
-    }
-
-    if (selectedRZone === "backLeft" && backLeftRCard) {
-      setHandCards((prev) => [backLeftRCard, ...prev]);
-      setBackLeftRCard(null);
-    }
-
-    if (selectedRZone === "backCenter" && backCenterRCard) {
-      setHandCards((prev) => [backCenterRCard, ...prev]);
-      setBackCenterRCard(null);
-    }
-
-    if (selectedRZone === "backRight" && backRightRCard) {
-      setHandCards((prev) => [backRightRCard, ...prev]);
-      setBackRightRCard(null);
-    }
-
-    setSelectedRZone(null);
-
-    if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
-  const card = damageCards[selectedDamageIndex];
-
-  if (card) {
-    setHandCards((prev) => [card, ...prev]);
-
-    setDamageCards((prev) =>
-      prev.filter((_, index) => index !== selectedDamageIndex)
-    );
   }
 
-  setSelectedDamageIndex(null);
-  setSelectedMoveSource(null);
+  if (selectedMoveSource === "waiting") {
+    selectMoveTarget("hand");
+    return;
+  }
+
+  if (selectedMoveSource === "trigger") {
+  selectMoveTarget("hand");
+  return;
 }
-  }}
+
+  if (selectedRZone === "frontLeft" && frontLeftRCard) {
+    setHandCards((prev) => [frontLeftRCard, ...prev]);
+    setFrontLeftRCard(null);
+  }
+
+  if (selectedRZone === "frontRight" && frontRightRCard) {
+    setHandCards((prev) => [frontRightRCard, ...prev]);
+    setFrontRightRCard(null);
+  }
+
+  if (selectedRZone === "backLeft" && backLeftRCard) {
+    setHandCards((prev) => [backLeftRCard, ...prev]);
+    setBackLeftRCard(null);
+  }
+
+  if (selectedRZone === "backCenter" && backCenterRCard) {
+    setHandCards((prev) => [backCenterRCard, ...prev]);
+    setBackCenterRCard(null);
+  }
+
+  if (selectedRZone === "backRight" && backRightRCard) {
+    setHandCards((prev) => [backRightRCard, ...prev]);
+    setBackRightRCard(null);
+  }
+
+  setSelectedRZone(null);
+}}
 
 className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
 >
@@ -5050,6 +5437,27 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   オーダー
+</button>
+
+<button
+  onClick={() => {
+    if (selectedDeckCardIndex === null) return;
+
+    const card = onePlayerDeck[selectedDeckCardIndex];
+    if (!card) return;
+
+    setWaitingCards((prev) => [...prev, card]);
+    setOnePlayerDeck((prev) =>
+      prev.filter((_, index) => index !== selectedDeckCardIndex)
+    );
+
+    setSelectedDeckCardIndex(null);
+    setIsDeckViewerOpen(false);
+  }}
+  disabled={selectedDeckCardIndex === null}
+  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  待機領域
 </button>
 
 </div>
