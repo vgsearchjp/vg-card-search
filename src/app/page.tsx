@@ -141,6 +141,7 @@ const [selectedDeckCardIndex, setSelectedDeckCardIndex] = useState<number | null
 const [handCards, setHandCards] = useState<any[]>([]);
 const [selectedHandCardIndex, setSelectedHandCardIndex] = useState<number | null>(null);
 const [selectedRZone, setSelectedRZone] = useState<string | null>(null);
+const [selectedOrderIndex, setSelectedOrderIndex] = useState<number | null>(null);
 const [selectedMoveSource, setSelectedMoveSource] = useState<string | null>(null);
 const [selectedMoveTarget, setSelectedMoveTarget] = useState<string | null>(null);
 const selectMoveTarget = (target: string) => {
@@ -166,12 +167,10 @@ const selectMoveTarget = (target: string) => {
     }
 
     // 待機領域 → オーダー
-    else if (target === "order") {
-      if (orderCard) return;
-
-      setOrderCard(card);
-      setWaitingCards((prev) => prev.slice(0, -1));
-    }
+else if (target === "order") {
+  setOrderCard((prev) => [...prev, card]);
+  setWaitingCards((prev) => prev.slice(0, -1));
+}
 
     // 待機領域 → 山札上
     else if (target === "deckTop") {
@@ -281,11 +280,9 @@ else if (target === "frontLeft") {
     setTriggerCard(card);
     }
 
-    else if (target === "order") {
-      if (orderCard) return;
-
-      setOrderCard(card);
-    }
+else if (target === "order") {
+  setOrderCard((prev) => [...prev, card]);
+}
 
     else if (target === "deckTop") {
       setOnePlayerDeck((prev) => [card, ...prev]);
@@ -347,11 +344,9 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
     setOnePlayerDeck((prev) => [...prev, card]);
   }
 
-  else if (target === "order") {
-    if (orderCard) return;
-
-    setOrderCard(card);
-  }
+else if (target === "order") {
+  setOrderCard((prev) => [...prev, card]);
+}
 
   else {
     return;
@@ -399,11 +394,9 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-    else if (target === "order") {
-      if (orderCard) return;
-
-      setOrderCard(card);
-    }
+else if (target === "order") {
+  setOrderCard((prev) => [...prev, card]);
+}
 
     else {
       return;
@@ -419,9 +412,10 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
   // =========================
   // オーダー
   // =========================
-  if (selectedMoveSource === "order" && orderCard) {
+if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
 
-    const card = orderCard;
+  const card = orderCard[selectedOrderIndex];
+  if (!card) return;
 
     if (target === "hand") {
       setHandCards((prev) => [card, ...prev]);
@@ -451,10 +445,11 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
       return;
     }
 
-    setOrderCard(null);
-    setSelectedMoveSource(null);
-    setSelectedMoveTarget(null);
-    return;
+setOrderCard((prev) => prev.filter((_, index) => index !== selectedOrderIndex));
+setSelectedOrderIndex(null);
+setSelectedMoveSource(null);
+setSelectedMoveTarget(null);
+return;
   }
 
 
@@ -498,11 +493,9 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-    else if (target === "order") {
-      if (orderCard) return;
-
-      setOrderCard(card);
-    }
+else if (target === "order") {
+  setOrderCard((prev) => [...prev, card]);
+}
 
     else {
       return;
@@ -554,11 +547,9 @@ else if (target === "drop") {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-    else if (target === "order") {
-      if (orderCard) return;
-
-      setOrderCard(card);
-    }
+else if (target === "order") {
+  setOrderCard((prev) => [...prev, card]);
+}
 
     else if (
       target === "frontLeft" ||
@@ -632,7 +623,7 @@ const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>([]);
 const [rideGrade, setRideGrade] = useState(0);
 const [vanguardCard, setVanguardCard] = useState<any | null>(null);
-const [orderCard, setOrderCard] = useState<any | null>(null);
+const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
 const [waitingCards, setWaitingCards] = useState<any[]>([]);
@@ -4406,6 +4397,11 @@ className="
 <div
   className="absolute top-[5%] left-[5%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  // R → オーダー
+if (selectedRZone) {
+  selectMoveTarget("order");
+  return;
+}
   // 待機領域から選択中なら、移動先としてオーダーを指定
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("order");
@@ -4418,35 +4414,49 @@ onClick={() => {
     return;
   }
 
-  // オーダーにカードがある場合は、オーダーを移動元として選択
-  if (orderCard) {
-    setSelectedMoveSource((prev) =>
-      prev === "order" ? null : "order"
-    );
-    return;
-  }
+ // 手札からオーダーへ
+if (selectedHandCardIndex !== null) {
+  selectMoveTarget("order");
+  return;
+}
 
-  // 手札からオーダーへ
-  if (selectedHandCardIndex !== null) {
-    selectMoveTarget("order");
-  }
+// オーダーにカードがある場合は、オーダーを移動元として選択
+if (orderCard.length > 0) {
+  setSelectedMoveSource((prev) =>
+    prev === "order" ? null : "order"
+  );
+  return;
+}
 }}
 >
   <span className="text-sm md:text-lg">オーダー</span>
 
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedMoveSource === "order" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
-    {orderCard ? (
+<div className="flex items-start">
+  {orderCard.map((card, index) => (
+    <div
+      key={index}
+onClick={(e) => {
+  e.stopPropagation();
+
+  if (selectedOrderIndex === index && selectedMoveSource === "order") {
+    setSelectedOrderIndex(null);
+    setSelectedMoveSource(null);
+    return;
+  }
+
+  setSelectedOrderIndex(index);
+  setSelectedMoveSource("order");
+}}
+      className={`relative shrink-0 w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 rounded bg-white overflow-hidden cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : "border-gray-400"}`}
+    >
       <img
-        src={getCardImage(orderCard)}
+        src={getCardImage(card)}
         alt=""
         className="w-full h-full object-cover"
       />
-    ) : (
-      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
-        オーダー
-      </span>
-    )}
-  </div>
+    </div>
+  ))}
+</div>
 </div>
 
 {/* トリガー */}
@@ -4556,6 +4566,11 @@ setSelectedMoveSource((prev) =>
 <div
   className="absolute top-[40%] left-[2%] flex flex-col items-center cursor-pointer"
 onClick={() => {
+  // R → ダメージ
+if (selectedRZone) {
+  selectMoveTarget("damage");
+  return;
+}
   // 待機領域 → ダメージ
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("damage");
@@ -4628,6 +4643,11 @@ style={{
 <div
   className="absolute top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  if (selectedMoveSource === "waiting") {
+    selectMoveTarget("frontLeft");
+    return;
+  }
+
   if (frontLeftRCard) {
     setSelectedRZone((prev) => prev === "frontLeft" ? null : "frontLeft");
     return;
@@ -4745,30 +4765,35 @@ onClick={() => {
 {/* 前列右R */}
 <div
   className="absolute top-[20%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
-onClick={() => {
-  if (frontRightRCard) {
-    setSelectedRZone((prev) =>
-      prev === "frontRight" ? null : "frontRight"
+  onClick={() => {
+    if (selectedMoveSource === "waiting") {
+      selectMoveTarget("frontRight");
+      return;
+    }
+
+    if (frontRightRCard) {
+      setSelectedRZone((prev) =>
+        prev === "frontRight" ? null : "frontRight"
+      );
+      return;
+    }
+
+    if (selectedHandCardIndex === null) return;
+
+    const card = handCards[selectedHandCardIndex];
+
+    if (!card) return;
+
+    setFrontRightRCard(card);
+
+    setHandCards((prev) =>
+      prev.filter((_, index) => index !== selectedHandCardIndex)
     );
-    return;
-  }
 
-  if (selectedHandCardIndex === null) return;
-
-  const card = handCards[selectedHandCardIndex];
-
-  if (!card) return;
-
-  setFrontRightRCard(card);
-
-  setHandCards((prev) =>
-    prev.filter((_, index) => index !== selectedHandCardIndex)
-  );
-
-  setSelectedHandCardIndex(null);
-}}
+    setSelectedHandCardIndex(null);
+  }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
+  <div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
     {frontRightRCard ? (
       <img
         src={getCardImage(frontRightRCard)}
@@ -4819,12 +4844,12 @@ onClick={() => {
     return;
   }
 
-  if (selectedMoveSource === "order" && orderCard) {
-    setOnePlayerDeck((prev) => [orderCard, ...prev]);
-    setOrderCard(null);
-    setSelectedMoveSource(null);
-    return;
-  }
+if (selectedMoveSource === "order" && orderCard) {
+  setOnePlayerDeck((prev) => [orderCard, ...prev]);
+  setOrderCard([]);
+  setSelectedMoveSource(null);
+  return;
+}
 
   if (selectedRZone === "frontLeft" && frontLeftRCard) {
     setOnePlayerDeck((prev) => [frontLeftRCard, ...prev]);
@@ -4908,12 +4933,12 @@ onClick={() => {
     return;
   }
 
-  if (selectedMoveSource === "order" && orderCard) {
-    setOnePlayerDeck((prev) => [...prev, orderCard]);
-    setOrderCard(null);
-    setSelectedMoveSource(null);
-    return;
-  }
+if (selectedMoveSource === "order" && orderCard) {
+  setOnePlayerDeck((prev) => [...prev, orderCard]);
+  setOrderCard([]);
+  setSelectedMoveSource(null);
+  return;
+}
 
   if (selectedRZone === "frontLeft" && frontLeftRCard) {
     setOnePlayerDeck((prev) => [...prev, frontLeftRCard]);
@@ -5019,6 +5044,10 @@ onClick={() => {
 <div
   className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  if (selectedMoveSource === "waiting") {
+  selectMoveTarget("backLeft");
+  return;
+}
   if (backLeftRCard) {
     setSelectedRZone((prev) => prev === "backLeft" ? null : "backLeft");
     return;
@@ -5052,6 +5081,10 @@ onClick={() => {
 <div
   className="absolute top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  if (selectedMoveSource === "waiting") {
+    selectMoveTarget("backCenter");
+    return;
+  }
   if (backCenterRCard) {
     setSelectedRZone((prev) => prev === "backCenter" ? null : "backCenter");
     return;
@@ -5085,6 +5118,10 @@ onClick={() => {
 <div
   className="absolute top-[45%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+  if (selectedMoveSource === "waiting") {
+  selectMoveTarget("backRight");
+  return;
+}
   if (backRightRCard) {
     setSelectedRZone((prev) => prev === "backRight" ? null : "backRight");
     return;
@@ -5128,6 +5165,12 @@ onClick={() => {
 
   <div
 onClick={() => {
+  // R → ドロップ
+if (selectedRZone) {
+  selectMoveTarget("drop");
+  return;
+}
+
   // ダメージ → ドロップ
   if (selectedMoveSource === "damage") {
     selectMoveTarget("drop");
