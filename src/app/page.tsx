@@ -756,6 +756,18 @@ const drawCard = () => {
   setOnePlayerDeck(remainingDeck);
   setHandCards((prev) => [...prev, drawnCard]);
 };
+const shuffleDeck = () => {
+  setOnePlayerDeck((prev) => {
+    const shuffled = [...prev];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+  });
+};
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>([]);
@@ -4993,7 +5005,7 @@ onClick={() => {
 </div>
 
 {/* 山札 */}
-<div className="absolute top-[30%] right-[5%] flex flex-col items-center gap-2">
+<div className="absolute top-[30%] right-[1%] flex flex-col items-center gap-2">
   <div className="flex items-center gap-2">
     <div className="flex flex-col items-center gap-2">
   <button
@@ -5233,6 +5245,15 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
         ドロー
       </button>
     </div>
+
+    <button
+      onClick={shuffleDeck}
+      disabled={onePlayerDeck.length === 0}
+      className="w-[32px] h-[80px] md:w-[40px] md:h-[105px] bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400 flex items-center justify-center"
+    >
+      <span className="[writing-mode:vertical-rl]">シャッフル</span>
+    </button>
+
   </div>
 </div>
 
