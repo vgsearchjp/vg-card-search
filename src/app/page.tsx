@@ -348,6 +348,39 @@ else if (target === "order") {
   setOrderCard((prev) => [...prev, card]);
 }
 
+else if (
+  target === "frontLeft" ||
+  target === "frontRight" ||
+  target === "backLeft" ||
+  target === "backCenter" ||
+  target === "backRight"
+) {
+  if (target === "frontLeft") {
+    if (frontLeftRCard) return;
+    setFrontLeftRCard(card);
+  }
+
+  if (target === "frontRight") {
+    if (frontRightRCard) return;
+    setFrontRightRCard(card);
+  }
+
+  if (target === "backLeft") {
+    if (backLeftRCard) return;
+    setBackLeftRCard(card);
+  }
+
+  if (target === "backCenter") {
+    if (backCenterRCard) return;
+    setBackCenterRCard(card);
+  }
+
+  if (target === "backRight") {
+    if (backRightRCard) return;
+    setBackRightRCard(card);
+  }
+}
+
   else {
     return;
   }
@@ -441,10 +474,47 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-    else {
-      return;
+    else if (target === "vanguard") {
+     if (vanguardCard) return;
+     setVanguardCard(card);
     }
 
+else if (
+  target === "frontLeft" ||
+  target === "frontRight" ||
+  target === "backLeft" ||
+  target === "backCenter" ||
+  target === "backRight"
+) {
+  if (target === "frontLeft") {
+    if (frontLeftRCard) return;
+    setFrontLeftRCard(card);
+  }
+
+  if (target === "frontRight") {
+    if (frontRightRCard) return;
+    setFrontRightRCard(card);
+  }
+
+  if (target === "backLeft") {
+    if (backLeftRCard) return;
+    setBackLeftRCard(card);
+  }
+
+  if (target === "backCenter") {
+    if (backCenterRCard) return;
+    setBackCenterRCard(card);
+  }
+
+  if (target === "backRight") {
+    if (backRightRCard) return;
+    setBackRightRCard(card);
+  }
+}
+
+else {
+  return;
+}
 setOrderCard((prev) => prev.filter((_, index) => index !== selectedOrderIndex));
 setSelectedOrderIndex(null);
 setSelectedMoveSource(null);
@@ -453,65 +523,133 @@ return;
   }
 
 
+// =========================
+// R → 各領域
+// =========================
+if (selectedRZone) {
+
+  const rCards: Record<string, any> = {
+    frontLeft: frontLeftRCard,
+    frontRight: frontRightRCard,
+    backLeft: backLeftRCard,
+    backCenter: backCenterRCard,
+    backRight: backRightRCard,
+  };
+
+  const card = rCards[selectedRZone];
+  if (!card) return;
+
   // =========================
-  // R → 各領域
+  // R → R（入れ替え）
   // =========================
-  if (selectedRZone) {
+  if (
+    target === "frontLeft" ||
+    target === "frontRight" ||
+    target === "backLeft" ||
+    target === "backCenter" ||
+    target === "backRight"
+  ) {
 
-    const rCards: Record<string, any> = {
-      frontLeft: frontLeftRCard,
-      frontRight: frontRightRCard,
-      backLeft: backLeftRCard,
-      backCenter: backCenterRCard,
-      backRight: backRightRCard,
-    };
+    const targetCard = rCards[target];
 
-    const card = rCards[selectedRZone];
-    if (!card) return;
-
-    if (target === "hand") {
-      setHandCards((prev) => [card, ...prev]);
-    }
-
-    else if (target === "waiting") {
-      setWaitingCards((prev) => [...prev, card]);
-    }
-
-    else if (target === "damage") {
-      setDamageCards((prev) => [...prev, card]);
-    }
-
-    else if (target === "drop") {
-      setDropCards((prev) => [...prev, card]);
-    }
-
-    else if (target === "deckTop") {
-      setOnePlayerDeck((prev) => [card, ...prev]);
-    }
-
-    else if (target === "deckBottom") {
-      setOnePlayerDeck((prev) => [...prev, card]);
-    }
-
-else if (target === "order") {
-  setOrderCard((prev) => [...prev, card]);
-}
-
-    else {
+    // 移動元と移動先が同じ場合
+    if (selectedRZone === target) {
       return;
     }
 
-    if (selectedRZone === "frontLeft") setFrontLeftRCard(null);
-    if (selectedRZone === "frontRight") setFrontRightRCard(null);
-    if (selectedRZone === "backLeft") setBackLeftRCard(null);
-    if (selectedRZone === "backCenter") setBackCenterRCard(null);
-    if (selectedRZone === "backRight") setBackRightRCard(null);
+    if (target === "frontLeft") {
+      setFrontLeftRCard(card);
+    }
+
+    if (target === "frontRight") {
+      setFrontRightRCard(card);
+    }
+
+    if (target === "backLeft") {
+      setBackLeftRCard(card);
+    }
+
+    if (target === "backCenter") {
+      setBackCenterRCard(card);
+    }
+
+    if (target === "backRight") {
+      setBackRightRCard(card);
+    }
+
+    // 移動先にあったカードを移動元へ
+    if (selectedRZone === "frontLeft") {
+      setFrontLeftRCard(targetCard);
+    }
+
+    if (selectedRZone === "frontRight") {
+      setFrontRightRCard(targetCard);
+    }
+
+    if (selectedRZone === "backLeft") {
+      setBackLeftRCard(targetCard);
+    }
+
+    if (selectedRZone === "backCenter") {
+      setBackCenterRCard(targetCard);
+    }
+
+    if (selectedRZone === "backRight") {
+      setBackRightRCard(targetCard);
+    }
 
     setSelectedRZone(null);
     setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
     return;
   }
+
+  // =========================
+  // R → その他
+  // =========================
+  if (target === "hand") {
+    setHandCards((prev) => [card, ...prev]);
+  }
+
+  else if (target === "waiting") {
+    setWaitingCards((prev) => [...prev, card]);
+  }
+
+  else if (target === "damage") {
+    setDamageCards((prev) => [...prev, card]);
+  }
+
+  else if (target === "drop") {
+    setDropCards((prev) => [...prev, card]);
+  }
+
+  else if (target === "deckTop") {
+    setOnePlayerDeck((prev) => [card, ...prev]);
+  }
+
+  else if (target === "deckBottom") {
+    setOnePlayerDeck((prev) => [...prev, card]);
+  }
+
+  else if (target === "order") {
+    setOrderCard((prev) => [...prev, card]);
+  }
+
+  else {
+    return;
+  }
+
+  if (selectedRZone === "frontLeft") setFrontLeftRCard(null);
+  if (selectedRZone === "frontRight") setFrontRightRCard(null);
+  if (selectedRZone === "backLeft") setBackLeftRCard(null);
+  if (selectedRZone === "backCenter") setBackCenterRCard(null);
+  if (selectedRZone === "backRight") setBackRightRCard(null);
+
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
 
 
   // =========================
@@ -4474,6 +4612,11 @@ onClick={(e) => {
         return;
       }
 
+      if (selectedMoveSource === "order") {
+        selectMoveTarget("waiting");
+        return;
+      }
+
       // 手札 → 待機領域
       if (selectedHandCardIndex !== null) {
         selectMoveTarget("waiting");
@@ -4571,11 +4714,17 @@ if (selectedRZone) {
   selectMoveTarget("damage");
   return;
 }
-  // 待機領域 → ダメージ
+ 
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("damage");
     return;
   }
+
+   // オーダー → ダメージ
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("damage");
+  return;
+}
 
   // トリガー → ダメージ
 if (selectedMoveSource === "trigger") {
@@ -4648,6 +4797,21 @@ onClick={() => {
     return;
   }
 
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("frontLeft");
+  return;
+}
+
+if (selectedMoveSource === "damage") {
+  selectMoveTarget("frontLeft");
+  return;
+}
+
+if (selectedRZone && selectedRZone !== "frontLeft") {
+  selectMoveTarget("frontLeft");
+  return;
+}
+
   if (frontLeftRCard) {
     setSelectedRZone((prev) => prev === "frontLeft" ? null : "frontLeft");
     return;
@@ -4685,6 +4849,11 @@ onClick={() => {
     selectMoveTarget("vanguard");
     return;
   }
+
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("vanguard");
+  return;
+}
 
   if (selectedHandCardIndex === null) return;
 
@@ -4771,6 +4940,21 @@ onClick={() => {
       return;
     }
 
+    if (selectedMoveSource === "order") {
+       selectMoveTarget("frontRight");
+      return;
+    }
+
+    if (selectedMoveSource === "damage") {
+       selectMoveTarget("frontRight");
+      return;
+    }
+
+    if (selectedRZone && selectedRZone !== "frontLeft") {
+       selectMoveTarget("frontRight");
+       return;
+    }
+
     if (frontRightRCard) {
       setSelectedRZone((prev) =>
         prev === "frontRight" ? null : "frontRight"
@@ -4844,9 +5028,15 @@ onClick={() => {
     return;
   }
 
-if (selectedMoveSource === "order" && orderCard) {
-  setOnePlayerDeck((prev) => [orderCard, ...prev]);
-  setOrderCard([]);
+if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+  const card = orderCard[selectedOrderIndex];
+  if (!card) return;
+
+  setOnePlayerDeck((prev) => [card, ...prev]);
+  setOrderCard((prev) =>
+    prev.filter((_, index) => index !== selectedOrderIndex)
+  );
+  setSelectedOrderIndex(null);
   setSelectedMoveSource(null);
   return;
 }
@@ -4933,9 +5123,15 @@ onClick={() => {
     return;
   }
 
-if (selectedMoveSource === "order" && orderCard) {
-  setOnePlayerDeck((prev) => [...prev, orderCard]);
-  setOrderCard([]);
+if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+  const card = orderCard[selectedOrderIndex];
+  if (!card) return;
+
+  setOnePlayerDeck((prev) => [...prev, card]);
+  setOrderCard((prev) =>
+    prev.filter((_, index) => index !== selectedOrderIndex)
+  );
+  setSelectedOrderIndex(null);
   setSelectedMoveSource(null);
   return;
 }
@@ -5047,7 +5243,23 @@ onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backLeft");
   return;
-}
+  }
+
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("backLeft");
+  return;
+  }
+
+  if (selectedMoveSource === "damage") {
+  selectMoveTarget("backLeft");
+  return;
+  }
+
+  if (selectedRZone && selectedRZone !== "backLeft") {
+  selectMoveTarget("backLeft");
+  return;
+  }
+
   if (backLeftRCard) {
     setSelectedRZone((prev) => prev === "backLeft" ? null : "backLeft");
     return;
@@ -5085,6 +5297,22 @@ onClick={() => {
     selectMoveTarget("backCenter");
     return;
   }
+
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("backCenter");
+  return;
+  }
+
+  if (selectedMoveSource === "damage") {
+  selectMoveTarget("backCenter");
+  return;
+  }
+
+  if (selectedRZone && selectedRZone !== "backCenter") {
+  selectMoveTarget("backCenter");
+  return;
+}
+
   if (backCenterRCard) {
     setSelectedRZone((prev) => prev === "backCenter" ? null : "backCenter");
     return;
@@ -5121,7 +5349,23 @@ onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backRight");
   return;
-}
+  }
+
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("backRight");
+  return;
+  }
+
+  if (selectedMoveSource === "damage") {
+  selectMoveTarget("backRight");
+  return;
+  }
+
+  if (selectedRZone && selectedRZone !== "backRight") {
+  selectMoveTarget("backRight");
+  return;
+ }
+
   if (backRightRCard) {
     setSelectedRZone((prev) => prev === "backRight" ? null : "backRight");
     return;
@@ -5176,6 +5420,12 @@ if (selectedRZone) {
     selectMoveTarget("drop");
     return;
   }
+
+  // オーダー → ドロップ
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("drop");
+  return;
+}
 
   // トリガー → ドロップ
 if (selectedMoveSource === "trigger") {
@@ -5335,7 +5585,7 @@ onClick={() => {
 <div className="flex items-end justify-center gap-1 overflow-visible">
 <button
   onClick={() => {
-  if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting" && selectedMoveSource !== "trigger") return;
+  if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting" && selectedMoveSource !== "trigger" && selectedMoveSource !== "order") return;
 
   if (selectedMoveSource === "damage") {
     selectMoveTarget("hand");
@@ -5346,6 +5596,11 @@ onClick={() => {
     selectMoveTarget("hand");
     return;
   }
+
+  if (selectedMoveSource === "order") {
+  selectMoveTarget("hand");
+  return;
+}
 
   if (selectedMoveSource === "trigger") {
   selectMoveTarget("hand");
@@ -5468,7 +5723,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     const card = onePlayerDeck[selectedDeckCardIndex];
     if (!card) return;
 
-    setOrderCard(card);
+    setOrderCard((prev) => [...prev, card]);
     setOnePlayerDeck((prev) =>
       prev.filter((_, index) => index !== selectedDeckCardIndex)
     );
