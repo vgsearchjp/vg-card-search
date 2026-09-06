@@ -4754,7 +4754,7 @@ onClick={(e) => {
   </div>
 </div>
 
-<div className="absolute top-[3%] right-[1%] flex flex-col items-center gap-2">
+<div className="absolute top-[3%] right-[1%] flex flex-col items-start gap-2">
 
   {/* トリガーボタン */}
   <button
@@ -4769,7 +4769,7 @@ onClick={(e) => {
       setSelectedMoveSource(null);
     }}
     disabled={!!triggerCard || onePlayerDeck.length === 0}
-    className="text-sm md:text-lg bg-blue-500 text-white px-3 py-1 rounded disabled:bg-gray-400"
+    className="w-[80px] md:w-[105px] text-sm md:text-lg bg-blue-500 text-white px-3 py-1 rounded disabled:bg-gray-400"
   >
     トリガー
   </button>
