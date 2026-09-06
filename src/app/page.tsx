@@ -5697,7 +5697,7 @@ onClick={() => {
   <div className="mt-4 flex flex-wrap gap-2 justify-center">
     <button
       onClick={() => selectMoveTarget("hand")}
-      className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
         selectedMoveTarget === "hand"
           ? "bg-green-600"
           : "bg-blue-500"
@@ -5708,7 +5708,7 @@ onClick={() => {
 
     <button
       onClick={() => selectMoveTarget("damage")}
-      className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+     className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
         selectedMoveTarget === "damage"
           ? "bg-green-600"
           : "bg-blue-500"
@@ -5719,7 +5719,7 @@ onClick={() => {
 
     <button
       onClick={() => selectMoveTarget("order")}
-      className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
         selectedMoveTarget === "order"
           ? "bg-green-600"
           : "bg-blue-500"
@@ -5730,7 +5730,7 @@ onClick={() => {
 
     <button
   onClick={() => selectMoveTarget("trigger")}
- className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "trigger"
       ? "bg-green-600"
       : "bg-blue-500"
@@ -5741,7 +5741,7 @@ onClick={() => {
 
     <button
       onClick={() => selectMoveTarget("deckTop")}
-      className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+     className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
         selectedMoveTarget === "deckTop"
           ? "bg-green-600"
           : "bg-blue-500"
@@ -5752,7 +5752,7 @@ onClick={() => {
 
     <button
       onClick={() => selectMoveTarget("deckBottom")}
-      className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+     className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
         selectedMoveTarget === "deckBottom"
           ? "bg-green-600"
           : "bg-blue-500"
@@ -5763,7 +5763,7 @@ onClick={() => {
 
     <button
       onClick={() => selectMoveTarget("waiting")}
-      className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
         selectedMoveTarget === "waiting"
           ? "bg-green-600"
           : "bg-blue-500"
@@ -5788,14 +5788,14 @@ onClick={() => {
     setSelectedDropIndex(null);
   }}
   disabled={selectedDropIndex === null}
-  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="px-2 py-1.5 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   ソウル
 </button>
 
 <button
   onClick={() => selectMoveTarget("vanguard")}
-  className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "vanguard"
       ? "bg-green-600"
       : "bg-blue-500"
@@ -5806,7 +5806,7 @@ onClick={() => {
 
 <button
   onClick={() => selectMoveTarget("frontLeft")}
-  className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "frontLeft"
       ? "bg-green-600"
       : "bg-blue-500"
@@ -5817,7 +5817,7 @@ onClick={() => {
 
 <button
   onClick={() => selectMoveTarget("frontRight")}
-  className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "frontRight"
       ? "bg-green-600"
       : "bg-blue-500"
@@ -5828,7 +5828,7 @@ onClick={() => {
 
 <button
   onClick={() => selectMoveTarget("backLeft")}
-  className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "backLeft"
       ? "bg-green-600"
       : "bg-blue-500"
@@ -5839,7 +5839,7 @@ onClick={() => {
 
 <button
   onClick={() => selectMoveTarget("backCenter")}
-  className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "backCenter"
       ? "bg-green-600"
       : "bg-blue-500"
@@ -5850,7 +5850,7 @@ onClick={() => {
 
 <button
   onClick={() => selectMoveTarget("backRight")}
-  className={`px-1 py-1 text-xs md:text-base rounded text-white ${
+ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     selectedMoveTarget === "backRight"
       ? "bg-green-600"
       : "bg-blue-500"
