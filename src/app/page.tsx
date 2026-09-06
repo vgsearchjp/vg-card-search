@@ -5183,7 +5183,7 @@ setSelectedHandCardIndex(null);
 {/* 山札 */}
 <div className="absolute top-[30%] right-[1%] flex flex-col items-center gap-2">
   <div className="flex items-center gap-2">
-    <div className="flex flex-col items-center gap-2">
+<div className="flex flex-col items-center gap-2 translate-y-4 md:translate-y-0">
   <button
    onClick={() => {
   if (selectedMoveSource === "waiting") {
