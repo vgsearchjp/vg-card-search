@@ -4849,7 +4849,7 @@ style={{
 
 {/* 前列左R */}
 <div
-  className="absolute top-[25%] md:top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[26%] md:top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("frontLeft");
