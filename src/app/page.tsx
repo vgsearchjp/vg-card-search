@@ -6489,12 +6489,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
           山札 ({onePlayerDeck.length}枚)
         </div>
 
-        <button
-          onClick={() => setIsDeckViewerOpen(false)}
-          className="px-3 py-1 bg-gray-500 text-white rounded"
-        >
-          閉じる
-        </button>
+
         <div className="flex flex-wrap items-center gap-2 flex-1">
 <button
   onClick={() => {
@@ -6672,6 +6667,13 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   後列右R
+</button>
+
+<button
+  onClick={() => setIsDeckViewerOpen(false)}
+  className="px-3 py-1 bg-gray-500 text-white rounded"
+>
+  閉じる
 </button>
 
 </div>
