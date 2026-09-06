@@ -6489,7 +6489,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
           山札 ({onePlayerDeck.length}枚)
         </div>
 
-<div className="flex flex-wrap items-center gap-2 flex-1">
+<div className="grid grid-cols-8 gap-2 flex-1">
 <button
   onClick={() => {
     if (selectedDeckCardIndex === null) return;
