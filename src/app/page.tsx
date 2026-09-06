@@ -137,6 +137,8 @@ const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
 const [isDeckTopRevealed, setIsDeckTopRevealed] = useState(false);
 const [isDeckViewerOpen, setIsDeckViewerOpen] = useState(false);
+const [isDeckViewSelectOpen, setIsDeckViewSelectOpen] = useState(false);
+const [deckViewCount, setDeckViewCount] = useState("");
 const [selectedDeckCardIndex, setSelectedDeckCardIndex] = useState<number | null>(null);
 const [handCards, setHandCards] = useState<any[]>([]);
 const [selectedHandCardIndex, setSelectedHandCardIndex] = useState<number | null>(null);
@@ -264,12 +266,6 @@ else if (target === "frontLeft") {
       setHandCards((prev) => [card, ...prev]);
     }
 
-    else if (target === "trigger") {
-    if (triggerCard) return;
-
-    setTriggerCard(card);
-    }
-
     else if (target === "damage") {
       setDamageCards((prev) => [...prev, card]);
     }
@@ -292,13 +288,61 @@ else if (target === "order") {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-    else if (target === "waiting") {
-      setWaitingCards((prev) => [...prev, card]);
-    }
+else if (target === "waiting") {
+  setWaitingCards((prev) => [...prev, card]);
+}
 
-    else {
-      return;
-    }
+else if (target === "vanguard") {
+  if (vanguardCard) {
+    setDropCards((prev) => [...prev, vanguardCard]);
+  }
+
+  setVanguardCard(card);
+}
+
+else if (target === "frontLeft") {
+  if (frontLeftRCard) {
+    setDropCards((prev) => [...prev, frontLeftRCard]);
+  }
+
+  setFrontLeftRCard(card);
+}
+
+else if (target === "frontRight") {
+  if (frontRightRCard) {
+    setDropCards((prev) => [...prev, frontRightRCard]);
+  }
+
+  setFrontRightRCard(card);
+}
+
+else if (target === "backLeft") {
+  if (backLeftRCard) {
+    setDropCards((prev) => [...prev, backLeftRCard]);
+  }
+
+  setBackLeftRCard(card);
+}
+
+else if (target === "backCenter") {
+  if (backCenterRCard) {
+    setDropCards((prev) => [...prev, backCenterRCard]);
+  }
+
+  setBackCenterRCard(card);
+}
+
+else if (target === "backRight") {
+  if (backRightRCard) {
+    setDropCards((prev) => [...prev, backRightRCard]);
+  }
+
+  setBackRightRCard(card);
+}
+
+else {
+  return;
+}
 
     setDropCards((prev) =>
       prev.filter((_, index) => index !== selectedDropIndex)
@@ -773,6 +817,9 @@ const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>([]);
 const [rideGrade, setRideGrade] = useState(0);
 const [vanguardCard, setVanguardCard] = useState<any | null>(null);
+const [soulCards, setSoulCards] = useState<any[]>([]);
+const [isSoulViewerOpen, setIsSoulViewerOpen] = useState(false);
+const [selectedSoulIndex, setSelectedSoulIndex] = useState<number | null>(null);
 const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
@@ -4855,7 +4902,7 @@ if (selectedRZone && selectedRZone !== "frontLeft") {
 
 {/* V */}
 <div
-  className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[7%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("vanguard");
@@ -4869,20 +4916,161 @@ onClick={() => {
 
   if (selectedHandCardIndex === null) return;
 
-  const card = handCards[selectedHandCardIndex];
+const card = handCards[selectedHandCardIndex];
 
-  if (!card) return;
+if (!card) return;
 
-  setVanguardCard(card);
+const currentVanguard =
+  vanguardCard ??
+  (rideGrade === 0 ? rideG0 :
+   rideGrade === 1 ? rideG1 :
+   rideGrade === 2 ? rideG2 :
+   rideG3);
 
-  setHandCards((prev) =>
-    prev.filter((_, index) => index !== selectedHandCardIndex)
-  );
+if (currentVanguard) {
+  setSoulCards((prev) => [...prev, currentVanguard]);
+}
 
-  setSelectedHandCardIndex(null);
+setVanguardCard(card);
+
+setHandCards((prev) =>
+  prev.filter((_, index) => index !== selectedHandCardIndex)
+);
+
+setSelectedHandCardIndex(null);
 }}
 >
+<div className="flex items-start gap-2">
+  <div className="flex flex-col items-start gap-2">
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsSoulViewerOpen(true);
+      }}
+      disabled={soulCards.length === 0}
+      className="w-full px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+    >
+      ソウル
+    </button>
 
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+
+    if (selectedHandCardIndex !== null) {
+      const card = handCards[selectedHandCardIndex];
+      if (!card) return;
+
+      setSoulCards((prev) => [...prev, card]);
+      setHandCards((prev) =>
+        prev.filter((_, index) => index !== selectedHandCardIndex)
+      );
+      setSelectedHandCardIndex(null);
+      return;
+    }
+
+    if (selectedRZone === "frontLeft" && frontLeftRCard) {
+      setSoulCards((prev) => [...prev, frontLeftRCard]);
+      setFrontLeftRCard(null);
+      setSelectedRZone(null);
+      return;
+    }
+
+    if (selectedRZone === "frontRight" && frontRightRCard) {
+      setSoulCards((prev) => [...prev, frontRightRCard]);
+      setFrontRightRCard(null);
+      setSelectedRZone(null);
+      return;
+    }
+
+    if (selectedRZone === "backLeft" && backLeftRCard) {
+      setSoulCards((prev) => [...prev, backLeftRCard]);
+      setBackLeftRCard(null);
+      setSelectedRZone(null);
+      return;
+    }
+
+    if (selectedRZone === "backCenter" && backCenterRCard) {
+      setSoulCards((prev) => [...prev, backCenterRCard]);
+      setBackCenterRCard(null);
+      setSelectedRZone(null);
+      return;
+    }
+
+    if (selectedRZone === "backRight" && backRightRCard) {
+      setSoulCards((prev) => [...prev, backRightRCard]);
+      setBackRightRCard(null);
+      setSelectedRZone(null);
+      return;
+    }
+
+    if (selectedMoveSource === "waiting") {
+      const card = waitingCards[waitingCards.length - 1];
+      if (!card) return;
+
+      setSoulCards((prev) => [...prev, card]);
+      setWaitingCards((prev) => prev.slice(0, -1));
+      setSelectedMoveSource(null);
+      return;
+    }
+
+    if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
+      const card = damageCards[selectedDamageIndex];
+      if (!card) return;
+
+      setSoulCards((prev) => [...prev, card]);
+      setDamageCards((prev) =>
+        prev.filter((_, index) => index !== selectedDamageIndex)
+      );
+      setSelectedDamageIndex(null);
+      setSelectedMoveSource(null);
+      return;
+    }
+
+    if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+      const card = orderCard[selectedOrderIndex];
+      if (!card) return;
+
+      setSoulCards((prev) => [...prev, card]);
+      setOrderCard((prev) =>
+        prev.filter((_, index) => index !== selectedOrderIndex)
+      );
+      setSelectedOrderIndex(null);
+      setSelectedMoveSource(null);
+      return;
+    }
+  }}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base"
+>
+  ソウルへ
+</button>
+  </div>
+
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+
+      if (rideGrade >= 3) return;
+
+      const currentVanguard =
+        vanguardCard ??
+        (rideGrade === 0 ? rideG0 :
+         rideGrade === 1 ? rideG1 :
+         rideGrade === 2 ? rideG2 :
+         rideG3);
+
+      if (currentVanguard) {
+        setSoulCards((prev) => [...prev, currentVanguard]);
+      }
+
+      setRideGrade((prev) => prev + 1);
+    }}
+    disabled={rideGrade >= 3}
+    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+  >
+    ライド
+  </button>
+</div>
 <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden relative">
 
 {vanguardCard ? (
@@ -4929,18 +5117,6 @@ onClick={() => {
       />
     )}
   </div>
-
-<button
-  onClick={() => {
-    if (rideGrade < 3) {
-      setRideGrade(rideGrade + 1);
-    }
-  }}
-  disabled={rideGrade >= 3}
-  className="absolute left-full top-1/2 -translate-y-1/2 ml-2 w-[32px] h-[80px] md:w-[40px] md:h-[105px] bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400 flex items-center justify-center"
->
-  <span className="[writing-mode:vertical-rl]">ライド</span>
-</button>
 </div>
 
 {/* 前列右R */}
@@ -5206,13 +5382,13 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
     公開
   </button>
 
-  <button
-    onClick={() => setIsDeckViewerOpen(true)}
-    disabled={onePlayerDeck.length === 0}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
-  >
-    見る
-  </button>
+<button
+  onClick={() => setIsDeckViewSelectOpen(true)}
+  disabled={onePlayerDeck.length === 0}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+>
+  見る
+</button>
 </div>
 
     <div className="flex flex-col items-center gap-2">
@@ -5595,7 +5771,94 @@ onClick={() => {
     >
       待機領域
     </button>
-  </div>
+
+    <button
+  onClick={() => {
+    if (selectedDropIndex === null) return;
+
+    const card = dropCards[selectedDropIndex];
+    if (!card) return;
+
+    setSoulCards((prev) => [...prev, card]);
+
+    setDropCards((prev) =>
+      prev.filter((_, index) => index !== selectedDropIndex)
+    );
+
+    setSelectedDropIndex(null);
+  }}
+  disabled={selectedDropIndex === null}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+>
+  ソウル
+</button>
+
+<button
+  onClick={() => selectMoveTarget("vanguard")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "vanguard"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  V
+</button>
+
+<button
+  onClick={() => selectMoveTarget("frontLeft")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "frontLeft"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  前列左R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("frontRight")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "frontRight"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  前列右R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("backLeft")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "backLeft"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  後列左R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("backCenter")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "backCenter"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  後列中央R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("backRight")}
+  className={`px-3 py-2 rounded text-white ${
+    selectedMoveTarget === "backRight"
+      ? "bg-green-600"
+      : "bg-blue-500"
+  }`}
+>
+  後列右R
+</button>
+</div>
 )}
 </div>
 </div>
@@ -5680,6 +5943,409 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   </div>
 </div>
 </div>
+
+{isDeckViewSelectOpen && (
+  <div className="fixed inset-0 z-[10000] bg-black/60 flex items-center justify-center p-4">
+    <div className="bg-white rounded-lg p-6 w-full max-w-sm">
+      <div className="font-bold text-lg mb-4 text-center">
+        山札を見る
+      </div>
+
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <input
+          type="number"
+          min="1"
+          max={onePlayerDeck.length}
+          value={deckViewCount}
+          onChange={(e) => setDeckViewCount(e.target.value)}
+          className="w-20 px-2 py-2 border rounded text-center"
+          placeholder="枚数"
+        />
+
+        <button
+          onClick={() => {
+            const count = Number(deckViewCount);
+
+            if (!count || count < 1 || count > onePlayerDeck.length) return;
+
+            setIsDeckViewSelectOpen(false);
+            setIsDeckViewerOpen(true);
+          }}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          枚
+        </button>
+      </div>
+
+      <button
+        onClick={() => {
+          setDeckViewCount(String(onePlayerDeck.length));
+          setIsDeckViewSelectOpen(false);
+          setIsDeckViewerOpen(true);
+        }}
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        全て
+      </button>
+
+      <button
+        onClick={() => {
+          setDeckViewCount("");
+          setIsDeckViewSelectOpen(false);
+        }}
+        className="w-full mt-2 px-4 py-2 bg-gray-500 text-white rounded"
+      >
+        キャンセル
+      </button>
+    </div>
+  </div>
+)}
+
+{isSoulViewerOpen && (
+  <div className="fixed inset-0 z-[10000] bg-black/60 flex items-center justify-center p-4">
+    <div className="bg-white rounded-lg p-4 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
+      <div className="flex items-center justify-between mb-4">
+<div className="font-bold text-lg whitespace-nowrap">
+  ソウル（{soulCards.length}枚）
+</div>
+
+       
+<div className="grid grid-cols-7 gap-2 mt-2">
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setHandCards((prev) => [card, ...prev]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  手札
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setWaitingCards((prev) => [...prev, card]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  待機領域
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setDamageCards((prev) => [...prev, card]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  ダメージ
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setDropCards((prev) => [...prev, card]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  ドロップ
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setOrderCard((prev) => [...prev, card]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  オーダー
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setOnePlayerDeck((prev) => [card, ...prev]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  山札上
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    setOnePlayerDeck((prev) => [...prev, card]);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  山札下
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    if (vanguardCard) {
+      setSoulCards((prev) => [...prev, vanguardCard]);
+    }
+
+    setVanguardCard(card);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  V
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    if (frontLeftRCard) {
+      setSoulCards((prev) => [...prev, frontLeftRCard]);
+    }
+
+    setFrontLeftRCard(card);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  前列左R
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    if (frontRightRCard) {
+      setSoulCards((prev) => [...prev, frontRightRCard]);
+    }
+
+    setFrontRightRCard(card);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  前列右R
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    if (backLeftRCard) {
+      setSoulCards((prev) => [...prev, backLeftRCard]);
+    }
+
+    setBackLeftRCard(card);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  後列左R
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    if (backCenterRCard) {
+      setSoulCards((prev) => [...prev, backCenterRCard]);
+    }
+
+    setBackCenterRCard(card);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  後列中央R
+</button>
+
+<button
+  onClick={() => {
+    if (selectedSoulIndex === null) return;
+
+    const card = soulCards[selectedSoulIndex];
+    if (!card) return;
+
+    if (backRightRCard) {
+      setSoulCards((prev) => [...prev, backRightRCard]);
+    }
+
+    setBackRightRCard(card);
+
+    setSoulCards((prev) =>
+      prev.filter((_, index) => index !== selectedSoulIndex)
+    );
+
+    setSelectedSoulIndex(null);
+  }}
+  disabled={selectedSoulIndex === null}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+>
+  後列右R
+</button>
+
+ <button
+  onClick={() => {
+  setIsSoulViewerOpen(false);
+  setSelectedSoulIndex(null);
+  }}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
+  >
+  閉じる
+</button>
+</div>
+      </div>
+
+      <div className="grid grid-cols-5 md:grid-cols-8 gap-2">
+        {soulCards.map((card, index) => (
+          <div
+            key={`${card.id}-${index}`}
+            onClick={() =>
+              setSelectedSoulIndex((prev) =>
+                prev === index ? null : index
+              )
+            }
+            className={`rounded overflow-hidden cursor-pointer ${
+              selectedSoulIndex === index
+                ? "ring-4 ring-blue-500"
+                : ""
+            }`}
+          >
+            <img
+              src={getCardImage(card)}
+              alt=""
+              className="w-full aspect-[7/10] object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 
 {isDeckViewerOpen && (
   <div className="fixed inset-0 z-[10000] bg-black/60 flex items-center justify-center p-4 landscape:p-2">
@@ -5779,11 +6445,32 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   待機領域
 </button>
 
+<button
+  onClick={() => {
+    if (selectedDeckCardIndex === null) return;
+
+    const card = onePlayerDeck[selectedDeckCardIndex];
+    if (!card) return;
+
+    setSoulCards((prev) => [...prev, card]);
+
+    setOnePlayerDeck((prev) =>
+      prev.filter((_, index) => index !== selectedDeckCardIndex)
+    );
+
+    setSelectedDeckCardIndex(null);
+    setIsDeckViewerOpen(false);
+  }}
+  disabled={selectedDeckCardIndex === null}
+  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  ソウル
+</button>
 </div>
 
 <div className="overflow-y-auto p-3">
   <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-    {onePlayerDeck.map((card, index) => (
+    {onePlayerDeck.slice(0, Number(deckViewCount) || onePlayerDeck.length).map((card, index) => (
 
 <div
   key={`${card.id ?? card.card_no}-${index}`}
