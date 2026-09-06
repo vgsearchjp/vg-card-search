@@ -812,6 +812,58 @@ const shuffleDeck = () => {
     return shuffled;
   });
 };
+const resetOnePlayerBoard = async () => {
+  if (!selectedDeck) return;
+
+  const refreshedDeck = await refreshDeckCards(
+    selectedDeck.main_deck || []
+  );
+
+  const shuffledDeck = [...refreshedDeck];
+
+  for (let i = shuffledDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledDeck[i], shuffledDeck[j]] = [shuffledDeck[j], shuffledDeck[i]];
+  }
+
+  const initialHand = shuffledDeck.slice(0, 5);
+  const remainingDeck = shuffledDeck.slice(5);
+
+  setHandCards(initialHand);
+  setOnePlayerDeck(remainingDeck);
+
+  setRideGrade(0);
+  setVanguardCard(null);
+
+  setSoulCards([]);
+  setDamageCards([]);
+  setOrderCard([]);
+  setTriggerCard(null);
+  setDropCards([]);
+  setWaitingCards([]);
+
+  setFrontLeftRCard(null);
+  setFrontRightRCard(null);
+  setBackLeftRCard(null);
+  setBackCenterRCard(null);
+  setBackRightRCard(null);
+
+  setSelectedHandCardIndex(null);
+  setSelectedDamageIndex(null);
+  setSelectedOrderIndex(null);
+  setSelectedSoulIndex(null);
+  setSelectedDropIndex(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  setSelectedDeckCardIndex(null);
+
+  setIsDeckTopRevealed(false);
+  setIsDeckViewerOpen(false);
+  setIsDeckViewSelectOpen(false);
+  setIsSoulViewerOpen(false);
+  setIsDropViewerOpen(false);
+};
 const [gDeck, setGDeck] = useState<any[]>([]);
 const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>([]);
@@ -4702,7 +4754,9 @@ onClick={(e) => {
   </div>
 </div>
 
-<div className="absolute top-[3%] right-[5%] flex flex-col items-center gap-2">
+<div className="absolute top-[3%] right-[1%] flex flex-col items-center gap-2">
+
+  {/* トリガーボタン */}
   <button
     onClick={() => {
       if (triggerCard) return;
@@ -4720,47 +4774,61 @@ onClick={(e) => {
     トリガー
   </button>
 
-<div
-onClick={() => {
-// ダメージ → トリガー
-if (selectedMoveSource === "damage") {
-  selectMoveTarget("trigger");
-  return;
-}
+  {/* トリガー枠 ＋ リセット */}
+  <div className="flex items-center gap-2">
 
-// ドロップ → トリガー
-if (selectedMoveSource === "drop") {
-  selectMoveTarget("trigger");
-  return;
-}
+    {/* トリガー枠 */}
+    <div
+      onClick={() => {
+        // ダメージ → トリガー
+        if (selectedMoveSource === "damage") {
+          selectMoveTarget("trigger");
+          return;
+        }
 
-// 手札 → トリガー
-if (selectedHandCardIndex !== null) {
-  selectMoveTarget("trigger");
-  return;
-}
+        // ドロップ → トリガー
+        if (selectedMoveSource === "drop") {
+          selectMoveTarget("trigger");
+          return;
+        }
 
-if (!triggerCard) return;
+        // 手札 → トリガー
+        if (selectedHandCardIndex !== null) {
+          selectMoveTarget("trigger");
+          return;
+        }
 
-setSelectedMoveSource((prev) =>
-  prev === "trigger" ? null : "trigger"
-);
-}}
-  className={`w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
-    selectedMoveSource === "trigger"
-      ? "ring-4 ring-blue-500"
-      : "border-gray-400"
-  }`}
->
-{triggerCard ? (
-  <div className="w-full h-full flex items-center justify-center overflow-hidden">
-    <img
-      src={getCardImage(triggerCard)}
-      alt=""
-      className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] object-cover rotate-270"
-    />
-  </div>
-) : null}
+        if (!triggerCard) return;
+
+        setSelectedMoveSource((prev) =>
+          prev === "trigger" ? null : "trigger"
+        );
+      }}
+      className={`w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
+        selectedMoveSource === "trigger"
+          ? "ring-4 ring-blue-500"
+          : "border-gray-400"
+      }`}
+    >
+      {triggerCard ? (
+        <div className="w-full h-full flex items-center justify-center overflow-hidden">
+          <img
+            src={getCardImage(triggerCard)}
+            alt=""
+            className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] object-cover rotate-270"
+          />
+        </div>
+      ) : null}
+    </div>
+
+    {/* リセット */}
+    <button
+      onClick={resetOnePlayerBoard}
+      className="w-[32px] h-[80px] md:w-[40px] md:h-[105px] bg-gray-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+    >
+      <span className="[writing-mode:vertical-rl]">リセット</span>
+    </button>
+
   </div>
 </div>
 
