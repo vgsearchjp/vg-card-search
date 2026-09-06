@@ -6484,7 +6484,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 {isDeckViewerOpen && (
   <div className="fixed inset-0 z-[10000] bg-black/60 flex items-center justify-center p-4 landscape:p-2">
     <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col landscape:max-w-none landscape:w-full landscape:h-full landscape:max-h-none landscape:rounded-none">
-      <div className="flex items-center justify-between p-3 border-b">
+     <div className="flex flex-wrap items-center justify-between gap-2 p-3 border-b">
         <div className="font-bold text-lg">
           山札 ({onePlayerDeck.length}枚)
         </div>
