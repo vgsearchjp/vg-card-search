@@ -6489,8 +6489,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
           山札 ({onePlayerDeck.length}枚)
         </div>
 
-
-        <div className="flex flex-wrap items-center gap-2 flex-1">
+<div className="flex flex-wrap items-center gap-2 flex-1">
 <button
   onClick={() => {
     if (selectedDeckCardIndex === null) return;
@@ -6507,7 +6506,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   手札
 </button>
@@ -6528,7 +6527,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   ダメージ
 </button>
@@ -6549,7 +6548,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   オーダー
 </button>
@@ -6570,7 +6569,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   待機領域
 </button>
@@ -6592,7 +6591,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   ソウル
 </button>
@@ -6600,7 +6599,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("trigger")}
   disabled={selectedDeckCardIndex === null}
- className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+ className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   トリガー
 </button>
@@ -6608,7 +6607,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("deckTop")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   山札上
 </button>
@@ -6616,7 +6615,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("deckBottom")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   山札下
 </button>
@@ -6624,7 +6623,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("vanguard")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   V
 </button>
@@ -6632,7 +6631,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("frontLeft")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   前列左R
 </button>
@@ -6640,7 +6639,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("frontRight")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   前列右R
 </button>
@@ -6648,7 +6647,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("backLeft")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   後列左R
 </button>
@@ -6656,7 +6655,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("backCenter")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   後列中央R
 </button>
@@ -6664,14 +6663,14 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("backRight")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[75px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   後列右R
 </button>
 
 <button
   onClick={() => setIsDeckViewerOpen(false)}
-  className="px-3 py-1 bg-gray-500 text-white rounded"
+className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-gray-500 text-white rounded"
 >
   閉じる
 </button>
