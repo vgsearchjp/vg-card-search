@@ -4849,7 +4849,7 @@ style={{
 
 {/* 前列左R */}
 <div
-  className="absolute top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[22%] md:top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("frontLeft");
@@ -5121,7 +5121,7 @@ setSelectedHandCardIndex(null);
 
 {/* 前列右R */}
 <div
-  className="absolute top-[20%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[22%] md:top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
     if (selectedMoveSource === "waiting") {
       selectMoveTarget("frontRight");
@@ -5435,7 +5435,7 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
 
 {/* 後列左R */}
 <div
-  className="absolute top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[47%] md:top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backLeft");
@@ -5488,7 +5488,7 @@ onClick={() => {
 
 {/* 後列中央R */}
 <div
-  className="absolute top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[47%] md:top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("backCenter");
@@ -5541,7 +5541,7 @@ onClick={() => {
 
 {/* 後列右R */}
 <div
-  className="absolute top-[45%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[47%] md:top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backRight");
@@ -5594,7 +5594,7 @@ onClick={() => {
 
 {/* ドロップ */}
 <div
-  className="absolute top-[75%] right-[1%] z-20 flex items-center gap-3"
+  className="absolute top-[70%] md:top-[75%] right-[1%] z-20 flex items-center gap-3"
 >
 <button
   onClick={() => setIsDropViewerOpen(true)}
