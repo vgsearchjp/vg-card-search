@@ -253,6 +253,72 @@ else if (target === "frontLeft") {
     return;
   }
 
+// =========================
+// 山札
+// =========================
+if (selectedMoveSource === "deck" && selectedDeckCardIndex !== null) {
+  const card = onePlayerDeck[selectedDeckCardIndex];
+  if (!card) return;
+
+  if (target === "hand") {
+    setHandCards((prev) => [card, ...prev]);
+  } else if (target === "trigger") {
+    if (triggerCard) return;
+    setTriggerCard(card);
+  } else if (target === "damage") {
+    setDamageCards((prev) => [...prev, card]);
+  } else if (target === "order") {
+    setOrderCard((prev) => [...prev, card]);
+  } else if (target === "waiting") {
+    setWaitingCards((prev) => [...prev, card]);
+  } else if (target === "soul") {
+    setSoulCards((prev) => [...prev, card]);
+  } else if (target === "deckTop") {
+    setOnePlayerDeck((prev) => [card, ...prev.filter((_, index) => index !== selectedDeckCardIndex)]);
+    setSelectedDeckCardIndex(null);
+    setSelectedMoveSource(null);
+    setSelectedMoveTarget(null);
+    setIsDeckViewerOpen(false);
+    return;
+  } else if (target === "deckBottom") {
+    setOnePlayerDeck((prev) => [...prev.filter((_, index) => index !== selectedDeckCardIndex), card]);
+    setSelectedDeckCardIndex(null);
+    setSelectedMoveSource(null);
+    setSelectedMoveTarget(null);
+    setIsDeckViewerOpen(false);
+    return;
+  } else if (target === "vanguard") {
+    if (vanguardCard) setOnePlayerDeck((prev) => [...prev, vanguardCard]);
+    setVanguardCard(card);
+  } else if (target === "frontLeft") {
+    if (frontLeftRCard) setOnePlayerDeck((prev) => [...prev, frontLeftRCard]);
+    setFrontLeftRCard(card);
+  } else if (target === "frontRight") {
+    if (frontRightRCard) setOnePlayerDeck((prev) => [...prev, frontRightRCard]);
+    setFrontRightRCard(card);
+  } else if (target === "backLeft") {
+    if (backLeftRCard) setOnePlayerDeck((prev) => [...prev, backLeftRCard]);
+    setBackLeftRCard(card);
+  } else if (target === "backCenter") {
+    if (backCenterRCard) setOnePlayerDeck((prev) => [...prev, backCenterRCard]);
+    setBackCenterRCard(card);
+  } else if (target === "backRight") {
+    if (backRightRCard) setOnePlayerDeck((prev) => [...prev, backRightRCard]);
+    setBackRightRCard(card);
+  } else {
+    return;
+  }
+
+  setOnePlayerDeck((prev) =>
+    prev.filter((_, index) => index !== selectedDeckCardIndex)
+  );
+
+  setSelectedDeckCardIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  setIsDeckViewerOpen(false);
+  return;
+}
 
   // =========================
   // ドロップ
@@ -6534,6 +6600,79 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 >
   ソウル
 </button>
+
+<button
+  onClick={() => selectMoveTarget("trigger")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  トリガー
+</button>
+
+<button
+  onClick={() => selectMoveTarget("deckTop")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  山札上
+</button>
+
+<button
+  onClick={() => selectMoveTarget("deckBottom")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  山札下
+</button>
+
+<button
+  onClick={() => selectMoveTarget("vanguard")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  V
+</button>
+
+<button
+  onClick={() => selectMoveTarget("frontLeft")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  前列左R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("frontRight")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  前列右R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("backLeft")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  後列左R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("backCenter")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  後列中央R
+</button>
+
+<button
+  onClick={() => selectMoveTarget("backRight")}
+  disabled={selectedDeckCardIndex === null}
+  className="px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+>
+  後列右R
+</button>
+
 </div>
 
 <div className="overflow-y-auto p-3">
@@ -6542,8 +6681,10 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 
 <div
   key={`${card.id ?? card.card_no}-${index}`}
-  onClick={() =>
-  setSelectedDeckCardIndex((prev) => prev === index ? null : index)}
+ onClick={() => {
+  setSelectedDeckCardIndex((prev) => prev === index ? null : index);
+  setSelectedMoveSource("deck");
+}}
   className={`flex flex-col items-center cursor-pointer rounded p-1 ${
   selectedDeckCardIndex === index ? "ring-4 ring-blue-500" : ""
   }`}
