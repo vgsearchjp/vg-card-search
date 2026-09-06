@@ -5121,7 +5121,7 @@ setSelectedHandCardIndex(null);
 
 {/* 前列右R */}
 <div
-  className="absolute top-[22%] md:top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[22%] md:top-[20%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
     if (selectedMoveSource === "waiting") {
       selectMoveTarget("frontRight");
@@ -5488,7 +5488,7 @@ onClick={() => {
 
 {/* 後列中央R */}
 <div
-  className="absolute top-[47%] md:top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[47%] md:top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("backCenter");
@@ -5541,7 +5541,7 @@ onClick={() => {
 
 {/* 後列右R */}
 <div
-  className="absolute top-[47%] md:top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[47%] md:top-[45%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backRight");
