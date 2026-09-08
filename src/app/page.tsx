@@ -146,6 +146,7 @@ const [selectedRZone, setSelectedRZone] = useState<string | null>(null);
 const [selectedOrderIndex, setSelectedOrderIndex] = useState<number | null>(null);
 const [selectedMoveSource, setSelectedMoveSource] = useState<string | null>(null);
 const [selectedMoveTarget, setSelectedMoveTarget] = useState<string | null>(null);
+
 const selectMoveTarget = (target: string) => {
 
   // =========================
@@ -278,18 +279,26 @@ if (selectedMoveSource === "deck" && selectedDeckCardIndex !== null) {
     setSelectedDeckCardIndex(null);
     setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
-    setIsDeckViewerOpen(false);
     return;
   } else if (target === "deckBottom") {
     setOnePlayerDeck((prev) => [...prev.filter((_, index) => index !== selectedDeckCardIndex), card]);
     setSelectedDeckCardIndex(null);
     setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
-    setIsDeckViewerOpen(false);
     return;
-  } else if (target === "vanguard") {
-    if (vanguardCard) setOnePlayerDeck((prev) => [...prev, vanguardCard]);
-    setVanguardCard(card);
+} else if (target === "vanguard") {
+  const currentVanguard =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
+
+  if (currentVanguard) {
+    setSoulCards((prev) => [...prev, currentVanguard]);
+  }
+
+  setVanguardCard(card);
   } else if (target === "frontLeft") {
     if (frontLeftRCard) setOnePlayerDeck((prev) => [...prev, frontLeftRCard]);
     setFrontLeftRCard(card);
@@ -316,7 +325,6 @@ if (selectedMoveSource === "deck" && selectedDeckCardIndex !== null) {
   setSelectedDeckCardIndex(null);
   setSelectedMoveSource(null);
   setSelectedMoveTarget(null);
-  setIsDeckViewerOpen(false);
   return;
 }
 
@@ -359,8 +367,15 @@ else if (target === "waiting") {
 }
 
 else if (target === "vanguard") {
-  if (vanguardCard) {
-    setDropCards((prev) => [...prev, vanguardCard]);
+  const currentVanguard =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
+
+  if (currentVanguard) {
+    setSoulCards((prev) => [...prev, currentVanguard]);
   }
 
   setVanguardCard(card);
@@ -417,7 +432,6 @@ else {
     setSelectedDropIndex(null);
     setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
-    setIsDropViewerOpen(false);
     return;
   }
 
@@ -584,10 +598,20 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-    else if (target === "vanguard") {
-     if (vanguardCard) return;
-     setVanguardCard(card);
-    }
+else if (target === "vanguard") {
+  const currentVanguard =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
+
+  if (currentVanguard) {
+    setSoulCards((prev) => [...prev, currentVanguard]);
+  }
+
+  setVanguardCard(card);
+}
 
 else if (
   target === "frontLeft" ||
@@ -938,12 +962,83 @@ const [vanguardCard, setVanguardCard] = useState<any | null>(null);
 const [soulCards, setSoulCards] = useState<any[]>([]);
 const [isSoulViewerOpen, setIsSoulViewerOpen] = useState(false);
 const [selectedSoulIndex, setSelectedSoulIndex] = useState<number | null>(null);
+const [restedCardIds, setRestedCardIds] = useState<Set<number>>(new Set());
+const handleRestStand = () => {
+  let card = null;
+
+  if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+    card = orderCard[selectedOrderIndex];
+  } else if (selectedMoveSource === "vanguard") {
+    card =
+      vanguardCard ??
+      (rideGrade === 0 ? rideG0 :
+       rideGrade === 1 ? rideG1 :
+       rideGrade === 2 ? rideG2 :
+       rideG3);
+  } else if (selectedMoveSource === "frontLeft") {
+    card = frontLeftRCard;
+  } else if (selectedMoveSource === "frontRight") {
+    card = frontRightRCard;
+  } else if (selectedMoveSource === "backLeft") {
+    card = backLeftRCard;
+  } else if (selectedMoveSource === "backCenter") {
+    card = backCenterRCard;
+  } else if (selectedMoveSource === "backRight") {
+    card = backRightRCard;
+  }
+
+  if (!card?.id) return;
+
+  setRestedCardIds((prev) => {
+    const next = new Set(prev);
+
+    if (next.has(card.id)) {
+      next.delete(card.id);
+    } else {
+      next.add(card.id);
+    }
+
+    return next;
+  });
+};
+
 const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
 const [waitingCards, setWaitingCards] = useState<any[]>([]);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
+const selectedRestedCardId =
+  selectedMoveSource === "order" && selectedOrderIndex !== null
+    ? orderCard[selectedOrderIndex]?.id
+    : selectedMoveSource === "vanguard"
+    ? (
+        vanguardCard?.id ??
+        (rideGrade === 0 ? rideG0?.id :
+         rideGrade === 1 ? rideG1?.id :
+         rideGrade === 2 ? rideG2?.id :
+         rideG3?.id)
+      )
+    : selectedMoveSource === "frontLeft"
+    ? frontLeftRCard?.id
+    : selectedMoveSource === "frontRight"
+    ? frontRightRCard?.id
+    : selectedMoveSource === "backLeft"
+    ? backLeftRCard?.id
+    : selectedMoveSource === "backCenter"
+    ? backCenterRCard?.id
+    : selectedMoveSource === "backRight"
+    ? backRightRCard?.id
+    : null;
+
+const isSelectedCardRested =
+  selectedRestedCardId != null && restedCardIds.has(selectedRestedCardId);
+const displayedVanguard =
+  vanguardCard ??
+  (rideGrade === 0 ? rideG0 :
+   rideGrade === 1 ? rideG1 :
+   rideGrade === 2 ? rideG2 :
+   rideG3);
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -5044,141 +5139,67 @@ onClick={() => {
   }
 
   if (selectedMoveSource === "order") {
-  selectMoveTarget("vanguard");
-  return;
-}
+    selectMoveTarget("vanguard");
+    return;
+  }
 
-  if (selectedHandCardIndex === null) return;
+  if (selectedMoveSource === "drop") {
+    selectMoveTarget("vanguard");
+    return;
+  }
 
-const card = handCards[selectedHandCardIndex];
-
-if (!card) return;
-
-const currentVanguard =
+const selectedVanguard =
   vanguardCard ??
   (rideGrade === 0 ? rideG0 :
    rideGrade === 1 ? rideG1 :
    rideGrade === 2 ? rideG2 :
    rideG3);
 
-if (currentVanguard) {
-  setSoulCards((prev) => [...prev, currentVanguard]);
+if (selectedVanguard) {
+  setSelectedMoveSource((prev) =>
+    prev === "vanguard" ? null : "vanguard"
+  );
+  setSelectedRZone(null);
+  return;
 }
 
-setVanguardCard(card);
+if (selectedHandCardIndex === null) return;
 
-setHandCards((prev) =>
-  prev.filter((_, index) => index !== selectedHandCardIndex)
-);
+  const card = handCards[selectedHandCardIndex];
 
-setSelectedHandCardIndex(null);
+  if (!card) return;
+
+  const currentVanguard =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
+
+  if (currentVanguard) {
+    setSoulCards((prev) => [...prev, currentVanguard]);
+  }
+
+  setVanguardCard(card);
+
+  setHandCards((prev) =>
+    prev.filter((_, index) => index !== selectedHandCardIndex)
+  );
+
+  setSelectedHandCardIndex(null);
 }}
 >
-<div className="flex items-start gap-2">
-  <div className="flex flex-col items-start gap-2">
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        setIsSoulViewerOpen(true);
-      }}
-      disabled={soulCards.length === 0}
-      className="w-full px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
-    >
-      ソウル
-    </button>
-
-<button
-  onClick={(e) => {
-    e.stopPropagation();
-
-    if (selectedHandCardIndex !== null) {
-      const card = handCards[selectedHandCardIndex];
-      if (!card) return;
-
-      setSoulCards((prev) => [...prev, card]);
-      setHandCards((prev) =>
-        prev.filter((_, index) => index !== selectedHandCardIndex)
-      );
-      setSelectedHandCardIndex(null);
-      return;
-    }
-
-    if (selectedRZone === "frontLeft" && frontLeftRCard) {
-      setSoulCards((prev) => [...prev, frontLeftRCard]);
-      setFrontLeftRCard(null);
-      setSelectedRZone(null);
-      return;
-    }
-
-    if (selectedRZone === "frontRight" && frontRightRCard) {
-      setSoulCards((prev) => [...prev, frontRightRCard]);
-      setFrontRightRCard(null);
-      setSelectedRZone(null);
-      return;
-    }
-
-    if (selectedRZone === "backLeft" && backLeftRCard) {
-      setSoulCards((prev) => [...prev, backLeftRCard]);
-      setBackLeftRCard(null);
-      setSelectedRZone(null);
-      return;
-    }
-
-    if (selectedRZone === "backCenter" && backCenterRCard) {
-      setSoulCards((prev) => [...prev, backCenterRCard]);
-      setBackCenterRCard(null);
-      setSelectedRZone(null);
-      return;
-    }
-
-    if (selectedRZone === "backRight" && backRightRCard) {
-      setSoulCards((prev) => [...prev, backRightRCard]);
-      setBackRightRCard(null);
-      setSelectedRZone(null);
-      return;
-    }
-
-    if (selectedMoveSource === "waiting") {
-      const card = waitingCards[waitingCards.length - 1];
-      if (!card) return;
-
-      setSoulCards((prev) => [...prev, card]);
-      setWaitingCards((prev) => prev.slice(0, -1));
-      setSelectedMoveSource(null);
-      return;
-    }
-
-    if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
-      const card = damageCards[selectedDamageIndex];
-      if (!card) return;
-
-      setSoulCards((prev) => [...prev, card]);
-      setDamageCards((prev) =>
-        prev.filter((_, index) => index !== selectedDamageIndex)
-      );
-      setSelectedDamageIndex(null);
-      setSelectedMoveSource(null);
-      return;
-    }
-
-    if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
-      const card = orderCard[selectedOrderIndex];
-      if (!card) return;
-
-      setSoulCards((prev) => [...prev, card]);
-      setOrderCard((prev) =>
-        prev.filter((_, index) => index !== selectedOrderIndex)
-      );
-      setSelectedOrderIndex(null);
-      setSelectedMoveSource(null);
-      return;
-    }
-  }}
-  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base"
->
-  ソウルへ
-</button>
-  </div>
+<div className="grid grid-cols-2 gap-2 mb-2">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setIsSoulViewerOpen(true);
+    }}
+    disabled={soulCards.length === 0}
+    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+  >
+    ソウル
+  </button>
 
   <button
     onClick={(e) => {
@@ -5197,6 +5218,22 @@ setSelectedHandCardIndex(null);
         setSoulCards((prev) => [...prev, currentVanguard]);
       }
 
+      setRestedCardIds((prev) => {
+  const next = new Set(prev);
+
+  const nextRide =
+    rideGrade + 1 === 0 ? rideG0 :
+    rideGrade + 1 === 1 ? rideG1 :
+    rideGrade + 1 === 2 ? rideG2 :
+    rideG3;
+
+  if (nextRide?.id) {
+    next.delete(nextRide.id);
+  }
+
+  return next;
+});
+
       setRideGrade((prev) => prev + 1);
     }}
     disabled={rideGrade >= 3}
@@ -5204,53 +5241,135 @@ setSelectedHandCardIndex(null);
   >
     ライド
   </button>
-</div>
-<div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden relative">
 
-{vanguardCard ? (
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+
+      if (selectedHandCardIndex !== null) {
+        const card = handCards[selectedHandCardIndex];
+        if (!card) return;
+
+        setSoulCards((prev) => [...prev, card]);
+        setHandCards((prev) =>
+          prev.filter((_, index) => index !== selectedHandCardIndex)
+        );
+        setSelectedHandCardIndex(null);
+        return;
+      }
+
+      if (selectedRZone === "frontLeft" && frontLeftRCard) {
+        setSoulCards((prev) => [...prev, frontLeftRCard]);
+        setFrontLeftRCard(null);
+        setSelectedRZone(null);
+        return;
+      }
+
+      if (selectedRZone === "frontRight" && frontRightRCard) {
+        setSoulCards((prev) => [...prev, frontRightRCard]);
+        setFrontRightRCard(null);
+        setSelectedRZone(null);
+        return;
+      }
+
+      if (selectedRZone === "backLeft" && backLeftRCard) {
+        setSoulCards((prev) => [...prev, backLeftRCard]);
+        setBackLeftRCard(null);
+        setSelectedRZone(null);
+        return;
+      }
+
+      if (selectedRZone === "backCenter" && backCenterRCard) {
+        setSoulCards((prev) => [...prev, backCenterRCard]);
+        setBackCenterRCard(null);
+        setSelectedRZone(null);
+        return;
+      }
+
+      if (selectedRZone === "backRight" && backRightRCard) {
+        setSoulCards((prev) => [...prev, backRightRCard]);
+        setBackRightRCard(null);
+        setSelectedRZone(null);
+        return;
+      }
+
+      if (selectedMoveSource === "waiting") {
+        const card = waitingCards[waitingCards.length - 1];
+        if (!card) return;
+
+        setSoulCards((prev) => [...prev, card]);
+        setWaitingCards((prev) => prev.slice(0, -1));
+        setSelectedMoveSource(null);
+        return;
+      }
+
+      if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
+        const card = damageCards[selectedDamageIndex];
+        if (!card) return;
+
+        setSoulCards((prev) => [...prev, card]);
+        setDamageCards((prev) =>
+          prev.filter((_, index) => index !== selectedDamageIndex)
+        );
+        setSelectedDamageIndex(null);
+        setSelectedMoveSource(null);
+        return;
+      }
+
+      if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+        const card = orderCard[selectedOrderIndex];
+        if (!card) return;
+
+        setSoulCards((prev) => [...prev, card]);
+        setOrderCard((prev) =>
+          prev.filter((_, index) => index !== selectedOrderIndex)
+        );
+        setSelectedOrderIndex(null);
+        setSelectedMoveSource(null);
+        return;
+      }
+    }}
+    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base"
+  >
+    ソウルへ
+  </button>
+
+  <button
+    onClick={handleRestStand}
+    disabled={
+      selectedMoveSource !== "order" &&
+      selectedMoveSource !== "vanguard" &&
+      selectedMoveSource !== "frontLeft" &&
+      selectedMoveSource !== "frontRight" &&
+      selectedMoveSource !== "backLeft" &&
+      selectedMoveSource !== "backCenter" &&
+      selectedMoveSource !== "backRight"
+    }
+    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+  >
+    {isSelectedCardRested ? "スタンド" : "レスト"}
+  </button>
+</div>
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+  !displayedVanguard ? "border-2 border-dashed border-gray-400 bg-white" : ""
+} ${
+  selectedMoveSource === "vanguard" ? "ring-4 ring-blue-500" : ""
+}`}>
+
+{displayedVanguard ? (
   <img
-    src={getCardImage(vanguardCard)}
+    src={getCardImage(displayedVanguard)}
     alt=""
-    className="w-full h-full object-cover"
+    className={`absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 ${
+      restedCardIds.has(displayedVanguard.id) ? "rotate-90" : ""
+    }`}
   />
 ) : (
   <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
     V
   </span>
 )}
-    
- {rideGrade === 0 && rideG0 && (
-  <img
-    src={getCardImage(rideG0)}
-    alt=""
-    className="w-full h-full object-cover"
-  />
-)}
-
-    {rideGrade === 1 && rideG1 && (
-      <img
-        src={getCardImage(rideG1)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    )}
-
-    {rideGrade === 2 && rideG2 && (
-      <img
-        src={getCardImage(rideG2)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    )}
-
-    {rideGrade === 3 && rideG3 && (
-      <img
-        src={getCardImage(rideG3)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    )}
-  </div>
+</div>
 </div>
 
 {/* 前列右R */}
@@ -5517,7 +5636,10 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
   </button>
 
 <button
-  onClick={() => setIsDeckViewSelectOpen(true)}
+  onClick={() => {
+  setDeckViewCount("");
+  setIsDeckViewSelectOpen(true);
+}}
   disabled={onePlayerDeck.length === 0}
   className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
 >
@@ -6489,7 +6611,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
           山札 ({onePlayerDeck.length}枚)
         </div>
 
-<div className="grid grid-cols-8 gap-2 flex-1">
+<div className="flex flex-wrap items-center gap-2 flex-1">
 <button
   onClick={() => {
     if (selectedDeckCardIndex === null) return;
@@ -6503,10 +6625,9 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     );
 
     setSelectedDeckCardIndex(null);
-    setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   手札
 </button>
@@ -6524,10 +6645,9 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     );
 
     setSelectedDeckCardIndex(null);
-    setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   ダメージ
 </button>
@@ -6545,10 +6665,9 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     );
 
     setSelectedDeckCardIndex(null);
-    setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   オーダー
 </button>
@@ -6566,10 +6685,9 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     );
 
     setSelectedDeckCardIndex(null);
-    setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   待機領域
 </button>
@@ -6588,10 +6706,9 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     );
 
     setSelectedDeckCardIndex(null);
-    setIsDeckViewerOpen(false);
   }}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   ソウル
 </button>
@@ -6599,7 +6716,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("trigger")}
   disabled={selectedDeckCardIndex === null}
- className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+ className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   トリガー
 </button>
@@ -6607,7 +6724,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("deckTop")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   山札上
 </button>
@@ -6615,7 +6732,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("deckBottom")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   山札下
 </button>
@@ -6623,7 +6740,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("vanguard")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   V
 </button>
@@ -6631,7 +6748,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("frontLeft")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   前列左R
 </button>
@@ -6639,7 +6756,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("frontRight")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   前列右R
 </button>
@@ -6647,7 +6764,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("backLeft")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   後列左R
 </button>
@@ -6655,7 +6772,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("backCenter")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   後列中央R
 </button>
@@ -6663,14 +6780,14 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
 <button
   onClick={() => selectMoveTarget("backRight")}
   disabled={selectedDeckCardIndex === null}
-  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   後列右R
 </button>
 
 <button
   onClick={() => setIsDeckViewerOpen(false)}
-className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-gray-500 text-white rounded"
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-gray-500 text-white rounded whitespace-nowrap"
 >
   閉じる
 </button>
