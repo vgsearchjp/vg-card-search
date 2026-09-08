@@ -5131,7 +5131,7 @@ if (selectedRZone && selectedRZone !== "frontLeft") {
 
 {/* V */}
 <div
-  className="absolute top-[7%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[5%] md:top-[7%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("vanguard");
