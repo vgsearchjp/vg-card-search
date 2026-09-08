@@ -975,17 +975,18 @@ const handleRestStand = () => {
        rideGrade === 1 ? rideG1 :
        rideGrade === 2 ? rideG2 :
        rideG3);
-  } else if (selectedMoveSource === "frontLeft") {
-    card = frontLeftRCard;
-  } else if (selectedMoveSource === "frontRight") {
-    card = frontRightRCard;
-  } else if (selectedMoveSource === "backLeft") {
-    card = backLeftRCard;
-  } else if (selectedMoveSource === "backCenter") {
-    card = backCenterRCard;
-  } else if (selectedMoveSource === "backRight") {
-    card = backRightRCard;
-  }
+} else if (selectedMoveSource === "vanguard") {
+} else if (selectedRZone === "frontLeft") {
+  card = frontLeftRCard;
+} else if (selectedRZone === "frontRight") {
+  card = frontRightRCard;
+} else if (selectedRZone === "backLeft") {
+  card = backLeftRCard;
+} else if (selectedRZone === "backCenter") {
+  card = backCenterRCard;
+} else if (selectedRZone === "backRight") {
+  card = backRightRCard;
+}
 
   if (!card?.id) return;
 
@@ -1000,6 +1001,10 @@ const handleRestStand = () => {
 
     return next;
   });
+
+  if (selectedRZone) {
+    setSelectedMoveSource(null);
+  }
 };
 
 const [orderCard, setOrderCard] = useState<any[]>([]);
@@ -1019,17 +1024,17 @@ const selectedRestedCardId =
          rideGrade === 2 ? rideG2?.id :
          rideG3?.id)
       )
-    : selectedMoveSource === "frontLeft"
-    ? frontLeftRCard?.id
-    : selectedMoveSource === "frontRight"
-    ? frontRightRCard?.id
-    : selectedMoveSource === "backLeft"
-    ? backLeftRCard?.id
-    : selectedMoveSource === "backCenter"
-    ? backCenterRCard?.id
-    : selectedMoveSource === "backRight"
-    ? backRightRCard?.id
-    : null;
+: selectedRZone === "frontLeft"
+? frontLeftRCard?.id
+: selectedRZone === "frontRight"
+? frontRightRCard?.id
+: selectedRZone === "backLeft"
+? backLeftRCard?.id
+: selectedRZone === "backCenter"
+? backCenterRCard?.id
+: selectedRZone === "backRight"
+? backRightRCard?.id
+: null;
 
 const isSelectedCardRested =
   selectedRestedCardId != null && restedCardIds.has(selectedRestedCardId);
@@ -5100,10 +5105,13 @@ if (selectedRZone && selectedRZone !== "frontLeft") {
   return;
 }
 
-  if (frontLeftRCard) {
-    setSelectedRZone((prev) => prev === "frontLeft" ? null : "frontLeft");
-    return;
-  }
+if (frontLeftRCard) {
+  setSelectedMoveSource(null);
+  setSelectedRZone((prev) =>
+    prev === "frontLeft" ? null : "frontLeft"
+  );
+  return;
+}
 
   if (selectedHandCardIndex === null) return;
   const card = handCards[selectedHandCardIndex];
@@ -5114,14 +5122,20 @@ if (selectedRZone && selectedRZone !== "frontLeft") {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "frontLeft" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
-    {frontLeftRCard ? (
-      <img
-        src={getCardImage(frontLeftRCard)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    ) : (
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+  !frontLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
+} ${
+  selectedRZone === "frontLeft" ? "ring-4 ring-blue-500" : ""
+}`}>
+{frontLeftRCard ? (
+  <img
+    src={getCardImage(frontLeftRCard)}
+    alt=""
+    className={`w-full h-full object-cover ${
+      restedCardIds.has(frontLeftRCard.id) ? "rotate-90" : ""
+    }`}
+  />
+) : (
       <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
         R
       </span>
@@ -5131,7 +5145,7 @@ if (selectedRZone && selectedRZone !== "frontLeft") {
 
 {/* V */}
 <div
-  className="absolute top-[5%] md:top-[7%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[5%] md:top-[6%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("vanguard");
@@ -5334,21 +5348,20 @@ if (selectedHandCardIndex === null) return;
     ソウルへ
   </button>
 
-  <button
-    onClick={handleRestStand}
-    disabled={
-      selectedMoveSource !== "order" &&
-      selectedMoveSource !== "vanguard" &&
-      selectedMoveSource !== "frontLeft" &&
-      selectedMoveSource !== "frontRight" &&
-      selectedMoveSource !== "backLeft" &&
-      selectedMoveSource !== "backCenter" &&
-      selectedMoveSource !== "backRight"
-    }
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
-  >
-    {isSelectedCardRested ? "スタンド" : "レスト"}
-  </button>
+ <button
+  onClick={(e) => {
+    e.stopPropagation();
+    handleRestStand();
+  }}
+  disabled={
+    selectedMoveSource !== "order" &&
+    selectedMoveSource !== "vanguard" &&
+    !selectedRZone
+  }
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+>
+  {isSelectedCardRested ? "スタンド" : "レスト"}
+</button>
 </div>
 <div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
   !displayedVanguard ? "border-2 border-dashed border-gray-400 bg-white" : ""
@@ -5386,22 +5399,23 @@ if (selectedHandCardIndex === null) return;
       return;
     }
 
-    if (selectedMoveSource === "damage") {
-       selectMoveTarget("frontRight");
-      return;
-    }
+if (selectedMoveSource === "damage") {
+  selectMoveTarget("frontRight");
+  return;
+}
 
-    if (selectedRZone && selectedRZone !== "frontLeft") {
-       selectMoveTarget("frontRight");
-       return;
-    }
+if (selectedRZone && selectedRZone !== "frontRight") {
+  selectMoveTarget("frontRight");
+  return;
+}
 
-    if (frontRightRCard) {
-      setSelectedRZone((prev) =>
-        prev === "frontRight" ? null : "frontRight"
-      );
-      return;
-    }
+if (frontRightRCard) {
+  setSelectedMoveSource(null);
+  setSelectedRZone((prev) =>
+    prev === "frontRight" ? null : "frontRight"
+  );
+  return;
+}
 
     if (selectedHandCardIndex === null) return;
 
@@ -5418,18 +5432,24 @@ if (selectedHandCardIndex === null) return;
     setSelectedHandCardIndex(null);
   }}
 >
-  <div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
-    {frontRightRCard ? (
-      <img
-        src={getCardImage(frontRightRCard)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    ) : (
-      <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
-        R
-      </span>
-    )}
+ <div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+  !frontRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
+} ${
+  selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : ""
+}`}>
+{frontRightRCard ? (
+  <img
+    src={getCardImage(frontRightRCard)}
+    alt=""
+    className={`w-full h-full object-cover ${
+      restedCardIds.has(frontRightRCard.id) ? "rotate-90" : ""
+    }`}
+  />
+) : (
+  <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
+    R
+  </span>
+)}
   </div>
 </div>
 
@@ -5713,11 +5733,13 @@ onClick={() => {
   return;
   }
 
-  if (backLeftRCard) {
-    setSelectedRZone((prev) => prev === "backLeft" ? null : "backLeft");
-    return;
-  }
-
+if (backLeftRCard) {
+  setSelectedMoveSource(null);
+  setSelectedRZone((prev) =>
+    prev === "backLeft" ? null : "backLeft"
+  );
+  return;
+}
   if (selectedHandCardIndex === null) return;
   const card = handCards[selectedHandCardIndex];
   if (!card) return;
@@ -5766,10 +5788,13 @@ onClick={() => {
   return;
 }
 
-  if (backCenterRCard) {
-    setSelectedRZone((prev) => prev === "backCenter" ? null : "backCenter");
-    return;
-  }
+if (backCenterRCard) {
+  setSelectedMoveSource(null);
+  setSelectedRZone((prev) =>
+    prev === "backCenter" ? null : "backCenter"
+  );
+  return;
+}
 
   if (selectedHandCardIndex === null) return;
   const card = handCards[selectedHandCardIndex];
@@ -5819,10 +5844,13 @@ onClick={() => {
   return;
  }
 
-  if (backRightRCard) {
-    setSelectedRZone((prev) => prev === "backRight" ? null : "backRight");
-    return;
-  }
+if (backRightRCard) {
+  setSelectedMoveSource(null);
+  setSelectedRZone((prev) =>
+    prev === "backRight" ? null : "backRight"
+  );
+  return;
+}
 
   if (selectedHandCardIndex === null) return;
   const card = handCards[selectedHandCardIndex];
