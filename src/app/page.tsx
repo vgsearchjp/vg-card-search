@@ -564,7 +564,63 @@ else if (target === "order") {
     setSelectedMoveTarget(null);
     return;
   }
+  
+// =========================
+// V → R
+// =========================
+if (
+  selectedMoveSource === "vanguard" &&
+  ["frontLeft", "frontRight", "backLeft", "backCenter", "backRight"].includes(target)
+) {
+  const card =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
 
+  if (!card) return;
+
+  const sourceRested = restedZones.has("vanguard");
+
+  if (target === "frontLeft") {
+    if (frontLeftRCard) return;
+    setFrontLeftRCard(card);
+  } else if (target === "frontRight") {
+    if (frontRightRCard) return;
+    setFrontRightRCard(card);
+  } else if (target === "backLeft") {
+    if (backLeftRCard) return;
+    setBackLeftRCard(card);
+  } else if (target === "backCenter") {
+    if (backCenterRCard) return;
+    setBackCenterRCard(card);
+  } else if (target === "backRight") {
+    if (backRightRCard) return;
+    setBackRightRCard(card);
+  }
+
+  setVanguardCard(null);
+
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+
+    next.delete("vanguard");
+    next.delete(target);
+
+    if (sourceRested) {
+      next.add(target);
+    }
+
+    return next;
+  });
+
+  setSelectedMoveSource(null);
+  setSelectedRZone(null);
+  setSelectedMoveTarget(null);
+
+  return;
+}
 
   // =========================
   // オーダー
@@ -690,7 +746,8 @@ if (selectedRZone) {
     if (selectedRZone === target) {
       return;
     }
-
+const sourceRested = restedZones.has(selectedRZone);
+const targetRested = restedZones.has(target);
     if (target === "frontLeft") {
       setFrontLeftRCard(card);
     }
@@ -732,6 +789,23 @@ if (selectedRZone) {
       setBackRightRCard(targetCard);
     }
 
+setRestedZones((prev) => {
+  const next = new Set(prev);
+
+  next.delete(selectedRZone);
+  next.delete(target);
+
+  if (sourceRested) {
+    next.add(target);
+  }
+
+  if (targetRested) {
+    next.add(selectedRZone);
+  }
+
+  return next;
+});
+
     setSelectedRZone(null);
     setSelectedMoveSource(null);
     setSelectedMoveTarget(null);
@@ -741,6 +815,41 @@ if (selectedRZone) {
   // =========================
   // R → その他
   // =========================
+  if (target === "vanguard") {
+  const currentVanguard =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
+
+  if (currentVanguard) return;
+
+  setVanguardCard(card);
+
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+
+    next.delete("vanguard");
+
+    if (prev.has(selectedRZone)) {
+      next.add("vanguard");
+    }
+
+    return next;
+  });
+
+  if (selectedRZone === "frontLeft") setFrontLeftRCard(null);
+  if (selectedRZone === "frontRight") setFrontRightRCard(null);
+  if (selectedRZone === "backLeft") setBackLeftRCard(null);
+  if (selectedRZone === "backCenter") setBackCenterRCard(null);
+  if (selectedRZone === "backRight") setBackRightRCard(null);
+
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
   if (target === "hand") {
     setHandCards((prev) => [card, ...prev]);
   }
@@ -962,82 +1071,58 @@ const [vanguardCard, setVanguardCard] = useState<any | null>(null);
 const [soulCards, setSoulCards] = useState<any[]>([]);
 const [isSoulViewerOpen, setIsSoulViewerOpen] = useState(false);
 const [selectedSoulIndex, setSelectedSoulIndex] = useState<number | null>(null);
-const [restedCardIds, setRestedCardIds] = useState<Set<number>>(new Set());
+const [restedZones, setRestedZones] = useState<Set<string>>(new Set());
 const handleRestStand = () => {
-  let card = null;
+  let zone: string | null = null;
 
-  if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
-    card = orderCard[selectedOrderIndex];
+if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+  zone = `order-${selectedOrderIndex}`;
   } else if (selectedMoveSource === "vanguard") {
-    card =
-      vanguardCard ??
-      (rideGrade === 0 ? rideG0 :
-       rideGrade === 1 ? rideG1 :
-       rideGrade === 2 ? rideG2 :
-       rideG3);
-} else if (selectedMoveSource === "vanguard") {
-} else if (selectedRZone === "frontLeft") {
-  card = frontLeftRCard;
-} else if (selectedRZone === "frontRight") {
-  card = frontRightRCard;
-} else if (selectedRZone === "backLeft") {
-  card = backLeftRCard;
-} else if (selectedRZone === "backCenter") {
-  card = backCenterRCard;
-} else if (selectedRZone === "backRight") {
-  card = backRightRCard;
-}
+    zone = "vanguard";
+  } else if (selectedRZone) {
+    zone = selectedRZone;
+  }
 
-  if (!card?.id) return;
+  if (!zone) return;
 
-  setRestedCardIds((prev) => {
+  setRestedZones((prev) => {
     const next = new Set(prev);
 
-    if (next.has(card.id)) {
-      next.delete(card.id);
+    if (next.has(zone)) {
+      next.delete(zone);
     } else {
-      next.add(card.id);
+      next.add(zone);
     }
 
     return next;
   });
 
-  if (selectedRZone) {
-    setSelectedMoveSource(null);
-  }
+setSelectedMoveSource(null);
+setSelectedRZone(null);
+setSelectedOrderIndex(null);
 };
-
+const clearRestedZone = (zone: string) => {
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete(zone);
+    return next;
+  });
+};
 const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
 const [waitingCards, setWaitingCards] = useState<any[]>([]);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
-const selectedRestedCardId =
+const selectedRestedZone =
   selectedMoveSource === "order" && selectedOrderIndex !== null
-    ? orderCard[selectedOrderIndex]?.id
+    ? `order-${selectedOrderIndex}`
     : selectedMoveSource === "vanguard"
-    ? (
-        vanguardCard?.id ??
-        (rideGrade === 0 ? rideG0?.id :
-         rideGrade === 1 ? rideG1?.id :
-         rideGrade === 2 ? rideG2?.id :
-         rideG3?.id)
-      )
-: selectedRZone === "frontLeft"
-? frontLeftRCard?.id
-: selectedRZone === "frontRight"
-? frontRightRCard?.id
-: selectedRZone === "backLeft"
-? backLeftRCard?.id
-: selectedRZone === "backCenter"
-? backCenterRCard?.id
-: selectedRZone === "backRight"
-? backRightRCard?.id
-: null;
+    ? "vanguard"
+    : selectedRZone ?? null;
 
 const isSelectedCardRested =
-  selectedRestedCardId != null && restedCardIds.has(selectedRestedCardId);
+  selectedRestedZone !== null && restedZones.has(selectedRestedZone);
 const displayedVanguard =
   vanguardCard ??
   (rideGrade === 0 ? rideG0 :
@@ -4848,28 +4933,32 @@ if (orderCard.length > 0) {
 
 <div className="flex items-start">
   {orderCard.map((card, index) => (
-    <div
-      key={index}
-onClick={(e) => {
-  e.stopPropagation();
+<div
+  key={index}
+  onClick={(e) => {
+    e.stopPropagation();
 
-  if (selectedOrderIndex === index && selectedMoveSource === "order") {
-    setSelectedOrderIndex(null);
-    setSelectedMoveSource(null);
-    return;
-  }
+    if (selectedOrderIndex === index && selectedMoveSource === "order") {
+      setSelectedOrderIndex(null);
+      setSelectedMoveSource(null);
+      return;
+    }
 
-  setSelectedOrderIndex(index);
-  setSelectedMoveSource("order");
-}}
-      className={`relative shrink-0 w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 rounded bg-white overflow-hidden cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : "border-gray-400"}`}
-    >
-      <img
-        src={getCardImage(card)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    </div>
+    setSelectedOrderIndex(index);
+    setSelectedMoveSource("order");
+  }}
+  className={`relative shrink-0 w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : ""}`}
+>
+<img
+  src={getCardImage(card)}
+  alt=""
+  className={`absolute top-1/2 left-1/2 object-cover ${
+    restedZones.has(`order-${index}`)
+      ? "w-[55px] h-[80px] md:w-[75px] md:h-[105px] -translate-x-1/2 -translate-y-1/2 rotate-90"
+      : "w-full h-full -translate-x-1/2 -translate-y-1/2"
+  }`}
+/>
+</div>
   ))}
 </div>
 </div>
@@ -5100,6 +5189,11 @@ if (selectedMoveSource === "damage") {
   return;
 }
 
+if (selectedMoveSource === "vanguard") {
+  selectMoveTarget("frontLeft");
+  return;
+}
+
 if (selectedRZone && selectedRZone !== "frontLeft") {
   selectMoveTarget("frontLeft");
   return;
@@ -5132,7 +5226,7 @@ if (frontLeftRCard) {
     src={getCardImage(frontLeftRCard)}
     alt=""
     className={`w-full h-full object-cover ${
-      restedCardIds.has(frontLeftRCard.id) ? "rotate-90" : ""
+      restedZones.has("frontLeft") ? "rotate-90" : ""
     }`}
   />
 ) : (
@@ -5228,27 +5322,17 @@ if (selectedHandCardIndex === null) return;
          rideGrade === 2 ? rideG2 :
          rideG3);
 
-      if (currentVanguard) {
-        setSoulCards((prev) => [...prev, currentVanguard]);
-      }
+if (currentVanguard) {
+  setSoulCards((prev) => [...prev, currentVanguard]);
+}
 
-      setRestedCardIds((prev) => {
+setRestedZones((prev) => {
   const next = new Set(prev);
-
-  const nextRide =
-    rideGrade + 1 === 0 ? rideG0 :
-    rideGrade + 1 === 1 ? rideG1 :
-    rideGrade + 1 === 2 ? rideG2 :
-    rideG3;
-
-  if (nextRide?.id) {
-    next.delete(nextRide.id);
-  }
-
+  next.delete("vanguard");
   return next;
 });
 
-      setRideGrade((prev) => prev + 1);
+setRideGrade((prev) => prev + 1);
     }}
     disabled={rideGrade >= 3}
     className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
@@ -5374,7 +5458,7 @@ if (selectedHandCardIndex === null) return;
     src={getCardImage(displayedVanguard)}
     alt=""
     className={`absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 ${
-      restedCardIds.has(displayedVanguard.id) ? "rotate-90" : ""
+      restedZones.has("vanguard") ? "rotate-90" : ""
     }`}
   />
 ) : (
@@ -5442,7 +5526,7 @@ if (frontRightRCard) {
     src={getCardImage(frontRightRCard)}
     alt=""
     className={`w-full h-full object-cover ${
-      restedCardIds.has(frontRightRCard.id) ? "rotate-90" : ""
+      restedZones.has("frontRight") ? "rotate-90" : ""
     }`}
   />
 ) : (
@@ -5749,14 +5833,16 @@ if (backLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
-    {backLeftRCard ? (
-      <img
-        src={getCardImage(backLeftRCard)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    ) : (
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
+{backLeftRCard ? (
+  <img
+    src={getCardImage(backLeftRCard)}
+    alt=""
+    className={`w-full h-full object-cover ${
+      restedZones.has("backLeft") ? "rotate-90" : ""
+    }`}
+  />
+) : (
       <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
         R
       </span>
@@ -5805,14 +5891,20 @@ if (backCenterRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "backCenter" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
-    {backCenterRCard ? (
-      <img
-        src={getCardImage(backCenterRCard)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    ) : (
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+  !backCenterRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
+} ${
+  selectedRZone === "backCenter" ? "ring-4 ring-blue-500" : ""
+}`}>
+{backCenterRCard ? (
+  <img
+    src={getCardImage(backCenterRCard)}
+    alt=""
+    className={`w-full h-full object-cover ${
+      restedZones.has("backCenter") ? "rotate-90" : ""
+    }`}
+  />
+) : (
       <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
         R
       </span>
@@ -5861,14 +5953,20 @@ if (backRightRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed rounded bg-white overflow-hidden ${selectedRZone === "backRight" ? "ring-4 ring-blue-500" : "border-gray-400"}`}>
-    {backRightRCard ? (
-      <img
-        src={getCardImage(backRightRCard)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    ) : (
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+  !backRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
+} ${
+  selectedRZone === "backRight" ? "ring-4 ring-blue-500" : ""
+}`}>
+{backRightRCard ? (
+  <img
+    src={getCardImage(backRightRCard)}
+    alt=""
+    className={`w-full h-full object-cover ${
+      restedZones.has("backRight") ? "rotate-90" : ""
+    }`}
+  />
+) : (
       <span className="flex w-full h-full items-center justify-center text-sm md:text-lg">
         R
       </span>
