@@ -600,7 +600,17 @@ if (
     setBackRightRCard(card);
   }
 
+  if (vanguardCard) {
   setVanguardCard(null);
+} else if (rideGrade === 0) {
+  setRideG0(null);
+} else if (rideGrade === 1) {
+  setRideG1(null);
+} else if (rideGrade === 2) {
+  setRideG2(null);
+} else if (rideGrade === 3) {
+  setRideG3(null);
+}
 
   setRestedZones((prev) => {
     const next = new Set(prev);
@@ -1068,6 +1078,7 @@ const [finisherDeck, setFinisherDeck] = useState<any[]>([]);
 const [damageCards, setDamageCards] = useState<any[]>([]);
 const [rideGrade, setRideGrade] = useState(0);
 const [vanguardCard, setVanguardCard] = useState<any | null>(null);
+const [movedRideVanguard, setMovedRideVanguard] = useState<any | null>(null);
 const [soulCards, setSoulCards] = useState<any[]>([]);
 const [isSoulViewerOpen, setIsSoulViewerOpen] = useState(false);
 const [selectedSoulIndex, setSelectedSoulIndex] = useState<number | null>(null);
@@ -1129,6 +1140,14 @@ const displayedVanguard =
    rideGrade === 1 ? rideG1 :
    rideGrade === 2 ? rideG2 :
    rideG3);
+
+console.log("表示状態", {
+  displayedVanguard,
+  vanguardCard,
+  frontLeftRCard,
+  movedRideVanguard,
+  rideG2,
+});
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -5190,7 +5209,116 @@ if (selectedMoveSource === "damage") {
 }
 
 if (selectedMoveSource === "vanguard") {
-  selectMoveTarget("frontLeft");
+  console.log("V→R", {
+  vanguardCard,
+  frontLeftRCard,
+  movedRideVanguard,
+  rideGrade,
+  rideG0,
+  rideG1,
+  rideG2,
+  rideG3,
+});
+  const vCard =
+    vanguardCard ??
+    (rideGrade === 0 ? rideG0 :
+     rideGrade === 1 ? rideG1 :
+     rideGrade === 2 ? rideG2 :
+     rideG3);
+
+  if (!vCard) return;
+
+if (frontLeftRCard) {
+  const rCard = frontLeftRCard;
+
+  if (movedRideVanguard) {
+    if (rideGrade === 0) {
+      setRideG0(movedRideVanguard);
+    } else if (rideGrade === 1) {
+      setRideG1(movedRideVanguard);
+    } else if (rideGrade === 2) {
+      setRideG2(movedRideVanguard);
+    } else {
+      setRideG3(movedRideVanguard);
+    }
+
+    setVanguardCard(null);
+    setFrontLeftRCard(vCard);
+    setMovedRideVanguard(null);
+    
+  } else if (vanguardCard) {
+    const currentVCard = vanguardCard;
+    setVanguardCard(rCard);
+    setFrontLeftRCard(currentVCard);
+
+  } else {
+    setMovedRideVanguard(vCard);
+    setVanguardCard(rCard);
+    setFrontLeftRCard(vCard);
+
+    if (rideGrade === 0) {
+      setRideG0(null);
+    } else if (rideGrade === 1) {
+      setRideG1(null);
+    } else if (rideGrade === 2) {
+      setRideG2(null);
+    } else {
+      setRideG3(null);
+    }
+  }
+
+  setRestedZones((prev) => {
+      const next = new Set(prev);
+      const vRested = prev.has("vanguard");
+      const rRested = prev.has("frontLeft");
+
+      next.delete("vanguard");
+      next.delete("frontLeft");
+
+      if (rRested) next.add("vanguard");
+      if (vRested) next.add("frontLeft");
+
+      return next;
+    });
+
+    setSelectedMoveSource(null);
+    setSelectedRZone(null);
+    setSelectedMoveTarget(null);
+    return;
+  }
+
+  setFrontLeftRCard(vCard);
+
+if (vanguardCard) {
+  setVanguardCard(null);
+} else {
+  setMovedRideVanguard(vCard);
+
+  if (rideGrade === 0) {
+    setRideG0(null);
+  } else if (rideGrade === 1) {
+    setRideG1(null);
+  } else if (rideGrade === 2) {
+    setRideG2(null);
+  } else {
+    setRideG3(null);
+  }
+}
+
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+
+    if (prev.has("vanguard")) {
+      next.delete("vanguard");
+      next.add("frontLeft");
+    }
+
+    return next;
+  });
+
+  setSelectedMoveSource(null);
+  setSelectedRZone(null);
+  setSelectedMoveTarget(null);
   return;
 }
 
@@ -5241,6 +5369,83 @@ if (frontLeftRCard) {
 <div
   className="absolute top-[5%] md:top-[6%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
+if (selectedRZone === "frontLeft") {
+  const rCard = frontLeftRCard;
+
+  if (!rCard) return;
+
+const isRideLineV = vanguardCard === null && !movedRideVanguard;
+
+const vCard =
+  vanguardCard ??
+  (rideGrade === 0 ? rideG0 :
+   rideGrade === 1 ? rideG1 :
+   rideGrade === 2 ? rideG2 :
+   rideG3);
+
+  if (!vCard) return;
+
+  if (movedRideVanguard) {
+  if (rideGrade === 0) {
+    setRideG0(movedRideVanguard);
+  } else if (rideGrade === 1) {
+    setRideG1(movedRideVanguard);
+  } else if (rideGrade === 2) {
+    setRideG2(movedRideVanguard);
+  } else {
+    setRideG3(movedRideVanguard);
+  }
+
+setFrontLeftRCard(vanguardCard);
+setVanguardCard(null);
+setMovedRideVanguard(null);
+
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    const rRested = prev.has("frontLeft");
+
+    next.delete("frontLeft");
+    next.delete("vanguard");
+
+    if (rRested) next.add("vanguard");
+
+    return next;
+  });
+
+  setSelectedMoveSource(null);
+  setSelectedRZone(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+if (isRideLineV) {
+  setMovedRideVanguard(vCard);
+  setVanguardCard(rCard);
+} else {
+  setVanguardCard(rCard);
+}
+
+setFrontLeftRCard(vCard);
+
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    const vRested = prev.has("vanguard");
+    const rRested = prev.has("frontLeft");
+
+    next.delete("vanguard");
+    next.delete("frontLeft");
+
+    if (rRested) next.add("vanguard");
+    if (vRested) next.add("frontLeft");
+
+    return next;
+  });
+
+  setSelectedMoveSource(null);
+  setSelectedRZone(null);
+  setSelectedMoveTarget(null);
+  return;
+}
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("vanguard");
     return;
