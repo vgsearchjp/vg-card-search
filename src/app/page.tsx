@@ -1091,6 +1091,25 @@ const [soulCards, setSoulCards] = useState<any[]>([]);
 const [isSoulViewerOpen, setIsSoulViewerOpen] = useState(false);
 const [selectedSoulIndex, setSelectedSoulIndex] = useState<number | null>(null);
 const [restedZones, setRestedZones] = useState<Set<string>>(new Set());
+const [faceDownCards, setFaceDownCards] = useState<Map<any, string>>(new Map());
+
+const toggleFaceDown = (card: any, zone: string) => {
+  if (!card) return;
+
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    const currentZone = next.get(card);
+
+    if (currentZone === zone) {
+      next.delete(card);
+    } else {
+      next.set(card, zone);
+    }
+
+    return next;
+  });
+};
+
 const handleRestStand = () => {
   let zone: string | null = null;
 
@@ -1156,6 +1175,38 @@ console.log("表示状態", {
   movedRideVanguard,
   rideG2,
 });
+const selectedFaceDownCard =
+  selectedMoveSource === "order" && selectedOrderIndex !== null
+    ? orderCard[selectedOrderIndex]
+    : selectedMoveSource === "damage" && selectedDamageIndex !== null
+    ? damageCards[selectedDamageIndex]
+    : selectedMoveSource === "vanguard"
+    ? displayedVanguard
+    : selectedRZone === "frontLeft"
+    ? frontLeftRCard
+    : selectedRZone === "frontRight"
+    ? frontRightRCard
+    : selectedRZone === "backLeft"
+    ? backLeftRCard
+    : selectedRZone === "backCenter"
+    ? backCenterRCard
+    : selectedRZone === "backRight"
+    ? backRightRCard
+    : null;
+
+const selectedFaceDownZone =
+  selectedMoveSource === "order"
+    ? "order"
+    : selectedMoveSource === "damage"
+    ? "damage"
+    : selectedMoveSource === "vanguard"
+    ? "vanguard"
+    : selectedRZone ?? null;
+
+const isSelectedCardFaceDown =
+  selectedFaceDownCard !== null &&
+  selectedFaceDownZone !== null &&
+  faceDownCards.get(selectedFaceDownCard) === selectedFaceDownZone;
 const mainDeckGrouped =Object.values(mainDeck.reduce((acc: any, card: any) => {const key =`${card.card_name}_${card.card_no}`;if (!acc[key]) {acc[key] = 
 {card,count: 0};}acc[key].count++;return acc;},{}));
 const displayMainDeckGrouped = [
@@ -4977,7 +5028,7 @@ if (orderCard.length > 0) {
   className={`relative shrink-0 w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : ""}`}
 >
 <img
-  src={getCardImage(card)}
+  src={faceDownCards.get(card) === "order" ? "/images/vanguard-card-back.jpg" : getCardImage(card)}
   alt=""
   className={`absolute top-1/2 left-1/2 object-cover ${
     restedZones.has(`order-${index}`)
@@ -5187,7 +5238,7 @@ style={{
       }}
     >
       <img
-        src={getCardImage(card)}
+        src={faceDownCards.get(card) === "damage" ? "/images/vanguard-card-back.jpg" : getCardImage(card)}
         alt=""
         className="w-full h-full object-cover"
       />
@@ -5359,7 +5410,7 @@ if (frontLeftRCard) {
 }`}>
 {frontLeftRCard ? (
   <img
-    src={getCardImage(frontLeftRCard)}
+    src={faceDownCards.get(frontLeftRCard) === "frontLeft" ? "/images/vanguard-card-back.jpg" : getCardImage(frontLeftRCard)}
     alt=""
     className={`w-full h-full object-cover ${
       restedZones.has("frontLeft") ? "rotate-90" : ""
@@ -5823,7 +5874,7 @@ if (selectedHandCardIndex === null) return;
   setSelectedHandCardIndex(null);
 }}
 >
-<div className="grid grid-cols-2 gap-2 mb-2">
+<div className="grid grid-cols-3 gap-2 mb-2">
   <button
     onClick={(e) => {
       e.stopPropagation();
@@ -5865,6 +5916,18 @@ setRideGrade((prev) => prev + 1);
   >
     ライド
   </button>
+
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    if (!selectedFaceDownCard || !selectedFaceDownZone) return;
+    toggleFaceDown(selectedFaceDownCard, selectedFaceDownZone);
+  }}
+  disabled={!selectedFaceDownCard || !selectedFaceDownZone}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+>
+  {isSelectedCardFaceDown ? "表" : "裏"}
+</button>
 
   <button
     onClick={(e) => {
@@ -6006,7 +6069,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
 
 {displayedVanguard ? (
   <img
-    src={getCardImage(displayedVanguard)}
+    src={faceDownCards.get(displayedVanguard) === "vanguard" ? "/images/vanguard-card-back.jpg" : getCardImage(displayedVanguard)}
     alt=""
     className={`absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 ${
       restedZones.has("vanguard") ? "rotate-90" : ""
@@ -6178,7 +6241,7 @@ if (frontRightRCard) {
 }`}>
 {frontRightRCard ? (
   <img
-    src={getCardImage(frontRightRCard)}
+    src={faceDownCards.get(frontRightRCard) === "frontRight" ? "/images/vanguard-card-back.jpg" : getCardImage(frontRightRCard)}
     alt=""
     className={`w-full h-full object-cover ${
       restedZones.has("frontRight") ? "rotate-90" : ""
@@ -6728,7 +6791,7 @@ if (backLeftRCard) {
 <div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
 {backLeftRCard ? (
   <img
-    src={getCardImage(backLeftRCard)}
+    src={faceDownCards.get(backLeftRCard) === "backLeft" ? "/images/vanguard-card-back.jpg" : getCardImage(backLeftRCard)}
     alt=""
     className={`w-full h-full object-cover ${
       restedZones.has("backLeft") ? "rotate-90" : ""
@@ -6892,7 +6955,7 @@ if (backCenterRCard) {
 }`}>
 {backCenterRCard ? (
   <img
-    src={getCardImage(backCenterRCard)}
+    src={faceDownCards.get(backCenterRCard) === "backCenter" ? "/images/vanguard-card-back.jpg" : getCardImage(backCenterRCard)}
     alt=""
     className={`w-full h-full object-cover ${
       restedZones.has("backCenter") ? "rotate-90" : ""
@@ -7056,7 +7119,7 @@ if (backRightRCard) {
 }`}>
 {backRightRCard ? (
   <img
-    src={getCardImage(backRightRCard)}
+    src={faceDownCards.get(backRightRCard) === "backRight" ? "/images/vanguard-card-back.jpg" : getCardImage(backRightRCard)}
     alt=""
     className={`w-full h-full object-cover ${
       restedZones.has("backRight") ? "rotate-90" : ""
