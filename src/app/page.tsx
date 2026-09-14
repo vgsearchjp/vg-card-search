@@ -892,6 +892,14 @@ setRestedZones((prev) => {
     return;
   }
 
+setRestedZones((prev) => {
+  const next = new Set(prev);
+  if (selectedRZone) {
+    next.delete(selectedRZone);
+  }
+  return next;
+});
+
   if (selectedRZone === "frontLeft") setFrontLeftRCard(null);
   if (selectedRZone === "frontRight") setFrontRightRCard(null);
   if (selectedRZone === "backLeft") setBackLeftRCard(null);
@@ -5874,40 +5882,65 @@ setRideGrade((prev) => prev + 1);
         return;
       }
 
-      if (selectedRZone === "frontLeft" && frontLeftRCard) {
-        setSoulCards((prev) => [...prev, frontLeftRCard]);
-        setFrontLeftRCard(null);
-        setSelectedRZone(null);
-        return;
-      }
+if (selectedRZone === "frontLeft" && frontLeftRCard) {
+  setSoulCards((prev) => [...prev, frontLeftRCard]);
+  setFrontLeftRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("frontLeft");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-      if (selectedRZone === "frontRight" && frontRightRCard) {
-        setSoulCards((prev) => [...prev, frontRightRCard]);
-        setFrontRightRCard(null);
-        setSelectedRZone(null);
-        return;
-      }
+if (selectedRZone === "frontRight" && frontRightRCard) {
+  setSoulCards((prev) => [...prev, frontRightRCard]);
+  setFrontRightRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("frontRight");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-      if (selectedRZone === "backLeft" && backLeftRCard) {
-        setSoulCards((prev) => [...prev, backLeftRCard]);
-        setBackLeftRCard(null);
-        setSelectedRZone(null);
-        return;
-      }
+if (selectedRZone === "backLeft" && backLeftRCard) {
+  setSoulCards((prev) => [...prev, backLeftRCard]);
+  setBackLeftRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backLeft");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-      if (selectedRZone === "backCenter" && backCenterRCard) {
-        setSoulCards((prev) => [...prev, backCenterRCard]);
-        setBackCenterRCard(null);
-        setSelectedRZone(null);
-        return;
-      }
+if (selectedRZone === "backCenter" && backCenterRCard) {
+  setSoulCards((prev) => [...prev, backCenterRCard]);
+  setBackCenterRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backCenter");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-      if (selectedRZone === "backRight" && backRightRCard) {
-        setSoulCards((prev) => [...prev, backRightRCard]);
-        setBackRightRCard(null);
-        setSelectedRZone(null);
-        return;
-      }
+if (selectedRZone === "backRight" && backRightRCard) {
+  setSoulCards((prev) => [...prev, backRightRCard]);
+  setBackRightRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backRight");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
       if (selectedMoveSource === "waiting") {
         const card = waitingCards[waitingCards.length - 1];
@@ -6208,40 +6241,65 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
   return;
 }
 
-  if (selectedRZone === "frontLeft" && frontLeftRCard) {
-    setOnePlayerDeck((prev) => [frontLeftRCard, ...prev]);
-    setFrontLeftRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "frontLeft" && frontLeftRCard) {
+  setOnePlayerDeck((prev) => [frontLeftRCard, ...prev]);
+  setFrontLeftRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("frontLeft");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "frontRight" && frontRightRCard) {
-    setOnePlayerDeck((prev) => [frontRightRCard, ...prev]);
-    setFrontRightRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "frontRight" && frontRightRCard) {
+  setOnePlayerDeck((prev) => [frontRightRCard, ...prev]);
+  setFrontRightRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("frontRight");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "backLeft" && backLeftRCard) {
-    setOnePlayerDeck((prev) => [backLeftRCard, ...prev]);
-    setBackLeftRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "backLeft" && backLeftRCard) {
+  setOnePlayerDeck((prev) => [backLeftRCard, ...prev]);
+  setBackLeftRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backLeft");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "backCenter" && backCenterRCard) {
-    setOnePlayerDeck((prev) => [backCenterRCard, ...prev]);
-    setBackCenterRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "backCenter" && backCenterRCard) {
+  setOnePlayerDeck((prev) => [backCenterRCard, ...prev]);
+  setBackCenterRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backCenter");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "backRight" && backRightRCard) {
-    setOnePlayerDeck((prev) => [backRightRCard, ...prev]);
-    setBackRightRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "backRight" && backRightRCard) {
+  setOnePlayerDeck((prev) => [backRightRCard, ...prev]);
+  setBackRightRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backRight");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
   if (selectedHandCardIndex !== null) {
     const card = handCards[selectedHandCardIndex];
@@ -6303,40 +6361,65 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
   return;
 }
 
-  if (selectedRZone === "frontLeft" && frontLeftRCard) {
-    setOnePlayerDeck((prev) => [...prev, frontLeftRCard]);
-    setFrontLeftRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "frontLeft" && frontLeftRCard) {
+  setOnePlayerDeck((prev) => [...prev, frontLeftRCard]);
+  setFrontLeftRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("frontLeft");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "frontRight" && frontRightRCard) {
-    setOnePlayerDeck((prev) => [...prev, frontRightRCard]);
-    setFrontRightRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "frontRight" && frontRightRCard) {
+  setOnePlayerDeck((prev) => [...prev, frontRightRCard]);
+  setFrontRightRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("frontRight");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "backLeft" && backLeftRCard) {
-    setOnePlayerDeck((prev) => [...prev, backLeftRCard]);
-    setBackLeftRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "backLeft" && backLeftRCard) {
+  setOnePlayerDeck((prev) => [...prev, backLeftRCard]);
+  setBackLeftRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backLeft");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "backCenter" && backCenterRCard) {
-    setOnePlayerDeck((prev) => [...prev, backCenterRCard]);
-    setBackCenterRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "backCenter" && backCenterRCard) {
+  setOnePlayerDeck((prev) => [...prev, backCenterRCard]);
+  setBackCenterRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backCenter");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
-  if (selectedRZone === "backRight" && backRightRCard) {
-    setOnePlayerDeck((prev) => [...prev, backRightRCard]);
-    setBackRightRCard(null);
-    setSelectedRZone(null);
-    return;
-  }
+if (selectedRZone === "backRight" && backRightRCard) {
+  setOnePlayerDeck((prev) => [...prev, backRightRCard]);
+  setBackRightRCard(null);
+  setRestedZones((prev) => {
+    const next = new Set(prev);
+    next.delete("backRight");
+    return next;
+  });
+  setSelectedRZone(null);
+  return;
+}
 
   if (selectedHandCardIndex !== null) {
     const card = handCards[selectedHandCardIndex];
@@ -6532,6 +6615,13 @@ if (selectedMoveSource === "vanguard") {
 
   setSelectedMoveSource(null);
   setSelectedRZone(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+if (selectedRZone === "backLeft" && selectedMoveSource !== "vanguard") {
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
   setSelectedMoveTarget(null);
   return;
 }
