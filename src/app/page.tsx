@@ -445,6 +445,11 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
 
   if (target === "hand") {
     setHandCards((prev) => [card, ...prev]);
+    setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
   }
 
   else if (target === "waiting") {
@@ -758,6 +763,12 @@ if (selectedRZone) {
     }
 const sourceRested = restedZones.has(selectedRZone);
 const targetRested = restedZones.has(target);
+setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  if (targetCard) next.delete(targetCard);
+  return next;
+});
     if (target === "frontLeft") {
       setFrontLeftRCard(card);
     }
@@ -833,11 +844,17 @@ setRestedZones((prev) => {
      rideGrade === 2 ? rideG2 :
      rideG3);
 
-  if (currentVanguard) return;
+if (currentVanguard) return;
 
-  setVanguardCard(card);
+setVanguardCard(card);
 
-  setRestedZones((prev) => {
+setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
+
+setRestedZones((prev) => {
     const next = new Set(prev);
 
     next.delete("vanguard");
@@ -845,7 +862,6 @@ setRestedZones((prev) => {
     if (prev.has(selectedRZone)) {
       next.add("vanguard");
     }
-
     return next;
   });
 
@@ -891,6 +907,12 @@ setRestedZones((prev) => {
   else {
     return;
   }
+
+setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
 
 setRestedZones((prev) => {
   const next = new Set(prev);
@@ -7353,7 +7375,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
       : "bg-blue-500"
   }`}
 >
-  前列左R
+  左前
 </button>
 
 <button
@@ -7364,7 +7386,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
       : "bg-blue-500"
   }`}
 >
-  前列右R
+  右前
 </button>
 
 <button
@@ -7375,7 +7397,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
       : "bg-blue-500"
   }`}
 >
-  後列左R
+  左後
 </button>
 
 <button
@@ -7386,7 +7408,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
       : "bg-blue-500"
   }`}
 >
-  後列中央R
+  中央後列
 </button>
 
 <button
@@ -7397,7 +7419,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
       : "bg-blue-500"
   }`}
 >
-  後列右R
+  右後
 </button>
 </div>
 )}
@@ -7469,6 +7491,11 @@ if (selectedMoveSource === "vanguard") {
 
 if (selectedRZone === "frontLeft" && frontLeftRCard) {
   setHandCards((prev) => [frontLeftRCard, ...prev]);
+  setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(frontLeftRCard);
+  return next;
+});
   setFrontLeftRCard(null);
   setRestedZones((prev) => {
     const next = new Set(prev);
@@ -7479,6 +7506,13 @@ if (selectedRZone === "frontLeft" && frontLeftRCard) {
 
 if (selectedRZone === "frontRight" && frontRightRCard) {
   setHandCards((prev) => [frontRightRCard, ...prev]);
+
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(frontRightRCard);
+    return next;
+  });
+
   setFrontRightRCard(null);
   setRestedZones((prev) => {
     const next = new Set(prev);
@@ -7489,6 +7523,13 @@ if (selectedRZone === "frontRight" && frontRightRCard) {
 
 if (selectedRZone === "backLeft" && backLeftRCard) {
   setHandCards((prev) => [backLeftRCard, ...prev]);
+
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(backLeftRCard);
+    return next;
+  });
+
   setBackLeftRCard(null);
   setRestedZones((prev) => {
     const next = new Set(prev);
@@ -7499,6 +7540,13 @@ if (selectedRZone === "backLeft" && backLeftRCard) {
 
 if (selectedRZone === "backCenter" && backCenterRCard) {
   setHandCards((prev) => [backCenterRCard, ...prev]);
+
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(backCenterRCard);
+    return next;
+  });
+
   setBackCenterRCard(null);
   setRestedZones((prev) => {
     const next = new Set(prev);
@@ -7509,6 +7557,13 @@ if (selectedRZone === "backCenter" && backCenterRCard) {
 
 if (selectedRZone === "backRight" && backRightRCard) {
   setHandCards((prev) => [backRightRCard, ...prev]);
+
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(backRightRCard);
+    return next;
+  });
+
   setBackRightRCard(null);
   setRestedZones((prev) => {
     const next = new Set(prev);
@@ -7806,7 +7861,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedSoulIndex === null}
   className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
 >
-  前列左R
+  左前
 </button>
 
 <button
@@ -7831,7 +7886,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedSoulIndex === null}
   className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
 >
-  前列右R
+  右前
 </button>
 
 <button
@@ -7856,7 +7911,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedSoulIndex === null}
   className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
 >
-  後列左R
+  左後
 </button>
 
 <button
@@ -7881,7 +7936,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedSoulIndex === null}
   className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
 >
-  後列中央R
+  中央後列
 </button>
 
 <button
@@ -7906,7 +7961,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedSoulIndex === null}
   className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
 >
-  後列右R
+  右後
 </button>
 
  <button
@@ -8095,7 +8150,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedDeckCardIndex === null}
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
-  前列左R
+  左前
 </button>
 
 <button
@@ -8103,7 +8158,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedDeckCardIndex === null}
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
-  前列右R
+  右前
 </button>
 
 <button
@@ -8111,7 +8166,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedDeckCardIndex === null}
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
-  後列左R
+  左後
 </button>
 
 <button
@@ -8119,7 +8174,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedDeckCardIndex === null}
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
-  後列中央R
+  中央後列
 </button>
 
 <button
@@ -8127,7 +8182,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
   disabled={selectedDeckCardIndex === null}
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
-  後列右R
+  右後
 </button>
 
 <button
