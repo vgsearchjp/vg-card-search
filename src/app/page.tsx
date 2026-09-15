@@ -454,27 +454,56 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
 
   else if (target === "waiting") {
     setWaitingCards((prev) => [...prev, card]);
+    setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
   }
 
   else if (target === "drop") {
     setDropCards((prev) => [...prev, card]);
+    setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
   }
 
   else if (target === "trigger") {
   if (triggerCard) return;
-
   setTriggerCard(card);
+  setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
 }
   else if (target === "deckTop") {
     setOnePlayerDeck((prev) => [card, ...prev]);
+    setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
   }
 
   else if (target === "deckBottom") {
     setOnePlayerDeck((prev) => [...prev, card]);
+    setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
   }
 
 else if (target === "order") {
   setOrderCard((prev) => [...prev, card]);
+  setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
 }
 
 else if (
@@ -504,15 +533,20 @@ else if (
     setBackCenterRCard(card);
   }
 
-  if (target === "backRight") {
-    if (backRightRCard) return;
-    setBackRightRCard(card);
-  }
+if (target === "backRight") {
+  if (backRightRCard) return;
+  setBackRightRCard(card);
 }
 
-  else {
-    return;
-  }
+setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
+}
+else {
+  return;
+}
 
   setDamageCards((prev) =>
     prev.filter((_, index) => index !== selectedDamageIndex)
@@ -647,26 +681,56 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
 
     if (target === "hand") {
       setHandCards((prev) => [card, ...prev]);
+      setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
     }
 
     else if (target === "waiting") {
       setWaitingCards((prev) => [...prev, card]);
+      setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
     }
 
     else if (target === "damage") {
       setDamageCards((prev) => [...prev, card]);
+      setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
     }
 
     else if (target === "drop") {
       setDropCards((prev) => [...prev, card]);
+      setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
     }
 
     else if (target === "deckTop") {
       setOnePlayerDeck((prev) => [card, ...prev]);
+      setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
     }
 
     else if (target === "deckBottom") {
       setOnePlayerDeck((prev) => [...prev, card]);
+      setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
     }
 
 else if (target === "vanguard") {
@@ -681,7 +745,13 @@ else if (target === "vanguard") {
     setSoulCards((prev) => [...prev, currentVanguard]);
   }
 
-  setVanguardCard(card);
+setVanguardCard(card);
+
+setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
 }
 
 else if (
@@ -711,10 +781,16 @@ else if (
     setBackCenterRCard(card);
   }
 
-  if (target === "backRight") {
-    if (backRightRCard) return;
-    setBackRightRCard(card);
-  }
+if (target === "backRight") {
+  if (backRightRCard) return;
+  setBackRightRCard(card);
+}
+
+setFaceDownCards((prev) => {
+  const next = new Map(prev);
+  next.delete(card);
+  return next;
+});
 }
 
 else {
@@ -6042,6 +6118,11 @@ if (selectedRZone === "backRight" && backRightRCard) {
         if (!card) return;
 
         setSoulCards((prev) => [...prev, card]);
+        setFaceDownCards((prev) => {
+        const next = new Map(prev);
+        next.delete(card);
+        return next;
+        });
         setDamageCards((prev) =>
           prev.filter((_, index) => index !== selectedDamageIndex)
         );
