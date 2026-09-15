@@ -7240,16 +7240,20 @@ if (backRightRCard) {
 <div
   className="absolute top-[70%] md:top-[75%] right-[1%] z-20 flex items-center gap-3"
 >
-<button
-  onClick={() => setIsDropViewerOpen(true)}
-  disabled={dropCards.length === 0}
-  className="w-[32px] h-[80px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center disabled:bg-gray-400"
->
-  <span className="[writing-mode:vertical-rl]">見る</span>
-</button>
-
-  <div
+<div
 onClick={() => {
+  if (
+  !selectedRZone &&
+  selectedMoveSource !== "damage" &&
+  selectedMoveSource !== "order" &&
+  selectedMoveSource !== "trigger" &&
+  selectedHandCardIndex === null
+) {
+  if (dropCards.length > 0) {
+    setIsDropViewerOpen(true);
+  }
+  return;
+}
   // R → ドロップ
 if (selectedRZone) {
   selectMoveTarget("drop");
