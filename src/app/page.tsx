@@ -5265,7 +5265,7 @@ if (orderCard.length > 0) {
 
 {/* ダメージ */}
 <div
-  className="absolute top-[40%] left-[2%] flex flex-col items-center cursor-pointer"
+  className="absolute top-[35%] left-[0%] flex flex-col items-center cursor-pointer"
 onClick={() => {
   // R → ダメージ
 if (selectedRZone) {
