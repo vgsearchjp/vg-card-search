@@ -5069,6 +5069,8 @@ className="
 
 <div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
 
+<div className="relative w-full h-full">
+
 {/* オーダー */}
 <div
   className="absolute top-[5%] left-[0%] flex flex-col items-center gap-2 cursor-pointer"
@@ -8305,7 +8307,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
     </div>
   </div>
 )}
-
+</div>
 </div>
 )}
 
