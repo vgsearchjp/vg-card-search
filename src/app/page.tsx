@@ -5075,8 +5075,8 @@ className="
 
 {/* オーダー */}
 <div
-  className="absolute top-[5%] left-[0%] flex flex-col items-center gap-2 cursor-pointer"
-onClick={() => {
+  className="absolute top-[5%] left-[-3%] flex flex-col items-center gap-2 cursor-pointer"
+  onClick={() => {
   // R → オーダー
 if (selectedRZone) {
   selectMoveTarget("order");
