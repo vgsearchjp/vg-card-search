@@ -5067,13 +5067,13 @@ className="
   </h2>
 </div>
 
-<div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:-left-[5vw] max-md:landscape:top-0 max-md:landscape:z-[9999] max-md:landscape:w-[110vw] max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
+<div className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
 
-<div className="relative w-full h-full left-[5vw]">
+<div className="relative w-full h-full">
 
 {/* オーダー */}
 <div
-  className="absolute top-[5%] left-[-3%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[5%] left-[0%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   // R → オーダー
 if (selectedRZone) {
