@@ -5071,8 +5071,6 @@ className="
 
 <div className="relative w-full h-full">
 
-  <div className="absolute top-0 bottom-0 -left-[5vw] -right-[5vw] bg-gray-100 pointer-events-none max-md:landscape:block hidden" />
-
 {/* オーダー */}
 <div
   className="absolute top-[5%] left-[0%] flex flex-col items-center gap-2 cursor-pointer"
