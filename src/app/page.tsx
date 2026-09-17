@@ -4218,7 +4218,7 @@ return (
 
   </div>
 )}
-   <div className="w-full overflow-x-hidden">
+   <div className="w-full overflow-x-visible">
 
 <div className="bg-slate-900 text-white">
   <div
