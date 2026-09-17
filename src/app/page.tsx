@@ -5069,7 +5069,6 @@ className="
 
 <div className="relative w-full h-full max-w-none mx-auto aspect-[16/10] landscape:fixed landscape:inset-0 landscape:z-[9999] landscape:w-[130vw] landscape:h-[100dvh] landscape:max-w-none landscape:aspect-auto landscape:mx-0 landscape:border-0 landscape:rounded-none">
 
-<div className="absolute top-0 left-[-25vw] w-[150vw] h-full bg-gray-100 border-2 border-gray-400 rounded-lg pointer-events-none" />
 
 {/* オーダー */}
 <div
