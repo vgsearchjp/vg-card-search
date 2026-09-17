@@ -5048,7 +5048,7 @@ className="
 )}
 
 {deckView === "onePlayer" && (
-  <div className="p-4">
+<div className="p-4 max-md:landscape:w-[130vw] max-md:landscape:max-w-none">
 
 <div className="max-md:landscape:hidden">
   <button
