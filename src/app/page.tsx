@@ -4174,7 +4174,7 @@ const displayDeckSearchCards = hideSameCard
   : deckSearchCards;
 
 return (
-  <main className="overflow-x-visible">
+  <main className="overflow-x-hidden">
 
 
 {storageLoading && (
@@ -5069,7 +5069,7 @@ className="
 
 <div className="relative w-full h-full max-w-none mx-auto aspect-[16/10] max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
 
-<div className="absolute top-0 left-[-25vw] w-[150vw] h-full bg-gray-100 border-2 border-gray-400 rounded-lg pointer-events-none" />
+<div className="absolute top-0 left-0 w-full h-full bg-gray-100 border-2 border-gray-400 rounded-lg pointer-events-none max-md:landscape:left-[-25vw] max-md:landscape:w-[150vw]" />
 
 {/* オーダー */}
 <div
