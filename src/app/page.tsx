@@ -4174,7 +4174,7 @@ const displayDeckSearchCards = hideSameCard
   : deckSearchCards;
 
 return (
-  <main className="overflow-x-hidden">
+  <main className="overflow-x-visible">
 
 
 {storageLoading && (
