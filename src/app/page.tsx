@@ -7680,7 +7680,7 @@ className="w-[32px] h-[47px] md:w-[60px] md:h-[88px] bg-blue-500 text-white roun
       <div
         key={`${card.id}-${index}`}
         onClick={() => setSelectedHandCardIndex((prev) => (prev === index ? null : index))}
-        className={`w-[40px] h-[58px] md:w-[60px] md:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
+        className={`w-[20px] h-[38px] md:w-[60px] md:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
             : ""
