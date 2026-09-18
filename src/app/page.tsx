@@ -7672,7 +7672,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   setSelectedRZone(null);
 }}
 
-className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+className="w-[40px] h-[58px] md:w-[60px] md:h-[88px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
 >
   手札
 </button>
@@ -7680,7 +7680,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
       <div
         key={`${card.id}-${index}`}
         onClick={() => setSelectedHandCardIndex((prev) => (prev === index ? null : index))}
-        className={`w-[55px] h-[80px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0 cursor-pointer ${
+        className={`w-[50px] h-[73px] md:w-[60px] md:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
             : ""
