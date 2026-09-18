@@ -7681,7 +7681,7 @@ className="w-[32px] h-[47px] md:w-[60px] md:h-[88px] bg-blue-500 text-white roun
   key={`${card.id}-${index}`}
   id="hand-card"
   onClick={() => setSelectedHandCardIndex((prev) => (prev === index ? null : index))}
-  className={`w-[40px] h-[58px] md:w-[60px] md:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
+  className={`w-[40px] h-[58px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[60px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
             : ""
