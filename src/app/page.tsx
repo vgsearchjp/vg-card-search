@@ -4221,6 +4221,10 @@ return (
    <div className="w-[100vw] min-w-[100vw] overflow-x-visible">
 
 <div className="bg-slate-900 text-white">
+    <div className="bg-yellow-200 text-black p-2 text-sm">
+    innerWidth: {typeof window !== "undefined" ? window.innerWidth : "-"} /
+    clientWidth: {typeof document !== "undefined" ? document.documentElement.clientWidth : "-"}
+  </div>
   <div
 className="text-center py-3 text-2xl md:text-3xl font-bold cursor-pointer"
 onClick={()=>{
