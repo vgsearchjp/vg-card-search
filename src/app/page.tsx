@@ -5135,14 +5135,14 @@ if (orderCard.length > 0) {
     setSelectedOrderIndex(index);
     setSelectedMoveSource("order");
   }}
-  className={`relative shrink-0 w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : ""}`}
+  className={`relative shrink-0 w-[55px] h-[80px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : ""}`}
 >
 <img
   src={faceDownCards.get(card) === "order" ? "/images/vanguard-card-back.jpg" : getCardImage(card)}
   alt=""
   className={`absolute top-1/2 left-1/2 object-cover ${
     restedZones.has(`order-${index}`)
-      ? "w-[55px] h-[80px] md:w-[75px] md:h-[105px] -translate-x-1/2 -translate-y-1/2 rotate-90"
+      ? "w-[55px] h-[80px] -translate-x-1/2 -translate-y-1/2 rotate-90"
       : "w-full h-full -translate-x-1/2 -translate-y-1/2"
   }`}
 />
@@ -5158,7 +5158,7 @@ if (orderCard.length > 0) {
   <div className="text-sm md:text-lg font-bold">待機領域</div>
 
   <div
-    className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""}`}
+    className={`w-[55px] h-[80px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""}`}
     onClick={() => {
       // ダメージ → 待機領域
       if (selectedMoveSource === "damage") {
@@ -5258,7 +5258,7 @@ if (orderCard.length > 0) {
           <img
             src={getCardImage(triggerCard)}
             alt=""
-            className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] object-cover rotate-270"
+            className="w-[55px] h-[80px] object-cover rotate-270"
           />
         </div>
       ) : null}
@@ -6176,7 +6176,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   {isSelectedCardRested ? "スタンド" : "レスト"}
 </button>
 </div>
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] rounded relative ${
   !displayedVanguard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedMoveSource === "vanguard" ? "ring-4 ring-blue-500" : ""
@@ -6349,7 +6349,7 @@ if (frontRightRCard) {
     setSelectedHandCardIndex(null);
   }}
 >
- <div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+ <div className={`w-[55px] h-[80px] rounded relative ${
   !frontRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : ""
@@ -6640,7 +6640,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
         <span className="text-xs md:text-sm">({onePlayerDeck.length}枚)</span>
       </div>
 
-      <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden">
+      <div className="w-[55px] h-[80px] rounded overflow-hidden">
         {isDeckTopRevealed && onePlayerDeck.length > 0 ? (
           <img
             src={getCardImage(onePlayerDeck[0])}
@@ -6903,7 +6903,7 @@ if (backLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
+<div className={`w-[55px] h-[80px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
 {backLeftRCard ? (
   <img
     src={faceDownCards.get(backLeftRCard) === "backLeft" ? "/images/vanguard-card-back.jpg" : getCardImage(backLeftRCard)}
@@ -7063,7 +7063,7 @@ if (backCenterRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] rounded relative ${
   !backCenterRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backCenter" ? "ring-4 ring-blue-500" : ""
@@ -7227,7 +7227,7 @@ if (backRightRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] rounded relative ${
   !backRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backRight" ? "ring-4 ring-blue-500" : ""
@@ -7297,7 +7297,7 @@ if (selectedMoveSource === "trigger") {
 }}
     className="flex items-center gap-3 cursor-pointer"
   >
-    <div className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
+    <div className="w-[55px] h-[80px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden">
       {dropCards.length > 0 && (
         <img
           src={getCardImage(dropCards[dropCards.length - 1])}
@@ -7339,7 +7339,7 @@ onClick={() => {
   );
   setSelectedMoveSource("drop");
 }}
-  className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden cursor-pointer ${
+  className={`w-[55px] h-[80px] rounded overflow-hidden cursor-pointer ${
     selectedDropIndex === index
       ? "ring-4 ring-blue-500"
       : ""
