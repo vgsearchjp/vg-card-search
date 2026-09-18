@@ -1674,6 +1674,18 @@ useEffect(() => {
 useEffect(() => {
   localStorage.setItem("imageMode", imageMode);
 }, [imageMode]);
+const [boardInfo, setBoardInfo] = useState("-");
+
+useEffect(() => {
+  const el = document.getElementById("game-board");
+  if (!el) return;
+
+  const r = el.getBoundingClientRect();
+
+  setBoardInfo(
+    `${Math.round(r.width)} / left:${Math.round(r.left)} / right:${Math.round(r.right)}`
+  );
+}, [onePlayerMode]);
 const APP_TITLE = "VGカード検索 ";
 const FloatingBackButton = ({ onClick }: { onClick: () => void }) => (
   <button
