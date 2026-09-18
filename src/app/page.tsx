@@ -5513,7 +5513,7 @@ if (frontLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] rounded relative ${
   !frontLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "frontLeft" ? "ring-4 ring-blue-500" : ""
