@@ -5991,10 +5991,10 @@ if (selectedHandCardIndex === null) return;
       setIsSoulViewerOpen(true);
     }}
     disabled={soulCards.length === 0}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
-  >
-    ソウル
-  </button>
+  className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
+>
+  ソウル
+</button>
 
   <button
     onClick={(e) => {
@@ -6022,10 +6022,10 @@ setRestedZones((prev) => {
 setRideGrade((prev) => prev + 1);
     }}
     disabled={rideGrade >= 3}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
-  >
-    ライド
-  </button>
+  className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
+>
+  ライド
+</button>
 
 <button
   onClick={(e) => {
@@ -6034,7 +6034,7 @@ setRideGrade((prev) => prev + 1);
     toggleFaceDown(selectedFaceDownCard, selectedFaceDownZone);
   }}
   disabled={!selectedFaceDownCard || !selectedFaceDownZone}
-  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+  className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
 >
   {isSelectedCardFaceDown ? "表" : "裏"}
 </button>
@@ -6156,10 +6156,10 @@ if (selectedRZone === "backRight" && backRightRCard) {
         return;
       }
     }}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base"
-  >
-    ソウルへ
-  </button>
+className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm"
+>
+  ソウルへ
+</button>
 
  <button
   onClick={(e) => {
@@ -6171,7 +6171,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
     selectedMoveSource !== "vanguard" &&
     !selectedRZone
   }
-  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
 >
   {isSelectedCardRested ? "スタンド" : "レスト"}
 </button>
