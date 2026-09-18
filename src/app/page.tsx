@@ -4237,7 +4237,9 @@ return (
   window: {typeof window !== "undefined" ? window.innerWidth : "-"} /
   html: {typeof document !== "undefined" ? document.documentElement.clientWidth : "-"} /
   main: {typeof document !== "undefined" ? Math.round(document.querySelector("main")?.getBoundingClientRect().width ?? 0) : "-"} /
-  wrapper: {typeof document !== "undefined" ? Math.round(document.querySelector(".w-\\[100vw\\]")?.getBoundingClientRect().width ?? 0) : "-"}
+  wrapper: {typeof document !== "undefined" ? Math.round(document.querySelector(".w-\\[100vw\\]")?.getBoundingClientRect().width ?? 0) : "-"} /
+  visual: {typeof window !== "undefined" && window.visualViewport ? Math.round(window.visualViewport.width) : "-"} /
+  body: {typeof document !== "undefined" ? Math.round(document.body.getBoundingClientRect().width) : "-"}
 </div>
   <div className="bg-green-200 text-black p-2 text-sm">
   board: {typeof window !== "undefined"
