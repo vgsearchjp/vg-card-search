@@ -5079,7 +5079,7 @@ className="
   </h2>
 </div>
 
-<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative landscape:fixed landscape:inset-0 landscape:z-[9999] landscape:w-screen landscape:h-[100dvh] landscape:max-w-none landscape:aspect-auto landscape:mx-0 landscape:border-0 landscape:rounded-none">
+<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:fixed [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:inset-0 [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:z-[9999] [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:w-screen [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:h-[100dvh] [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:max-w-none [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:aspect-auto [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:mx-0 [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:border-0 [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:rounded-none">
 
 {/* オーダー */}
 <div
@@ -5360,7 +5360,7 @@ style={{
 
 {/* 前列左R */}
 <div
-  className="absolute top-[27%] md:top-[20%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[30%] md:top-[23%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("frontLeft");
@@ -6200,7 +6200,7 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
 
 {/* 前列右R */}
 <div
-  className="absolute top-[27%] md:top-[20%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[30%] md:top-[23%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
     if (selectedMoveSource === "waiting") {
       selectMoveTarget("frontRight");
@@ -6678,7 +6678,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
 
 {/* 後列左R */}
 <div
-  className="absolute top-[52%] md:top-[45%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[55%] md:top-[48%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backLeft");
@@ -6922,7 +6922,7 @@ if (backLeftRCard) {
 
 {/* 後列中央R */}
 <div
-  className="absolute top-[52%] md:top-[45%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[55%] md:top-[48%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("backCenter");
@@ -7086,7 +7086,7 @@ if (backCenterRCard) {
 
 {/* 後列右R */}
 <div
-  className="absolute top-[52%] md:top-[45%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+ className="absolute top-[55%] md:top-[48%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backRight");
@@ -7680,7 +7680,7 @@ className="w-[45px] h-[65px] md:w-[65px] md:h-[95px] bg-blue-500 text-white roun
       <div
         key={`${card.id}-${index}`}
         onClick={() => setSelectedHandCardIndex((prev) => (prev === index ? null : index))}
-        className={`w-[45px] h-[65px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0 cursor-pointer ${
+        className={`w-[55px] h-[80px] md:w-[65px] md:h-[95px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
             : ""
