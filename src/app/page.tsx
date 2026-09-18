@@ -5097,7 +5097,7 @@ className="
   </h2>
 </div>
 
-<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
+<div id="game-board" className="fixed inset-0 z-[9999] w-screen h-[100dvh] max-w-none aspect-auto m-0 border-0 rounded-none bg-gray-100 relative">
 
 {/* オーダー */}
 <div
