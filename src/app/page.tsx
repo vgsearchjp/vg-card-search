@@ -4233,16 +4233,6 @@ return (
    <div className="w-[100vw] min-w-[100vw] overflow-x-visible">
 
 <div className="bg-slate-900 text-white">
-  <div className="bg-green-200 text-black p-2 text-sm">
-  board: {typeof window !== "undefined"
-    ? (() => {
-        const el = document.getElementById("game-board");
-        if (!el) return "-";
-        const r = el.getBoundingClientRect();
-        return `${Math.round(r.width)} / left:${Math.round(r.left)} / right:${Math.round(r.right)}`;
-      })()
-    : "-"}
-</div>
   <div
 className="text-center py-3 text-2xl md:text-3xl font-bold cursor-pointer"
 onClick={()=>{
