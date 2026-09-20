@@ -5247,7 +5247,7 @@ if (orderCard.length > 0) {
           prev === "trigger" ? null : "trigger"
         );
       }}
-      className={`w-[80px] h-[55px] md:w-[105px] md:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
+      className={`w-[80px] h-[55px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
         selectedMoveSource === "trigger"
           ? "ring-4 ring-blue-500"
           : "border-gray-400"
