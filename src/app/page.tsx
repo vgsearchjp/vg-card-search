@@ -6375,7 +6375,7 @@ if (frontRightRCard) {
 </div>
 
 {/* 山札 */}
-<div className="absolute top-[30%] right-[3%] md:right-[1%] flex flex-col items-center gap-2">
+<div className="absolute top-[30%] right-[3%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[1%] flex flex-col items-center gap-2">
   <div className="flex items-center gap-2">
 <div className="flex flex-col items-center gap-2 translate-y-4 md:translate-y-0 -translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0">
   <button
@@ -6640,7 +6640,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
 
     <div className="flex flex-col items-center gap-2 -translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0">
       <div>
-        <span className="text-sm md:text-lg">山札</span>
+        <span className="text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg">山札</span>
         <span className="text-[10px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-sm">({onePlayerDeck.length}枚)</span>
       </div>
 
