@@ -7672,7 +7672,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   setSelectedRZone(null);
 }}
 
-className="w-[32px] h-[47px] md:w-[60px] md:h-[88px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+className="w-[50px] h-[73px] md:w-[60px] md:h-[88px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
 >
   手札
 </button>
