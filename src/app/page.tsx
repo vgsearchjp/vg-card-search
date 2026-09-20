@@ -5212,7 +5212,7 @@ if (orderCard.length > 0) {
       setSelectedMoveSource(null);
     }}
     disabled={!!triggerCard || onePlayerDeck.length === 0}
-    className="w-[65px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] text-sm bg-blue-500 text-white px-2 py-1 rounded disabled:bg-gray-400"
+    className="w-[65px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] text-sm bg-blue-500 text-white px-2 py-1 rounded disabled:bg-gray-400 whitespace-nowrap"
   >
     トリガー
   </button>
