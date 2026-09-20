@@ -6678,7 +6678,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
 
 {/* 後列左R */}
 <div
- className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+ className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] left-[30%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backLeft");
@@ -7086,7 +7086,7 @@ if (backCenterRCard) {
 
 {/* 後列右R */}
 <div
-className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] right-[30%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
   selectMoveTarget("backRight");
