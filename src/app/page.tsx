@@ -6493,7 +6493,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   }
 }}
     disabled={onePlayerDeck.length === 0}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+    className="px-2 py-1 text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:px-3 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
   >
     山札上
   </button>
@@ -6613,7 +6613,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   }
 }}
     disabled={onePlayerDeck.length === 0}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+    className="px-2 py-1 text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:px-3 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
   >
     山札下
   </button>
@@ -6621,7 +6621,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   <button
     onClick={() => setIsDeckTopRevealed((prev) => !prev)}
     disabled={onePlayerDeck.length === 0}
-    className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+    className="px-2 py-1 text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:px-3 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
   >
     公開
   </button>
@@ -6632,13 +6632,13 @@ if (selectedRZone === "backRight" && backRightRCard) {
   setIsDeckViewSelectOpen(true);
 }}
   disabled={onePlayerDeck.length === 0}
-  className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+  className="px-2 py-1 text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:px-3 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
 >
   見る
 </button>
 </div>
 
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 -translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0">
       <div>
         <span className="text-sm md:text-lg">山札</span>
         <span className="text-xs md:text-sm">({onePlayerDeck.length}枚)</span>
