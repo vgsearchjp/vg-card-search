@@ -7672,7 +7672,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   setSelectedRZone(null);
 }}
 
-className="w-[45px] h-[65px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[60px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[88px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[60px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[88px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
 >
   手札
 </button>
