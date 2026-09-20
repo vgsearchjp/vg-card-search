@@ -7254,7 +7254,7 @@ if (backRightRCard) {
 
 {/* ドロップ */}
 <div
-  className="absolute top-[70%] md:top-[75%] right-[1%] z-20 flex items-center gap-3"
+  className="absolute top-[70%] md:top-[75%] right-[5%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[1%] z-20 flex items-center gap-3"
 >
 <div
 onClick={() => {
@@ -7311,7 +7311,7 @@ if (selectedMoveSource === "trigger") {
       )}
     </div>
 
-    <span className="w-[32px] h-[110px] text-sm md:text-lg [writing-mode:vertical-rl] bg-blue-500 text-white rounded flex items-center justify-center">
+    <span className="w-[28px] h-[95px] text-sm md:text-lg [writing-mode:vertical-rl] bg-blue-500 text-white rounded flex items-center justify-center">
       ドロップ
     </span>
   </div>
