@@ -5212,7 +5212,7 @@ if (orderCard.length > 0) {
       setSelectedMoveSource(null);
     }}
     disabled={!!triggerCard || onePlayerDeck.length === 0}
-    className="w-[65px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] text-sm bg-blue-500 text-white px-2 py-1 rounded disabled:bg-gray-400 whitespace-nowrap"
+   className="w-[65px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0 text-sm bg-blue-500 text-white px-2 py-1 rounded disabled:bg-gray-400 whitespace-nowrap"
   >
     トリガー
   </button>
@@ -5247,7 +5247,7 @@ if (orderCard.length > 0) {
           prev === "trigger" ? null : "trigger"
         );
       }}
-      className={`w-[80px] h-[55px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[75px] border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
+     className={`w-[80px] h-[55px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[105px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[75px] -translate-y-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-y-0 border-2 border-dashed rounded bg-white overflow-hidden cursor-pointer ${
         selectedMoveSource === "trigger"
           ? "ring-4 ring-blue-500"
           : "border-gray-400"
@@ -5267,7 +5267,7 @@ if (orderCard.length > 0) {
     {/* リセット */}
     <button
       onClick={resetOnePlayerBoard}
-      className="w-[32px] h-[80px] md:w-[40px] md:h-[105px] bg-gray-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+     className="w-[28px] h-[70px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[40px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] -translate-y-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-y-0 bg-gray-500 text-white rounded text-sm flex items-center justify-center"
     >
       <span className="[writing-mode:vertical-rl]">リセット</span>
     </button>
