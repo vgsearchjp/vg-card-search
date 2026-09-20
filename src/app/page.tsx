@@ -5360,7 +5360,7 @@ style={{
 
 {/* 前列左R */}
 <div
-  className="absolute top-[30%] md:top-[23%] left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[33%] md:top-[23%] left-[25%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "waiting") {
     selectMoveTarget("frontLeft");
@@ -6200,7 +6200,7 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
 
 {/* 前列右R */}
 <div
-  className="absolute top-[30%] md:top-[23%] right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[33%] md:top-[23%] right-[25%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
     if (selectedMoveSource === "waiting") {
       selectMoveTarget("frontRight");
