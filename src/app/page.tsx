@@ -5154,11 +5154,15 @@ if (orderCard.length > 0) {
 {/* トリガー */}
 
 {/* 待機領域 */}
-<div className="absolute top-[3%] right-[18%] flex flex-col items-center gap-2">
-  <div className="text-sm md:text-lg font-bold">待機領域</div>
+<div className="absolute top-[3%] right-[16%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[18%] flex flex-col items-center gap-2">
+  <div className="text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg font-bold">
+    待機領域
+  </div>
 
   <div
-    className={`w-[55px] h-[80px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""}`}
+    className={`w-[55px] h-[80px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${
+      selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""
+    }`}
     onClick={() => {
       // ダメージ → 待機領域
       if (selectedMoveSource === "damage") {
