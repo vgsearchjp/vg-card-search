@@ -6375,7 +6375,7 @@ if (frontRightRCard) {
 </div>
 
 {/* 山札 */}
-<div className="absolute top-[30%] right-[3%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[1%] flex flex-col items-center gap-2">
+<div className="absolute top-[30%] right-[5%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[1%] flex flex-col items-center gap-2">
   <div className="flex items-center gap-2">
 <div className="flex flex-col items-center gap-2 translate-y-4 md:translate-y-0 -translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0">
   <button
