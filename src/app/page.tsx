@@ -6663,7 +6663,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
       <button
         onClick={drawCard}
         disabled={onePlayerDeck.length === 0}
-        className="px-3 py-1 bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400"
+        className="px-2 py-1 text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:px-3 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
       >
         ドロー
       </button>
@@ -6672,7 +6672,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
     <button
       onClick={shuffleDeck}
       disabled={onePlayerDeck.length === 0}
-      className="w-[32px] h-[80px] md:w-[40px] md:h-[105px] bg-blue-500 text-white rounded text-sm md:text-base disabled:bg-gray-400 flex items-center justify-center"
+      className="w-[28px] h-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[40px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] bg-blue-500 text-white rounded text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-base disabled:bg-gray-400 flex items-center justify-center -translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0"
     >
       <span className="[writing-mode:vertical-rl]">シャッフル</span>
     </button>
