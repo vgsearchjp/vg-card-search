@@ -5312,7 +5312,7 @@ if (selectedMoveSource === "trigger") {
   }
 }}
 >
-<span className="text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg mb-1">
+<span className="px-3 py-1 bg-blue-500 text-white rounded text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg mb-1">
   ダメージ
 </span>
 
