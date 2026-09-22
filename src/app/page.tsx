@@ -1222,6 +1222,15 @@ const toggleFaceDown = (card: any, zone: string) => {
   });
 };
 
+const clearCardSelections = () => {
+  setSelectedHandCardIndex(null);
+  setSelectedOrderIndex(null);
+  setSelectedDamageIndex(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+};
+
 const handleRestStand = () => {
   let zone: string | null = null;
 
@@ -5183,10 +5192,18 @@ onClick={(e) => {
     return;
   }
 
-  setSelectedOrderIndex(index);
-  setSelectedMoveSource("order");
+if (selectedOrderIndex === index && selectedMoveSource === "order") {
+  clearCardSelections();
+  return;
+}
+
+clearCardSelections();
+setSelectedOrderIndex(index);
+setSelectedMoveSource("order");
 }}
-  className={`relative shrink-0 w-[55px] h-[80px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : ""}`}
+  className={`relative shrink-0 w-[55px] h-[80px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedMoveSource === "order" && selectedOrderIndex === index
+  ? "ring-4 ring-blue-500 z-50"
+  : ""}`}
 >
 <img
   src={faceDownCards.get(card) === "order" ? "/images/vanguard-card-back.jpg" : getCardImage(card)}
@@ -5397,14 +5414,14 @@ if (selectedMoveSource === "trigger") {
     onClick={(e) => {
       e.stopPropagation();
 
-      if (selectedDamageIndex === i) {
-        setSelectedDamageIndex(null);
-        setSelectedMoveSource(null);
-        return;
-      }
+if (selectedDamageIndex === i && selectedMoveSource === "damage") {
+  clearCardSelections();
+  return;
+}
 
-      setSelectedDamageIndex(i);
-      setSelectedMoveSource("damage");
+clearCardSelections();
+setSelectedDamageIndex(i);
+setSelectedMoveSource("damage");
     }}
     className={`absolute left-1/2 cursor-pointer ${
   selectedMoveSource === "damage" && selectedDamageIndex === i
@@ -5445,13 +5462,21 @@ onClick={() => {
     return;
   }
 
-  if (selectedMoveSource === "order") {
+if (selectedMoveSource === "order") {
+  setSelectedRZone("frontLeft");
   selectMoveTarget("frontLeft");
+  setSelectedOrderIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
 }
 
 if (selectedMoveSource === "damage") {
+  setSelectedRZone("frontLeft");
   selectMoveTarget("frontLeft");
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
 }
 
@@ -5575,10 +5600,13 @@ if (selectedRZone && selectedRZone !== "frontLeft") {
 }
 
 if (frontLeftRCard) {
-  setSelectedMoveSource(null);
-  setSelectedRZone((prev) =>
-    prev === "frontLeft" ? null : "frontLeft"
-  );
+  if (selectedRZone === "frontLeft") {
+    clearCardSelections();
+    return;
+  }
+
+  clearCardSelections();
+  setSelectedRZone("frontLeft");
   return;
 }
 
@@ -7951,7 +7979,14 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
 <div
   key={`${card.id}-${index}`}
   id="hand-card"
-  onClick={() => setSelectedHandCardIndex((prev) => (prev === index ? null : index))}
+  onClick={() => {
+  if (selectedHandCardIndex === index) {
+    clearCardSelections();
+    return;
+  }
+  clearCardSelections();
+  setSelectedHandCardIndex(index);
+}}
   className={`w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[60px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
