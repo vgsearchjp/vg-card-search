@@ -5079,10 +5079,16 @@ className="
   </h2>
 </div>
 
-<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:fixed [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:inset-0 [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:z-[9999] [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:w-screen [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:h-[100dvh] [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:max-w-none [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:aspect-auto [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:mx-0 [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:border-0 [@media(orientation:landscape)_and_(hover:none)_and_(pointer:coarse)]:rounded-none">
+<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
 
-{/* オーダー */}
-<div
+  <div className="hidden max-md:portrait:flex absolute inset-0 z-[10000] items-center justify-center bg-black/50">
+    <div className="bg-white rounded-lg px-6 py-4 text-center text-lg font-bold">
+      画面を横にしてください
+    </div>
+  </div>
+
+  {/* オーダー */}
+  <div
   className="absolute top-[5%] left-[2%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   // R → オーダー
