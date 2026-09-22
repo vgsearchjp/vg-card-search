@@ -5281,7 +5281,7 @@ if (orderCard.length > 0) {
 
 {/* ダメージ */}
 <div
-  className="absolute top-[35%] left-[0%] flex flex-col items-center cursor-pointer"
+  className="absolute top-[38%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[35%] left-[0%] flex flex-col items-center cursor-pointer"
 onClick={() => {
   // R → ダメージ
 if (selectedRZone) {
@@ -5346,7 +5346,7 @@ style={{
 }}
   >
 <div
-  className="absolute left-1/2 top-1/2 w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden"
+  className="absolute left-1/2 top-1/2 w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded bg-white overflow-hidden"
   style={{
     transform: "translate(-50%, -50%) rotate(270deg)",
   }}
