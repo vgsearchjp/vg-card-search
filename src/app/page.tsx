@@ -1248,6 +1248,8 @@ const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
 const [bindCards, setBindCards] = useState<any[]>([]);
+const [isBindViewerOpen, setIsBindViewerOpen] = useState(false);
+const [selectedBindIndex, setSelectedBindIndex] = useState<number | null>(null);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
 const selectedRestedZone =
@@ -5188,7 +5190,7 @@ onClick={(e) => {
 
 {/* トリガー */}
 
-{/* 待機領域 */}
+{/* バインドゾーン */}
 <div className="absolute top-[3%] right-[16%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[18%] flex flex-col items-center gap-2">
   <div className="text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg font-bold">
     バインド
@@ -5199,7 +5201,7 @@ onClick={(e) => {
       selectedMoveSource === "bind" ? "ring-4 ring-blue-500" : ""
     }`}
     onClick={() => {
-      // ダメージ → 待機領域
+      // ダメージ → バインド
       if (selectedMoveSource === "damage") {
         selectMoveTarget("bind");
         return;
@@ -5210,18 +5212,28 @@ onClick={(e) => {
         return;
       }
 
-      // 手札 → 待機領域
+      // 手札 → バインド
       if (selectedHandCardIndex !== null) {
         selectMoveTarget("bind");
         return;
       }
 
-      // 待機領域を移動元として選択
-      if (bindCards.length > 0) {
-        setSelectedMoveSource((prev) =>
-          prev === "bind" ? null : "bind"
-        );
-      }
+// 移動元が選択されていない場合は一覧を開く
+if (
+  !selectedMoveSource &&
+  selectedHandCardIndex === null &&
+  bindCards.length > 0
+) {
+  setIsBindViewerOpen(true);
+  return;
+}
+
+// バインドゾーンを移動元として選択
+if (bindCards.length > 0) {
+  setSelectedMoveSource((prev) =>
+    prev === "bind" ? null : "bind"
+  );
+}
     }}
   >
     {bindCards.length > 0 ? (
@@ -7566,6 +7578,53 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
 )}
 </div>
 </div>
+)}
+
+{isBindViewerOpen && (
+  <div className="absolute inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-lg p-4 w-[90%] max-w-[700px] max-h-[80%] overflow-y-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg md:text-2xl font-bold">
+          バインド（{bindCards.length}枚）
+        </h3>
+
+        <button
+          onClick={() => {
+            setIsBindViewerOpen(false);
+            setSelectedBindIndex(null);
+          }}
+          className="px-3 py-1 bg-gray-500 text-white rounded"
+        >
+          閉じる
+        </button>
+      </div>
+
+      <div className="mt-4 grid grid-cols-7 gap-2">
+        {bindCards.map((card, index) => (
+          <div
+            key={`${card.id}-${index}`}
+            onClick={() => {
+              setSelectedBindIndex((prev) =>
+                prev === index ? null : index
+              );
+              setSelectedMoveSource("bind");
+            }}
+            className={`w-[55px] h-[80px] rounded overflow-hidden cursor-pointer ${
+              selectedBindIndex === index
+                ? "ring-4 ring-blue-500"
+                : ""
+            }`}
+          >
+            <img
+              src={getCardImage(card)}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
 )}
 
 {/* 手札 */}
