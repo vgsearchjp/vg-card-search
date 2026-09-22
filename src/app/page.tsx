@@ -5352,7 +5352,7 @@ style={{
   }}
 >
   <img
-    src={getCardImage(card)}
+    src={faceDownCards.get(card) === "damage" ? "/images/vanguard-card-back.jpg" : getCardImage(card)}
     alt=""
     className="w-full h-full object-cover"
   />
