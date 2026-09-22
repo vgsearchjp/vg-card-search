@@ -6035,7 +6035,12 @@ setRideGrade((prev) => prev + 1);
   onClick={(e) => {
     e.stopPropagation();
     if (!selectedFaceDownCard || !selectedFaceDownZone) return;
+
     toggleFaceDown(selectedFaceDownCard, selectedFaceDownZone);
+    setSelectedMoveSource(null);
+    setSelectedRZone(null);
+    setSelectedOrderIndex(null);
+    setSelectedDamageIndex(null);
   }}
   disabled={!selectedFaceDownCard || !selectedFaceDownZone}
   className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
