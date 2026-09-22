@@ -5129,18 +5129,47 @@ if (orderCard.length > 0) {
   {orderCard.map((card, index) => (
 <div
   key={index}
-  onClick={(e) => {
-    e.stopPropagation();
+onClick={(e) => {
+  e.stopPropagation();
 
-    if (selectedOrderIndex === index && selectedMoveSource === "order") {
+  if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
+    if (selectedOrderIndex === index) {
       setSelectedOrderIndex(null);
       setSelectedMoveSource(null);
       return;
     }
 
-    setSelectedOrderIndex(index);
-    setSelectedMoveSource("order");
-  }}
+    const sourceIndex = selectedOrderIndex;
+    const targetIndex = index;
+
+    setOrderCard((prev) => {
+      const next = [...prev];
+      [next[sourceIndex], next[targetIndex]] = [next[targetIndex], next[sourceIndex]];
+      return next;
+    });
+
+    setRestedZones((prev) => {
+      const next = new Set(prev);
+      const sourceRested = prev.has(`order-${sourceIndex}`);
+      const targetRested = prev.has(`order-${targetIndex}`);
+
+      next.delete(`order-${sourceIndex}`);
+      next.delete(`order-${targetIndex}`);
+
+      if (sourceRested) next.add(`order-${targetIndex}`);
+      if (targetRested) next.add(`order-${sourceIndex}`);
+
+      return next;
+    });
+
+    setSelectedOrderIndex(null);
+    setSelectedMoveSource(null);
+    return;
+  }
+
+  setSelectedOrderIndex(index);
+  setSelectedMoveSource("order");
+}}
   className={`relative shrink-0 w-[55px] h-[80px] rounded overflow-visible cursor-pointer first:ml-0 -ml-[28px] md:-ml-[38px] ${selectedOrderIndex === index ? "ring-4 ring-blue-500 z-50" : ""}`}
 >
 <img
