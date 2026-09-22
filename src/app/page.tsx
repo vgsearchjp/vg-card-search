@@ -5239,6 +5239,12 @@ onClick={(e) => {
         return;
       }
 
+      // R → バインド
+if (selectedRZone) {
+  selectMoveTarget("bind");
+  return;
+}
+
 // 移動元が選択されていない場合は一覧を開く
 if (
   !selectedMoveSource &&
