@@ -5123,7 +5123,7 @@ if (orderCard.length > 0) {
 }
 }}
 >
-  <span className="text-sm md:text-lg">オーダー</span>
+  <span className="px-3 py-1 bg-blue-500 text-white rounded text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg mb-1">オーダー</span>
 
 <div className="flex items-start">
   {orderCard.map((card, index) => (
