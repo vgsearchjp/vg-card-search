@@ -7570,7 +7570,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
 
 {/* 手札 */}
 <div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
-<div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden max-w-full px-1">
+<div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden w-[500px] max-w-[calc(100vw-40px)] px-1">
 <button
   onClick={() => {
   if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting" && selectedMoveSource !== "trigger" && selectedMoveSource !== "order" && selectedMoveSource !== "vanguard") return;
