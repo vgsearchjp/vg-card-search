@@ -5312,9 +5312,9 @@ if (selectedMoveSource === "trigger") {
   }
 }}
 >
-  <span className="text-sm md:text-lg mb-3">
-    ダメージ
-  </span>
+<span className="text-sm md:text-lg mb-1">
+  ダメージ
+</span>
 
   <div className="relative w-[110px] h-[235px] md:w-[135px] md:h-[255px]">
 {damageCards.map((card, i) => (
