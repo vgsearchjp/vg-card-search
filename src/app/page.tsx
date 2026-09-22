@@ -150,99 +150,113 @@ const [selectedMoveTarget, setSelectedMoveTarget] = useState<string | null>(null
 const selectMoveTarget = (target: string) => {
 
   // =========================
-  // 待機領域
+  // バインド
   // =========================
-  if (selectedMoveSource === "bind") {
+if (selectedMoveSource === "bind") {
 
-    const card = bindCards[bindCards.length - 1];
-    if (!card) return;
+  const bindIndex =
+    selectedBindIndex !== null
+      ? selectedBindIndex
+      : bindCards.length - 1;
 
-    // 待機領域 → 手札
-    if (target === "hand") {
-      setHandCards((prev) => [card, ...prev]);
-      setBindCards((prev) => prev.slice(0, -1));
-    }
+  const card = bindCards[bindIndex];
+  if (!card) return;
 
-    // 待機領域 → ダメージ
+  const removeBindCard = () => {
+    setBindCards((prev) =>
+      prev.filter((_, index) => index !== bindIndex)
+    );
+    setSelectedBindIndex(null);
+    setSelectedMoveSource(null);
+    setIsBindViewerOpen(false);
+  };
+
+  // バインド → 手札
+  if (target === "hand") {
+    setHandCards((prev) => [card, ...prev]);
+    removeBindCard();
+  }
+
+    // バインド → ダメージ
     else if (target === "damage") {
       setDamageCards((prev) => [...prev, card]);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
-    // 待機領域 → オーダー
+    // バインド → オーダー
 else if (target === "order") {
   setOrderCard((prev) => [...prev, card]);
-  setBindCards((prev) => prev.slice(0, -1));
+  removeBindCard();
 }
 
-    // 待機領域 → 山札上
+    // バインド → 山札上
     else if (target === "deckTop") {
       setOnePlayerDeck((prev) => [card, ...prev]);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
-    // 待機領域 → 山札下
+    // バインド → 山札下
     else if (target === "deckBottom") {
       setOnePlayerDeck((prev) => [...prev, card]);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
-    // 待機領域 → ドロップ
+    // バインド → ドロップ
     else if (target === "drop") {
       setDropCards((prev) => [...prev, card]);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
-   // 待機領域 → トリガー
+   // バインド → トリガー
 else if (target === "trigger") {
   if (triggerCard) return;
 
   setTriggerCard(card);
-  setBindCards((prev) => prev.slice(0, -1));
+  removeBindCard();
 }
 
-// 待機領域 → V
+// バインド → V
 else if (target === "vanguard") {
   if (vanguardCard) return;
 
   setVanguardCard(card);
-  setBindCards((prev) => prev.slice(0, -1));
+  removeBindCard();
 }
 
-// 待機領域 → R
+// バインド → R
 else if (target === "frontLeft") {
       if (frontLeftRCard) return;
 
       setFrontLeftRCard(card);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
     else if (target === "frontRight") {
       if (frontRightRCard) return;
 
       setFrontRightRCard(card);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
     else if (target === "backLeft") {
       if (backLeftRCard) return;
 
       setBackLeftRCard(card);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
     else if (target === "backCenter") {
       if (backCenterRCard) return;
 
       setBackCenterRCard(card);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
     else if (target === "backRight") {
       if (backRightRCard) return;
 
       setBackRightRCard(card);
-      setBindCards((prev) => prev.slice(0, -1));
+      removeBindCard();
     }
 
     else {
@@ -5192,9 +5206,16 @@ onClick={(e) => {
 
 {/* バインドゾーン */}
 <div className="absolute top-[3%] right-[16%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[18%] flex flex-col items-center gap-2">
-  <div className="text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg font-bold">
-    バインド
-  </div>
+<button
+  onClick={() => {
+    if (bindCards.length === 0) return;
+    setIsBindViewerOpen(true);
+    setSelectedBindIndex(null);
+  }}
+  className="px-3 py-1 bg-blue-500 text-white rounded text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg mb-1"
+>
+  バインド
+</button>
 
   <div
     className={`w-[55px] h-[80px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${
@@ -5228,11 +5249,11 @@ if (
   return;
 }
 
-// バインドゾーンを移動元として選択
+// バインド一覧を開く
 if (bindCards.length > 0) {
-  setSelectedMoveSource((prev) =>
-    prev === "bind" ? null : "bind"
-  );
+  setIsBindViewerOpen(true);
+  setSelectedBindIndex(null);
+  return;
 }
     }}
   >
@@ -7623,6 +7644,147 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
           </div>
         ))}
       </div>
+      {selectedBindIndex !== null && (
+  <div className="mt-4 flex flex-wrap gap-2 justify-center">
+    <button
+      onClick={() => selectMoveTarget("hand")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "hand" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      手札
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("damage")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "damage" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      ダメージ
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("order")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "order" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      オーダー
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("trigger")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "trigger" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      トリガー
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("deckTop")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "deckTop" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      山札上
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("deckBottom")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "deckBottom" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      山札下
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("drop")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "drop" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      ドロップ
+    </button>
+
+    <button
+      onClick={() => {
+        if (selectedBindIndex === null) return;
+
+        const card = bindCards[selectedBindIndex];
+        if (!card) return;
+
+        setSoulCards((prev) => [...prev, card]);
+
+        setBindCards((prev) =>
+          prev.filter((_, index) => index !== selectedBindIndex)
+        );
+
+        setSelectedBindIndex(null);
+      }}
+      disabled={selectedBindIndex === null}
+      className="px-2 py-1.5 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400"
+    >
+      ソウル
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("vanguard")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "vanguard" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      V
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("frontLeft")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "frontLeft" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      左前
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("frontRight")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "frontRight" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      右前
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("backLeft")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "backLeft" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      左後
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("backCenter")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "backCenter" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      中央後列
+    </button>
+
+    <button
+      onClick={() => selectMoveTarget("backRight")}
+      className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
+        selectedMoveTarget === "backRight" ? "bg-green-600" : "bg-blue-500"
+      }`}
+    >
+      右後
+    </button>
+  </div>
+)}
     </div>
   </div>
 )}
