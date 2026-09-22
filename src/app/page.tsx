@@ -5079,7 +5079,7 @@ className="
   </h2>
 </div>
 
-<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-md:landscape:fixed max-md:landscape:inset-0 max-md:landscape:z-[9999] max-md:landscape:w-screen max-md:landscape:h-[100dvh] max-md:landscape:max-w-none max-md:landscape:aspect-auto max-md:landscape:mx-0 max-md:landscape:border-0 max-md:landscape:rounded-none">
+<div id="game-board" className="w-full max-w-[1000px] mx-auto aspect-[16/10] border-2 border-gray-400 rounded-lg bg-gray-100 relative max-[767px]:landscape:fixed max-[767px]:landscape:inset-0 max-[767px]:landscape:z-[9999] max-[767px]:landscape:w-screen max-[767px]:landscape:h-[100dvh] max-[767px]:landscape:max-w-none max-[767px]:landscape:aspect-auto max-[767px]:landscape:mx-0 max-[767px]:landscape:border-0 max-[767px]:landscape:rounded-none">
 
   <div className="hidden max-md:portrait:flex absolute inset-0 z-[10000] items-center justify-center bg-black/50">
     <div className="bg-white rounded-lg px-6 py-4 text-center text-lg font-bold">
