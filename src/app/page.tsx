@@ -152,45 +152,45 @@ const selectMoveTarget = (target: string) => {
   // =========================
   // 待機領域
   // =========================
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
 
-    const card = waitingCards[waitingCards.length - 1];
+    const card = bindCards[bindCards.length - 1];
     if (!card) return;
 
     // 待機領域 → 手札
     if (target === "hand") {
       setHandCards((prev) => [card, ...prev]);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     // 待機領域 → ダメージ
     else if (target === "damage") {
       setDamageCards((prev) => [...prev, card]);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     // 待機領域 → オーダー
 else if (target === "order") {
   setOrderCard((prev) => [...prev, card]);
-  setWaitingCards((prev) => prev.slice(0, -1));
+  setBindCards((prev) => prev.slice(0, -1));
 }
 
     // 待機領域 → 山札上
     else if (target === "deckTop") {
       setOnePlayerDeck((prev) => [card, ...prev]);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     // 待機領域 → 山札下
     else if (target === "deckBottom") {
       setOnePlayerDeck((prev) => [...prev, card]);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     // 待機領域 → ドロップ
     else if (target === "drop") {
       setDropCards((prev) => [...prev, card]);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
    // 待機領域 → トリガー
@@ -198,7 +198,7 @@ else if (target === "trigger") {
   if (triggerCard) return;
 
   setTriggerCard(card);
-  setWaitingCards((prev) => prev.slice(0, -1));
+  setBindCards((prev) => prev.slice(0, -1));
 }
 
 // 待機領域 → V
@@ -206,7 +206,7 @@ else if (target === "vanguard") {
   if (vanguardCard) return;
 
   setVanguardCard(card);
-  setWaitingCards((prev) => prev.slice(0, -1));
+  setBindCards((prev) => prev.slice(0, -1));
 }
 
 // 待機領域 → R
@@ -214,35 +214,35 @@ else if (target === "frontLeft") {
       if (frontLeftRCard) return;
 
       setFrontLeftRCard(card);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     else if (target === "frontRight") {
       if (frontRightRCard) return;
 
       setFrontRightRCard(card);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     else if (target === "backLeft") {
       if (backLeftRCard) return;
 
       setBackLeftRCard(card);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     else if (target === "backCenter") {
       if (backCenterRCard) return;
 
       setBackCenterRCard(card);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     else if (target === "backRight") {
       if (backRightRCard) return;
 
       setBackRightRCard(card);
-      setWaitingCards((prev) => prev.slice(0, -1));
+      setBindCards((prev) => prev.slice(0, -1));
     }
 
     else {
@@ -270,8 +270,8 @@ if (selectedMoveSource === "deck" && selectedDeckCardIndex !== null) {
     setDamageCards((prev) => [...prev, card]);
   } else if (target === "order") {
     setOrderCard((prev) => [...prev, card]);
-  } else if (target === "waiting") {
-    setWaitingCards((prev) => [...prev, card]);
+  } else if (target === "bind") {
+    setBindCards((prev) => [...prev, card]);
   } else if (target === "soul") {
     setSoulCards((prev) => [...prev, card]);
   } else if (target === "deckTop") {
@@ -362,8 +362,8 @@ else if (target === "order") {
       setOnePlayerDeck((prev) => [...prev, card]);
     }
 
-else if (target === "waiting") {
-  setWaitingCards((prev) => [...prev, card]);
+else if (target === "bind") {
+  setBindCards((prev) => [...prev, card]);
 }
 
 else if (target === "vanguard") {
@@ -452,8 +452,8 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
 });
   }
 
-  else if (target === "waiting") {
-    setWaitingCards((prev) => [...prev, card]);
+  else if (target === "bind") {
+    setBindCards((prev) => [...prev, card]);
     setFaceDownCards((prev) => {
   const next = new Map(prev);
   next.delete(card);
@@ -570,8 +570,8 @@ else {
       setHandCards((prev) => [card, ...prev]);
     }
 
-    else if (target === "waiting") {
-      setWaitingCards((prev) => [...prev, card]);
+    else if (target === "bind") {
+      setBindCards((prev) => [...prev, card]);
     }
 
     else if (target === "damage") {
@@ -688,8 +688,8 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
 });
     }
 
-    else if (target === "waiting") {
-      setWaitingCards((prev) => [...prev, card]);
+    else if (target === "bind") {
+      setBindCards((prev) => [...prev, card]);
       setFaceDownCards((prev) => {
   const next = new Map(prev);
   next.delete(card);
@@ -956,8 +956,8 @@ setRestedZones((prev) => {
     setHandCards((prev) => [card, ...prev]);
   }
 
-  else if (target === "waiting") {
-    setWaitingCards((prev) => [...prev, card]);
+  else if (target === "bind") {
+    setBindCards((prev) => [...prev, card]);
   }
 
   else if (target === "damage") {
@@ -1019,8 +1019,8 @@ setRestedZones((prev) => {
     const card = handCards[selectedHandCardIndex];
     if (!card) return;
 
-    if (target === "waiting") {
-  setWaitingCards((prev) => [...prev, card]);
+    if (target === "bind") {
+  setBindCards((prev) => [...prev, card]);
 }
 
 else if (target === "damage") {
@@ -1155,7 +1155,7 @@ const resetOnePlayerBoard = async () => {
   setOrderCard([]);
   setTriggerCard(null);
   setDropCards([]);
-  setWaitingCards([]);
+  setBindCards([]);
 
   setFrontLeftRCard(null);
   setFrontRightRCard(null);
@@ -1247,7 +1247,7 @@ const clearRestedZone = (zone: string) => {
 const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
-const [waitingCards, setWaitingCards] = useState<any[]>([]);
+const [bindCards, setBindCards] = useState<any[]>([]);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
 const selectedRestedZone =
@@ -5097,7 +5097,7 @@ if (selectedRZone) {
   return;
 }
   // 待機領域から選択中なら、移動先としてオーダーを指定
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
     selectMoveTarget("order");
     return;
   }
@@ -5191,43 +5191,43 @@ onClick={(e) => {
 {/* 待機領域 */}
 <div className="absolute top-[3%] right-[16%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[18%] flex flex-col items-center gap-2">
   <div className="text-xs [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:text-lg font-bold">
-    待機領域
+    バインド
   </div>
 
   <div
     className={`w-[55px] h-[80px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden ${
-      selectedMoveSource === "waiting" ? "ring-4 ring-blue-500" : ""
+      selectedMoveSource === "bind" ? "ring-4 ring-blue-500" : ""
     }`}
     onClick={() => {
       // ダメージ → 待機領域
       if (selectedMoveSource === "damage") {
-        selectMoveTarget("waiting");
+        selectMoveTarget("bind");
         return;
       }
 
       if (selectedMoveSource === "order") {
-        selectMoveTarget("waiting");
+        selectMoveTarget("bind");
         return;
       }
 
       // 手札 → 待機領域
       if (selectedHandCardIndex !== null) {
-        selectMoveTarget("waiting");
+        selectMoveTarget("bind");
         return;
       }
 
       // 待機領域を移動元として選択
-      if (waitingCards.length > 0) {
+      if (bindCards.length > 0) {
         setSelectedMoveSource((prev) =>
-          prev === "waiting" ? null : "waiting"
+          prev === "bind" ? null : "bind"
         );
       }
     }}
   >
-    {waitingCards.length > 0 ? (
+    {bindCards.length > 0 ? (
       <div className="w-full h-full cursor-pointer">
         <img
-          src={getCardImage(waitingCards[waitingCards.length - 1])}
+          src={getCardImage(bindCards[bindCards.length - 1])}
           alt=""
           className="w-full h-full object-cover"
         />
@@ -5324,7 +5324,7 @@ if (selectedRZone) {
   return;
 }
  
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
     selectMoveTarget("damage");
     return;
   }
@@ -5401,7 +5401,7 @@ style={{
 <div
  className="absolute top-[28%] left-[30%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[23%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:left-[28%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
     selectMoveTarget("frontLeft");
     return;
   }
@@ -5967,7 +5967,7 @@ if (selectedRZone === "backRight") {
   return;
 }
 
-if (selectedMoveSource === "waiting") {
+if (selectedMoveSource === "bind") {
   selectMoveTarget("vanguard");
   return;
 }
@@ -6159,12 +6159,12 @@ if (selectedRZone === "backRight" && backRightRCard) {
   return;
 }
 
-      if (selectedMoveSource === "waiting") {
-        const card = waitingCards[waitingCards.length - 1];
+      if (selectedMoveSource === "bind") {
+        const card = bindCards[bindCards.length - 1];
         if (!card) return;
 
         setSoulCards((prev) => [...prev, card]);
-        setWaitingCards((prev) => prev.slice(0, -1));
+        setBindCards((prev) => prev.slice(0, -1));
         setSelectedMoveSource(null);
         return;
       }
@@ -6246,7 +6246,7 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
 <div
   className="absolute top-[28%] right-[30%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[23%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[28%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
-    if (selectedMoveSource === "waiting") {
+    if (selectedMoveSource === "bind") {
       selectMoveTarget("frontRight");
       return;
     }
@@ -6420,14 +6420,14 @@ if (frontRightRCard) {
 <div className="flex flex-col items-center gap-2 translate-y-4 md:translate-y-0 -translate-x-2 [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:translate-x-0">
   <button
    onClick={() => {
-  if (selectedMoveSource === "waiting") {
-    if (waitingCards.length === 0) return;
+  if (selectedMoveSource === "bind") {
+    if (bindCards.length === 0) return;
 
-    const card = waitingCards[waitingCards.length - 1];
+    const card = bindCards[bindCards.length - 1];
     if (!card) return;
 
     setOnePlayerDeck((prev) => [card, ...prev]);
-    setWaitingCards((prev) => prev.slice(0, -1));
+    setBindCards((prev) => prev.slice(0, -1));
     setSelectedMoveSource(null);
     return;
   }
@@ -6540,14 +6540,14 @@ if (selectedRZone === "backRight" && backRightRCard) {
 
   <button
 onClick={() => {
-  if (selectedMoveSource === "waiting") {
-    if (waitingCards.length === 0) return;
+  if (selectedMoveSource === "bind") {
+    if (bindCards.length === 0) return;
 
-    const card = waitingCards[waitingCards.length - 1];
+    const card = bindCards[bindCards.length - 1];
     if (!card) return;
 
     setOnePlayerDeck((prev) => [...prev, card]);
-    setWaitingCards((prev) => prev.slice(0, -1));
+    setBindCards((prev) => prev.slice(0, -1));
     setSelectedMoveSource(null);
     return;
   }
@@ -6724,7 +6724,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
 <div
  className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] left-[30%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
   selectMoveTarget("backLeft");
   return;
   }
@@ -6968,7 +6968,7 @@ if (backLeftRCard) {
 <div
  className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
     selectMoveTarget("backCenter");
     return;
   }
@@ -7132,7 +7132,7 @@ if (backCenterRCard) {
 <div
 className="absolute top-[52%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[48%] right-[30%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
   selectMoveTarget("backRight");
   return;
   }
@@ -7466,14 +7466,14 @@ onClick={() => {
     </button>
 
     <button
-      onClick={() => selectMoveTarget("waiting")}
+      onClick={() => selectMoveTarget("bind")}
       className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
-        selectedMoveTarget === "waiting"
+        selectedMoveTarget === "bind"
           ? "bg-green-600"
           : "bg-blue-500"
       }`}
     >
-      待機領域
+      バインド
     </button>
 
     <button
@@ -7573,7 +7573,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
 <div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden w-[500px] max-w-[calc(100vw-40px)] px-1">
 <button
   onClick={() => {
-  if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "waiting" && selectedMoveSource !== "trigger" && selectedMoveSource !== "order" && selectedMoveSource !== "vanguard") return;
+  if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "bind" && selectedMoveSource !== "trigger" && selectedMoveSource !== "order" && selectedMoveSource !== "vanguard") return;
 
   if (selectedMoveSource === "damage") {
     selectMoveTarget("hand");
@@ -7615,7 +7615,7 @@ if (selectedMoveSource === "vanguard") {
   return;
 }
 
-  if (selectedMoveSource === "waiting") {
+  if (selectedMoveSource === "bind") {
     selectMoveTarget("hand");
     return;
   }
@@ -7837,7 +7837,7 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
     const card = soulCards[selectedSoulIndex];
     if (!card) return;
 
-    setWaitingCards((prev) => [...prev, card]);
+    setBindCards((prev) => [...prev, card]);
 
     setSoulCards((prev) =>
       prev.filter((_, index) => index !== selectedSoulIndex)
@@ -7848,7 +7848,7 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
   disabled={selectedSoulIndex === null}
   className="px-2 py-1 bg-blue-500 text-white rounded text-sm whitespace-nowrap disabled:bg-gray-400"
 >
-  待機領域
+  バインド
 </button>
 
 <button
@@ -8221,7 +8221,7 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
     const card = onePlayerDeck[selectedDeckCardIndex];
     if (!card) return;
 
-    setWaitingCards((prev) => [...prev, card]);
+    setBindCards((prev) => [...prev, card]);
     setOnePlayerDeck((prev) =>
       prev.filter((_, index) => index !== selectedDeckCardIndex)
     );
@@ -8231,7 +8231,7 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
   disabled={selectedDeckCardIndex === null}
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
-  待機領域
+  バインド
 </button>
 
 <button
