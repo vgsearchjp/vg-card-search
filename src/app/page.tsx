@@ -5345,18 +5345,18 @@ style={{
   zIndex: i,
 }}
   >
-    <div
-      className="absolute left-1/2 top-1/2 w-[65px] h-[90px] md:w-[75px] md:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden"
-      style={{
-        transform: "translate(-50%, -50%) rotate(270deg)",
-      }}
-    >
-      <img
-        src={faceDownCards.get(card) === "damage" ? "/images/vanguard-card-back.jpg" : getCardImage(card)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-    </div>
+<div
+  className="absolute left-1/2 top-1/2 w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] border-2 border-dashed border-gray-400 rounded bg-white overflow-hidden"
+  style={{
+    transform: "translate(-50%, -50%) rotate(270deg)",
+  }}
+>
+  <img
+    src={getCardImage(card)}
+    alt=""
+    className="w-full h-full object-cover"
+  />
+</div>
   </div>
 ))}
   </div>
