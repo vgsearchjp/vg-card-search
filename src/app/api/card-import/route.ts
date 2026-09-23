@@ -249,7 +249,7 @@ for (const row of rows) {
 
   if (data) {
 
- const isSame =
+const isSame =
   data.card_name === row.card_name &&
   data.image_url === row.image_url &&
   data.nation === row.nation &&
@@ -264,8 +264,8 @@ for (const row of rows) {
   data.trigger_type === row.trigger_type &&
   data.card_text === row.card_text &&
   data.flavor_text === row.flavor_text &&
-  data.illustrator === row.illustrator;
-
+  data.illustrator === row.illustrator &&
+  data.sort_order === row.sort_order;
 console.log("比較カード", row.card_no);
 
 console.log("DB", {
