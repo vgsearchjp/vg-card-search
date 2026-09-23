@@ -225,39 +225,49 @@ else if (target === "vanguard") {
 
 // バインド → R
 else if (target === "frontLeft") {
-      if (frontLeftRCard) return;
+  if (frontLeftRCard) {
+    setDropCards((prev) => [...prev, frontLeftRCard]);
+  }
 
-      setFrontLeftRCard(card);
-      removeBindCard();
-    }
+  setFrontLeftRCard(card);
+  removeBindCard();
+}
 
-    else if (target === "frontRight") {
-      if (frontRightRCard) return;
+else if (target === "frontRight") {
+  if (frontRightRCard) {
+    setDropCards((prev) => [...prev, frontRightRCard]);
+  }
 
-      setFrontRightRCard(card);
-      removeBindCard();
-    }
+  setFrontRightRCard(card);
+  removeBindCard();
+}
 
-    else if (target === "backLeft") {
-      if (backLeftRCard) return;
+else if (target === "backLeft") {
+  if (backLeftRCard) {
+    setDropCards((prev) => [...prev, backLeftRCard]);
+  }
 
-      setBackLeftRCard(card);
-      removeBindCard();
-    }
+  setBackLeftRCard(card);
+  removeBindCard();
+}
 
-    else if (target === "backCenter") {
-      if (backCenterRCard) return;
+else if (target === "backCenter") {
+  if (backCenterRCard) {
+    setDropCards((prev) => [...prev, backCenterRCard]);
+  }
 
-      setBackCenterRCard(card);
-      removeBindCard();
-    }
+  setBackCenterRCard(card);
+  removeBindCard();
+}
 
-    else if (target === "backRight") {
-      if (backRightRCard) return;
+else if (target === "backRight") {
+  if (backRightRCard) {
+    setDropCards((prev) => [...prev, backRightRCard]);
+  }
 
-      setBackRightRCard(card);
-      removeBindCard();
-    }
+  setBackRightRCard(card);
+  removeBindCard();
+}
 
     else {
       return;
@@ -313,21 +323,31 @@ if (selectedMoveSource === "deck" && selectedDeckCardIndex !== null) {
   }
 
   setVanguardCard(card);
-  } else if (target === "frontLeft") {
-    if (frontLeftRCard) setOnePlayerDeck((prev) => [...prev, frontLeftRCard]);
-    setFrontLeftRCard(card);
-  } else if (target === "frontRight") {
-    if (frontRightRCard) setOnePlayerDeck((prev) => [...prev, frontRightRCard]);
-    setFrontRightRCard(card);
-  } else if (target === "backLeft") {
-    if (backLeftRCard) setOnePlayerDeck((prev) => [...prev, backLeftRCard]);
-    setBackLeftRCard(card);
-  } else if (target === "backCenter") {
-    if (backCenterRCard) setOnePlayerDeck((prev) => [...prev, backCenterRCard]);
-    setBackCenterRCard(card);
-  } else if (target === "backRight") {
-    if (backRightRCard) setOnePlayerDeck((prev) => [...prev, backRightRCard]);
-    setBackRightRCard(card);
+} else if (target === "frontLeft") {
+  if (frontLeftRCard) {
+    setDropCards((prev) => [...prev, frontLeftRCard]);
+  }
+  setFrontLeftRCard(card);
+} else if (target === "frontRight") {
+  if (frontRightRCard) {
+    setDropCards((prev) => [...prev, frontRightRCard]);
+  }
+  setFrontRightRCard(card);
+} else if (target === "backLeft") {
+  if (backLeftRCard) {
+    setDropCards((prev) => [...prev, backLeftRCard]);
+  }
+  setBackLeftRCard(card);
+} else if (target === "backCenter") {
+  if (backCenterRCard) {
+    setDropCards((prev) => [...prev, backCenterRCard]);
+  }
+  setBackCenterRCard(card);
+} else if (target === "backRight") {
+  if (backRightRCard) {
+    setDropCards((prev) => [...prev, backRightRCard]);
+  }
+  setBackRightRCard(card);
   } else {
     return;
   }
@@ -528,29 +548,39 @@ else if (
   target === "backRight"
 ) {
   if (target === "frontLeft") {
-    if (frontLeftRCard) return;
+    if (frontLeftRCard) {
+      setDropCards((prev) => [...prev, frontLeftRCard]);
+    }
     setFrontLeftRCard(card);
   }
 
   if (target === "frontRight") {
-    if (frontRightRCard) return;
+    if (frontRightRCard) {
+      setDropCards((prev) => [...prev, frontRightRCard]);
+    }
     setFrontRightRCard(card);
   }
 
   if (target === "backLeft") {
-    if (backLeftRCard) return;
+    if (backLeftRCard) {
+      setDropCards((prev) => [...prev, backLeftRCard]);
+    }
     setBackLeftRCard(card);
   }
 
   if (target === "backCenter") {
-    if (backCenterRCard) return;
+    if (backCenterRCard) {
+      setDropCards((prev) => [...prev, backCenterRCard]);
+    }
     setBackCenterRCard(card);
   }
 
-if (target === "backRight") {
-  if (backRightRCard) return;
-  setBackRightRCard(card);
-}
+  if (target === "backRight") {
+    if (backRightRCard) {
+      setDropCards((prev) => [...prev, backRightRCard]);
+    }
+    setBackRightRCard(card);
+  }
 
 setFaceDownCards((prev) => {
   const next = new Map(prev);
@@ -776,29 +806,39 @@ else if (
   target === "backRight"
 ) {
   if (target === "frontLeft") {
-    if (frontLeftRCard) return;
+    if (frontLeftRCard) {
+      setDropCards((prev) => [...prev, frontLeftRCard]);
+    }
     setFrontLeftRCard(card);
   }
 
   if (target === "frontRight") {
-    if (frontRightRCard) return;
+    if (frontRightRCard) {
+      setDropCards((prev) => [...prev, frontRightRCard]);
+    }
     setFrontRightRCard(card);
   }
 
   if (target === "backLeft") {
-    if (backLeftRCard) return;
+    if (backLeftRCard) {
+      setDropCards((prev) => [...prev, backLeftRCard]);
+    }
     setBackLeftRCard(card);
   }
 
   if (target === "backCenter") {
-    if (backCenterRCard) return;
+    if (backCenterRCard) {
+      setDropCards((prev) => [...prev, backCenterRCard]);
+    }
     setBackCenterRCard(card);
   }
 
-if (target === "backRight") {
-  if (backRightRCard) return;
-  setBackRightRCard(card);
-}
+  if (target === "backRight") {
+    if (backRightRCard) {
+      setDropCards((prev) => [...prev, backRightRCard]);
+    }
+    setBackRightRCard(card);
+  }
 
 setFaceDownCards((prev) => {
   const next = new Map(prev);
@@ -5455,7 +5495,7 @@ style={{
 
 {/* 前列左R */}
 <div
- className="absolute top-[28%] left-[30%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[23%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:left-[28%] flex flex-col items-center gap-2 cursor-pointer"
+ className="absolute top-[28%] left-[30%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[23%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:left-[30%] flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
   if (selectedMoveSource === "bind") {
     selectMoveTarget("frontLeft");
@@ -5619,7 +5659,7 @@ if (frontLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] rounded relative ${
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
   !frontLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "frontLeft" ? "ring-4 ring-blue-500" : ""
@@ -5642,7 +5682,7 @@ if (frontLeftRCard) {
 
 {/* V */}
 <div
-  className="absolute top-[5%] md:top-[6%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[5%] md:top-[10%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
 if (selectedRZone === "frontLeft") {
   const rCard = frontLeftRCard;
@@ -6287,7 +6327,7 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
   {isSelectedCardRested ? "スタンド" : "レスト"}
 </button>
 </div>
-<div className={`w-[55px] h-[80px] rounded relative ${
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
   !displayedVanguard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedMoveSource === "vanguard" ? "ring-4 ring-blue-500" : ""
@@ -6311,20 +6351,28 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
 
 {/* 前列右R */}
 <div
-  className="absolute top-[28%] right-[30%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[23%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[28%] flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[28%] right-[30%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:top-[23%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:right-[30%] flex flex-col items-center gap-2 cursor-pointer"
   onClick={() => {
     if (selectedMoveSource === "bind") {
       selectMoveTarget("frontRight");
       return;
     }
 
-    if (selectedMoveSource === "order") {
-       selectMoveTarget("frontRight");
-      return;
-    }
+if (selectedMoveSource === "order") {
+  setSelectedRZone("frontRight");
+  selectMoveTarget("frontRight");
+  setSelectedOrderIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
 
 if (selectedMoveSource === "damage") {
+  setSelectedRZone("frontRight");
   selectMoveTarget("frontRight");
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
 }
 
@@ -6460,7 +6508,7 @@ if (frontRightRCard) {
     setSelectedHandCardIndex(null);
   }}
 >
- <div className={`w-[55px] h-[80px] rounded relative ${
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
   !frontRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : ""
@@ -6796,15 +6844,23 @@ onClick={() => {
   return;
   }
 
-  if (selectedMoveSource === "order") {
+ if (selectedMoveSource === "order") {
+  setSelectedRZone("backLeft");
   selectMoveTarget("backLeft");
+  setSelectedOrderIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
-  }
+}
 
-  if (selectedMoveSource === "damage") {
+if (selectedMoveSource === "damage") {
+  setSelectedRZone("backLeft");
   selectMoveTarget("backLeft");
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
-  }
+}
 
 if (selectedMoveSource === "vanguard") {
   const vCard =
@@ -7014,7 +7070,7 @@ if (backLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
 {backLeftRCard ? (
   <img
     src={faceDownCards.get(backLeftRCard) === "backLeft" ? "/images/vanguard-card-back.jpg" : getCardImage(backLeftRCard)}
@@ -7040,16 +7096,23 @@ onClick={() => {
     return;
   }
 
-  if (selectedMoveSource === "order") {
+if (selectedMoveSource === "order") {
+  setSelectedRZone("backCenter");
   selectMoveTarget("backCenter");
+  setSelectedOrderIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
-  }
+}
 
-  if (selectedMoveSource === "damage") {
+if (selectedMoveSource === "damage") {
+  setSelectedRZone("backCenter");
   selectMoveTarget("backCenter");
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
-  }
-
+}
 if (selectedMoveSource === "vanguard") {
   const vCard =
     vanguardCard ??
@@ -7174,7 +7237,7 @@ if (backCenterRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] rounded relative ${
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
   !backCenterRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backCenter" ? "ring-4 ring-blue-500" : ""
@@ -7204,15 +7267,23 @@ onClick={() => {
   return;
   }
 
-  if (selectedMoveSource === "order") {
+if (selectedMoveSource === "order") {
+  setSelectedRZone("backRight");
   selectMoveTarget("backRight");
+  setSelectedOrderIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
-  }
+}
 
-  if (selectedMoveSource === "damage") {
+if (selectedMoveSource === "damage") {
+  setSelectedRZone("backRight");
   selectMoveTarget("backRight");
+  setSelectedDamageIndex(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
   return;
-  }
+}
 
 if (selectedMoveSource === "vanguard") {
   const vCard =
@@ -7338,7 +7409,7 @@ if (backRightRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] rounded relative ${
+<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
   !backRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backRight" ? "ring-4 ring-blue-500" : ""
@@ -7825,8 +7896,8 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
 
 {/* 手札 */}
 <div className="absolute bottom-[3%] left-[5%] right-[5%] flex justify-center">
-<div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden w-[500px] max-w-[calc(100vw-40px)] px-1">
-<button
+  <div className="flex items-end gap-1 overflow-x-auto overflow-y-hidden w-[500px] max-w-[calc(100vw-40px)] px-1 py-2">
+    <button
   onClick={() => {
   if (!selectedRZone && selectedMoveSource !== "damage" && selectedMoveSource !== "bind" && selectedMoveSource !== "trigger" && selectedMoveSource !== "order" && selectedMoveSource !== "vanguard") return;
 
@@ -7971,7 +8042,7 @@ if (selectedRZone === "backRight" && backRightRCard) {
   setSelectedRZone(null);
 }}
 
-className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[60px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[88px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
+className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] bg-blue-500 text-white rounded text-sm md:text-base flex items-center justify-center"
 >
   手札
 </button>
@@ -7987,7 +8058,7 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
   clearCardSelections();
   setSelectedHandCardIndex(index);
 }}
-  className={`w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[60px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[88px] rounded overflow-hidden shrink-0 cursor-pointer ${
+  className={`w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded overflow-hidden shrink-0 cursor-pointer ${
           selectedHandCardIndex === index
             ? "ring-4 ring-blue-500"
             : ""
