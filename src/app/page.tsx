@@ -6130,7 +6130,7 @@ if (selectedHandCardIndex === null) return;
   setSelectedHandCardIndex(null);
 }}
 >
-<div className="grid grid-cols-3 gap-2 mb-2">
+<div className="grid grid-cols-3 gap-2 mb-2 -translate-y-2">
   <button
     onClick={(e) => {
       e.stopPropagation();
