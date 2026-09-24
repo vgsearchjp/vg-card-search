@@ -5659,7 +5659,7 @@ if (frontLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${
   !frontLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "frontLeft" ? "ring-4 ring-blue-500" : ""
@@ -6327,7 +6327,7 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
   {isSelectedCardRested ? "スタンド" : "レスト"}
 </button>
 </div>
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${
   !displayedVanguard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedMoveSource === "vanguard" ? "ring-4 ring-blue-500" : ""
@@ -6508,7 +6508,7 @@ if (frontRightRCard) {
     setSelectedHandCardIndex(null);
   }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${
   !frontRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "frontRight" ? "ring-4 ring-blue-500" : ""
@@ -7070,7 +7070,7 @@ if (backLeftRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
+<div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${!backLeftRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""} ${selectedRZone === "backLeft" ? "ring-4 ring-blue-500" : ""}`}>
 {backLeftRCard ? (
   <img
     src={faceDownCards.get(backLeftRCard) === "backLeft" ? "/images/vanguard-card-back.jpg" : getCardImage(backLeftRCard)}
@@ -7237,7 +7237,7 @@ if (backCenterRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${
   !backCenterRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backCenter" ? "ring-4 ring-blue-500" : ""
@@ -7409,7 +7409,7 @@ if (backRightRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80pxw-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px]] md:w-[75px] md:h-[105px] rounded relative ${
   !backRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backRight" ? "ring-4 ring-blue-500" : ""
