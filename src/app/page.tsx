@@ -5682,7 +5682,7 @@ if (frontLeftRCard) {
 
 {/* V */}
 <div
-  className="absolute top-[5%] md:top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+  className="absolute top-[2%] md:top-[10%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
 onClick={() => {
 if (selectedRZone === "frontLeft") {
   const rCard = frontLeftRCard;
