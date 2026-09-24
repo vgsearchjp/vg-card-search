@@ -7409,7 +7409,7 @@ if (backRightRCard) {
   setSelectedHandCardIndex(null);
 }}
 >
-<div className={`w-[55px] h-[80pxw-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px]] md:w-[75px] md:h-[105px] rounded relative ${
+<div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${
   !backRightRCard ? "border-2 border-dashed border-gray-400 bg-white" : ""
 } ${
   selectedRZone === "backRight" ? "ring-4 ring-blue-500" : ""
