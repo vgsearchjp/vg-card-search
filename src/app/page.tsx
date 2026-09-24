@@ -6337,9 +6337,9 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:
   <img
     src={faceDownCards.get(displayedVanguard) === "vanguard" ? "/images/vanguard-card-back.jpg" : getCardImage(displayedVanguard)}
     alt=""
-    className={`absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-[60%] ${
-      restedZones.has("vanguard") ? "rotate-90" : ""
-    }`}
+className={`absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-[65%] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:-translate-y-[60%] ${
+  restedZones.has("vanguard") ? "rotate-90" : ""
+}`}
   />
 ) : (
   <span className="absolute inset-0 flex items-center justify-center text-sm md:text-lg">
