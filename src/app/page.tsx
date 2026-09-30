@@ -295,10 +295,12 @@ if (selectedMoveSource === "deck" && selectedDeckCardIndex !== null) {
   } else if (target === "order") {
     setOrderCard((prev) => [...prev, card]);
   } else if (target === "bind") {
-    setBindCards((prev) => [...prev, card]);
-  } else if (target === "soul") {
-    setSoulCards((prev) => [...prev, card]);
-  } else if (target === "deckTop") {
+  setBindCards((prev) => [...prev, card]);
+} else if (target === "excluded") {
+  setExcludedCards((prev) => [...prev, card]);
+} else if (target === "soul") {
+  setSoulCards((prev) => [...prev, card]);
+} else if (target === "deckTop") {
     setOnePlayerDeck((prev) => [card, ...prev.filter((_, index) => index !== selectedDeckCardIndex)]);
     setSelectedDeckCardIndex(null);
     setSelectedMoveSource(null);
@@ -400,6 +402,10 @@ else if (target === "bind") {
   setBindCards((prev) => [...prev, card]);
 }
 
+else if (target === "excluded") {
+  setExcludedCards((prev) => [...prev, card]);
+}
+
 else if (target === "vanguard") {
   const currentVanguard =
     vanguardCard ??
@@ -495,16 +501,25 @@ if (selectedMoveSource === "damage" && selectedDamageIndex !== null) {
 });
   }
 
-  else if (target === "drop") {
-    setDropCards((prev) => [...prev, card]);
-    setFaceDownCards((prev) => {
-  const next = new Map(prev);
-  next.delete(card);
-  return next;
-});
-  }
+else if (target === "drop") {
+  setDropCards((prev) => [...prev, card]);
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(card);
+    return next;
+  });
+}
 
-  else if (target === "trigger") {
+else if (target === "excluded") {
+  setExcludedCards((prev) => [...prev, card]);
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(card);
+    return next;
+  });
+}
+
+else if (target === "trigger") {
   if (triggerCard) return;
   setTriggerCard(card);
   setFaceDownCards((prev) => {
@@ -750,16 +765,25 @@ if (selectedMoveSource === "order" && selectedOrderIndex !== null) {
 });
     }
 
-    else if (target === "drop") {
-      setDropCards((prev) => [...prev, card]);
-      setFaceDownCards((prev) => {
-  const next = new Map(prev);
-  next.delete(card);
-  return next;
-});
-    }
+else if (target === "drop") {
+  setDropCards((prev) => [...prev, card]);
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(card);
+    return next;
+  });
+}
 
-    else if (target === "deckTop") {
+else if (target === "excluded") {
+  setExcludedCards((prev) => [...prev, card]);
+  setFaceDownCards((prev) => {
+    const next = new Map(prev);
+    next.delete(card);
+    return next;
+  });
+}
+
+else if (target === "deckTop") {
       setOnePlayerDeck((prev) => [card, ...prev]);
       setFaceDownCards((prev) => {
   const next = new Map(prev);
@@ -857,6 +881,53 @@ setSelectedMoveTarget(null);
 return;
   }
 
+// =========================
+// R → 除外
+// =========================
+if (selectedRZone === "frontLeft" && frontLeftRCard && target === "excluded") {
+  setExcludedCards((prev) => [...prev, frontLeftRCard]);
+  setFrontLeftRCard(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+if (selectedRZone === "frontRight" && frontRightRCard && target === "excluded") {
+  setExcludedCards((prev) => [...prev, frontRightRCard]);
+  setFrontRightRCard(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+if (selectedRZone === "backLeft" && backLeftRCard && target === "excluded") {
+  setExcludedCards((prev) => [...prev, backLeftRCard]);
+  setBackLeftRCard(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+if (selectedRZone === "backCenter" && backCenterRCard && target === "excluded") {
+  setExcludedCards((prev) => [...prev, backCenterRCard]);
+  setBackCenterRCard(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
+
+if (selectedRZone === "backRight" && backRightRCard && target === "excluded") {
+  setExcludedCards((prev) => [...prev, backRightRCard]);
+  setBackRightRCard(null);
+  setSelectedRZone(null);
+  setSelectedMoveSource(null);
+  setSelectedMoveTarget(null);
+  return;
+}
 
 // =========================
 // R → 各領域
@@ -1090,9 +1161,13 @@ else if (target === "drop") {
   setDropCards((prev) => [...prev, card]);
 }
 
-    else if (target === "deckTop") {
-      setOnePlayerDeck((prev) => [card, ...prev]);
-    }
+else if (target === "excluded") {
+  setExcludedCards((prev) => [...prev, card]);
+}
+
+else if (target === "deckTop") {
+  setOnePlayerDeck((prev) => [card, ...prev]);
+}
 
     else if (target === "deckBottom") {
       setOnePlayerDeck((prev) => [...prev, card]);
@@ -1310,6 +1385,8 @@ const clearRestedZone = (zone: string) => {
 const [orderCard, setOrderCard] = useState<any[]>([]);
 const [triggerCard, setTriggerCard] = useState<any | null>(null);
 const [dropCards, setDropCards] = useState<any[]>([]);
+const [excludedCards, setExcludedCards] = useState<any[]>([]);
+const [isExcludedViewerOpen, setIsExcludedViewerOpen] = useState(false);
 const [bindCards, setBindCards] = useState<any[]>([]);
 const [isBindViewerOpen, setIsBindViewerOpen] = useState(false);
 const [selectedBindIndex, setSelectedBindIndex] = useState<number | null>(null);
@@ -6312,7 +6389,7 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm"
   ソウルへ
 </button>
 
- <button
+<button
   onClick={(e) => {
     e.stopPropagation();
     handleRestStand();
@@ -6322,10 +6399,65 @@ className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm"
     selectedMoveSource !== "vanguard" &&
     !selectedRZone
   }
-className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
+  className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm disabled:bg-gray-400"
 >
   {isSelectedCardRested ? "スタンド" : "レスト"}
 </button>
+
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+
+    // 手札 → 除外
+    if (selectedHandCardIndex !== null) {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // ダメージ → 除外
+    if (selectedMoveSource === "damage") {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // オーダー → 除外
+    if (selectedMoveSource === "order") {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // R → 除外
+    if (selectedRZone) {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // V → 除外
+    if (selectedMoveSource === "vanguard") {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // トリガー → 除外
+    if (selectedMoveSource === "trigger") {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // 待機領域 → 除外
+    if (selectedMoveSource === "waiting") {
+      selectMoveTarget("excluded");
+      return;
+    }
+
+    // 選択なし → 除外一覧を開く
+    setIsExcludedViewerOpen(true);
+  }}
+  className="px-2 py-1 bg-blue-500 text-white rounded text-xs md:text-sm"
+>
+  除外
+</button>
+
 </div>
 <div className={`w-[55px] h-[80px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:w-[75px] [@media(min-width:768px)_and_(hover:hover)_and_(pointer:fine)]:h-[105px] rounded relative ${
   !displayedVanguard ? "border-2 border-dashed border-gray-400 bg-white" : ""
@@ -7615,6 +7747,14 @@ onClick={() => {
     </button>
 
     <button
+  onClick={() => selectMoveTarget("excluded")}
+  disabled={selectedDropIndex === null}
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
+>
+  除外
+</button>
+
+    <button
   onClick={() => {
     if (selectedDropIndex === null) return;
 
@@ -7704,6 +7844,40 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
 )}
 </div>
 </div>
+)}
+
+{isExcludedViewerOpen && (
+  <div className="absolute inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-lg p-4 w-[90%] max-w-[700px] max-h-[80%] overflow-y-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg md:text-2xl font-bold">
+          除外（{excludedCards.length}枚）
+        </h3>
+
+        <button
+          onClick={() => setIsExcludedViewerOpen(false)}
+          className="px-3 py-1 bg-gray-500 text-white rounded"
+        >
+          閉じる
+        </button>
+      </div>
+
+      <div className="mt-4 grid grid-cols-7 gap-2">
+        {excludedCards.map((card, index) => (
+          <div
+            key={`${card.id}-${index}`}
+            className="w-[55px] h-[80px] md:w-[75px] md:h-[105px] rounded overflow-hidden"
+          >
+            <img
+              src={getCardImage(card)}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
 )}
 
 {isBindViewerOpen && (
@@ -8610,6 +8784,14 @@ className="w-[50px] h-[73px] [@media(min-width:768px)_and_(hover:hover)_and_(poi
   className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
 >
   山札下
+</button>
+
+<button
+  onClick={() => selectMoveTarget("excluded")}
+  disabled={selectedDeckCardIndex === null}
+  className="w-[65px] h-[42px] px-1 py-1 text-xs md:text-base bg-blue-500 text-white rounded disabled:bg-gray-400 whitespace-nowrap"
+>
+  除外
 </button>
 
 <button
