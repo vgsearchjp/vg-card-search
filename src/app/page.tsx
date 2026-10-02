@@ -7900,7 +7900,7 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
   <div className="absolute inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
     <div className="bg-white rounded-lg p-4 w-[90%] max-w-[700px] max-h-[80%] overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg md:text-2xl font-bold">
+        <h3 className="text-sm md:text-2xl font-bold">
 バインド（{bindCards.length}枚）
         </h3>
 
