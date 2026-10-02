@@ -154,19 +154,32 @@ const selectMoveTarget = (target: string) => {
   // =========================
 if (selectedMoveSource === "bind") {
 
+  const isFaceDownBind = selectedBindZone === "faceDown";
+  const currentBindCards = isFaceDownBind
+    ? bindFaceDownCards
+    : bindCards;
+
   const bindIndex =
     selectedBindIndex !== null
       ? selectedBindIndex
-      : bindCards.length - 1;
+      : currentBindCards.length - 1;
 
-  const card = bindCards[bindIndex];
+  const card = currentBindCards[bindIndex];
   if (!card) return;
 
   const removeBindCard = () => {
-    setBindCards((prev) =>
-      prev.filter((_, index) => index !== bindIndex)
-    );
+    if (isFaceDownBind) {
+      setBindFaceDownCards((prev) =>
+        prev.filter((_, index) => index !== bindIndex)
+      );
+    } else {
+      setBindCards((prev) =>
+        prev.filter((_, index) => index !== bindIndex)
+      );
+    }
+
     setSelectedBindIndex(null);
+    setSelectedBindZone(null);
     setSelectedMoveSource(null);
     setIsBindViewerOpen(false);
   };
@@ -1283,10 +1296,11 @@ const resetOnePlayerBoard = async () => {
   setDamageCards([]);
   setOrderCard([]);
   setTriggerCard(null);
-  setDropCards([]);
-  setBindCards([]);
+setDropCards([]);
+setBindCards([]);
+setBindFaceDownCards([]);
 
-  setFrontLeftRCard(null);
+setFrontLeftRCard(null);
   setFrontRightRCard(null);
   setBackLeftRCard(null);
   setBackCenterRCard(null);
@@ -1388,8 +1402,10 @@ const [dropCards, setDropCards] = useState<any[]>([]);
 const [excludedCards, setExcludedCards] = useState<any[]>([]);
 const [isExcludedViewerOpen, setIsExcludedViewerOpen] = useState(false);
 const [bindCards, setBindCards] = useState<any[]>([]);
+const [bindFaceDownCards, setBindFaceDownCards] = useState<any[]>([]);
 const [isBindViewerOpen, setIsBindViewerOpen] = useState(false);
 const [selectedBindIndex, setSelectedBindIndex] = useState<number | null>(null);
+const [selectedBindZone, setSelectedBindZone] = useState<"normal" | "faceDown" | null>(null);
 const [isDropViewerOpen, setIsDropViewerOpen] = useState(false);
 const [selectedDropIndex, setSelectedDropIndex] = useState<number | null>(null);
 const selectedRestedZone =
@@ -7879,51 +7895,87 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     </div>
   </div>
 )}
-
+{/* バインド表示 */}
 {isBindViewerOpen && (
   <div className="absolute inset-0 z-[100] bg-black/50 flex items-center justify-center p-4">
     <div className="bg-white rounded-lg p-4 w-[90%] max-w-[700px] max-h-[80%] overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg md:text-2xl font-bold">
-          バインド（{bindCards.length}枚）
+バインド（{bindCards.length}枚）
         </h3>
 
-        <button
-          onClick={() => {
-            setIsBindViewerOpen(false);
-            setSelectedBindIndex(null);
-          }}
-          className="px-3 py-1 bg-gray-500 text-white rounded"
-        >
-          閉じる
-        </button>
+<button
+onClick={() => {
+  setIsBindViewerOpen(false);
+  setSelectedBindIndex(null);
+  setSelectedBindZone(null);
+}}
+ className="px-3 py-1 bg-gray-500 text-white rounded">
+閉じる
+</button>
       </div>
 
-      <div className="mt-4 grid grid-cols-7 gap-2">
-        {bindCards.map((card, index) => (
-          <div
-            key={`${card.id}-${index}`}
-            onClick={() => {
-              setSelectedBindIndex((prev) =>
-                prev === index ? null : index
-              );
-              setSelectedMoveSource("bind");
-            }}
-            className={`w-[55px] h-[80px] rounded overflow-hidden cursor-pointer ${
-              selectedBindIndex === index
-                ? "ring-4 ring-blue-500"
-                : ""
-            }`}
-          >
-            <img
-              src={getCardImage(card)}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
+<div className="mt-4 flex gap-2 overflow-x-auto">
+  {bindCards.map((card, index) => (
+    <div
+      key={`bind-${card.id}-${index}`}
+      onClick={() => {
+        setSelectedBindIndex((prev) =>
+          selectedBindZone === "normal" && prev === index
+            ? null
+            : index
+        );
+        setSelectedBindZone("normal");
+        setSelectedMoveSource("bind");
+      }}
+className={`relative w-[55px] h-[80px] flex-shrink-0 rounded cursor-pointer ${
+  selectedBindZone === "normal" && selectedBindIndex === index
+    ? "border-4 border-blue-500"
+    : ""
+}`}
+    >
+<img
+  src={getCardImage(card)}
+  alt=""
+  className="w-full h-full object-cover rounded"
+/>
+    </div>
+  ))}
+</div>
+<div className="mt-4">
+  <div className="text-sm md:text-base font-bold mb-2">
+    裏バインド（{bindFaceDownCards.length}枚）
+  </div>
+
+  <div className="flex gap-2 overflow-x-auto">
+    {bindFaceDownCards.map((card, index) => (
+      <div
+        key={`bind-face-down-${card.id}-${index}`}
+        onClick={() => {
+          setSelectedBindIndex((prev) =>
+            selectedBindZone === "faceDown" && prev === index
+              ? null
+              : index
+          );
+          setSelectedBindZone("faceDown");
+          setSelectedMoveSource("bind");
+        }}
+className={`relative w-[55px] h-[80px] flex-shrink-0 rounded cursor-pointer ${
+  selectedBindZone === "faceDown" && selectedBindIndex === index
+    ? "border-4 border-blue-500"
+    : ""
+}`}
+      >
+<img
+  src={getCardImage(card)}
+  alt=""
+  className="w-full h-full object-cover"
+/>
       </div>
-      {selectedBindIndex !== null && (
+    ))}
+  </div>
+</div>
+{selectedBindIndex !== null && (
   <div className="mt-4 flex flex-wrap gap-2 justify-center">
     <button
       onClick={() => selectMoveTarget("hand")}
@@ -8062,10 +8114,58 @@ className={`px-2 py-1.5 text-xs md:text-base rounded text-white ${
     >
       右後
     </button>
-  </div>
+    {selectedBindZone === "normal" && (
+  <button
+    onClick={() => {
+      if (selectedBindIndex === null) return;
+
+      const card = bindCards[selectedBindIndex];
+      if (!card) return;
+
+      setBindFaceDownCards((prev) => [...prev, card]);
+
+      setBindCards((prev) =>
+        prev.filter((_, index) => index !== selectedBindIndex)
+      );
+
+      setSelectedBindIndex(null);
+      setSelectedBindZone(null);
+      setSelectedMoveSource(null);
+      setSelectedMoveTarget(null);
+    }}
+    className="px-2 py-1.5 text-xs md:text-base rounded text-white bg-blue-500"
+  >
+    裏
+  </button>
 )}
-    </div>
-  </div>
+{selectedBindZone === "faceDown" && (
+  <button
+    onClick={() => {
+      if (selectedBindIndex === null) return;
+
+      const card = bindFaceDownCards[selectedBindIndex];
+      if (!card) return;
+
+      setBindCards((prev) => [...prev, card]);
+
+      setBindFaceDownCards((prev) =>
+        prev.filter((_, index) => index !== selectedBindIndex)
+      );
+
+      setSelectedBindIndex(null);
+      setSelectedBindZone(null);
+      setSelectedMoveSource(null);
+      setSelectedMoveTarget(null);
+    }}
+    className="px-2 py-1.5 text-xs md:text-base rounded text-white bg-blue-500"
+  >
+    表
+  </button>
+)}
+</div>
+)}
+</div>
+</div>
 )}
 
 {/* 手札 */}
