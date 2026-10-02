@@ -1766,6 +1766,10 @@ const [productNameSearch, setProductNameSearch] = useState("");
 const [selectedHomeProduct,setSelectedHomeProduct] = useState<any>(null);
 const [homeSearch,setHomeSearch] = useState("");
 const [cardSearch,setCardSearch] = useState("");
+const [showSearchDetail, setShowSearchDetail] = useState(false);
+const [searchFields, setSearchFields] = useState<string[]>([
+  "all"
+]);
 const [homeRarity,setHomeRarity] = useState("");
 const [searchNation, setSearchNation] = useState("");
 const [nationList, setNationList] = useState<string[]>([]);
@@ -2744,18 +2748,22 @@ const keyword = cardSearch.trim();
     card_collection (*),
     products (*)
   `, { count: "exact" })
-  if (keyword) {
+if (keyword) {
 
-query = query.or(
-  [
-    `card_name.ilike.%${keyword}%`,
-    `card_no.ilike.%${keyword}%`,
-    `card_type.ilike.%${keyword}%`,
-    `nation.ilike.%${keyword}%`,
-    `race.ilike.%${keyword}%`,
-    `card_text.ilike.%${keyword}%`
-  ].join(",")
-);
+  const searchConditions =
+    searchFields.includes("all")
+      ? [
+          `card_name.ilike.%${keyword}%`,
+          `card_text.ilike.%${keyword}%`,
+          `card_no.ilike.%${keyword}%`,
+          `race.ilike.%${keyword}%`,
+          `illustrator.ilike.%${keyword}%`,
+        ]
+      : searchFields.map((field) =>
+          `${field}.ilike.%${keyword}%`
+        );
+
+  query = query.or(searchConditions.join(","));
 
 }
 
@@ -10428,7 +10436,7 @@ onClick={()=>addToFinisherDeck(item.card)}
 
 <div className="w-full">
 
-<div className="flex flex-row md:inline-flex gap-2 mb-3">
+<div className="relative flex flex-row md:inline-flex gap-2 mb-3">
 
   <div className="relative flex-1">
 
@@ -10461,6 +10469,60 @@ onClick={() => {
   </button>
 )}
   </div>
+
+  <button
+  type="button"
+  className="border px-4 py-3 bg-gray-500 text-white whitespace-nowrap"
+  onClick={() => setShowSearchDetail((prev) => !prev)}
+>
+  詳細
+</button>
+{showSearchDetail && (
+  <div className="absolute z-50 mt-2 bg-white border rounded shadow-lg p-3 w-[220px]">
+    <div className="font-bold mb-2">
+      検索対象
+    </div>
+
+    <label className="flex items-center gap-2 mb-2">
+      <input
+        type="checkbox"
+        checked={searchFields.includes("all")}
+        onChange={() => {
+          setSearchFields(["all"]);
+        }}
+      />
+      全て
+    </label>
+
+    {[
+      ["card_name", "カード名"],
+      ["card_text", "テキスト"],
+      ["card_no", "カード番号"],
+      ["race", "種族"],
+      ["illustrator", "イラストレーター"],
+    ].map(([value, label]) => (
+      <label
+        key={value}
+        className="flex items-center gap-2 mb-2"
+      >
+        <input
+          type="checkbox"
+          checked={searchFields.includes(value)}
+          onChange={() => {
+            setSearchFields((prev) => {
+              const next = prev.includes(value)
+                ? prev.filter((item) => item !== value)
+                : [...prev.filter((item) => item !== "all"), value];
+
+              return next.length === 0 ? ["all"] : next;
+            });
+          }}
+        />
+        {label}
+      </label>
+    ))}
+  </div>
+)}
 
   <button
     className="border px-6 py-3 bg-blue-500 text-white w-24 md:w-[80px] whitespace-nowrap flex items-center justify-center"
@@ -10745,7 +10807,7 @@ className={`border px-3 py-2 text-sm md:text-base ${
 {isSearchResult && (
 <div className="w-full">
 
-<div className="flex flex-row md:inline-flex gap-2 mb-3">
+<div className="relative flex flex-row md:inline-flex gap-2 mb-3">
 
   <div className="relative flex-1">
 
@@ -10781,6 +10843,57 @@ className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 opacity-60 ho
 )}
 
   </div>
+<button
+  type="button"
+  className="border px-4 py-3 bg-gray-500 text-white whitespace-nowrap"
+  onClick={() => setShowSearchDetail((prev) => !prev)}
+>
+  詳細
+</button>
+
+{showSearchDetail && (
+  <div className="absolute z-50 mt-12 bg-white border rounded shadow-lg p-3 w-[220px]">
+    <div className="font-bold mb-2">
+      検索対象
+    </div>
+
+    <label className="flex items-center gap-2 mb-2">
+      <input
+        type="checkbox"
+        checked={searchFields.includes("all")}
+        onChange={() => {
+          setSearchFields(["all"]);
+        }}
+      />
+      全て
+    </label>
+
+    {[
+      ["card_name", "カード名"],
+      ["card_text", "テキスト"],
+      ["card_no", "カード番号"],
+      ["race", "種族"],
+      ["illustrator", "イラストレーター"],
+    ].map(([value, label]) => (
+      <label key={value} className="flex items-center gap-2 mb-2">
+        <input
+          type="checkbox"
+          checked={searchFields.includes(value)}
+          onChange={() => {
+            setSearchFields((prev) => {
+              const next = prev.includes(value)
+                ? prev.filter((item) => item !== value)
+                : [...prev.filter((item) => item !== "all"), value];
+
+              return next.length === 0 ? ["all"] : next;
+            });
+          }}
+        />
+        {label}
+      </label>
+    ))}
+  </div>
+)}
 
 <button
 className="border px-6 py-3 bg-blue-500 text-white w-24 md:w-[80px] whitespace-nowrap flex items-center justify-center"
