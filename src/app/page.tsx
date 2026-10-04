@@ -11159,7 +11159,7 @@ onClick={() => {
   src={getCardImage(selectedHomeCard)}
   alt={selectedHomeCard.card_name}
   onClick={() => setZoomCard(selectedHomeCard)}
-  className="w-[130px] md:w-[280px] mb-2 cursor-pointer"
+className="w-[125px] md:w-[280px] mb-2 cursor-pointer"
 />
 )}
 <div className="
@@ -11372,71 +11372,77 @@ wanted
 <div className="flex-1 min-w-0 order-none">
 
   {/* スマホ用 */}
-  <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-[11px]">
+  <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-[10px]">
 
-    <div className="grid grid-cols-[90px_minmax(0,1fr)]">
+    <div className="grid grid-cols-[78px_minmax(0,1fr)]">
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         カードタイプ
       </div>
-<div className="border-b border-gray-300 px-3 py-2 whitespace-nowrap">
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
   {selectedHomeCard?.card_type}
 </div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         国家
       </div>
-<div className="border-b border-gray-300 px-3 py-2 whitespace-nowrap">
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
   {selectedHomeCard?.nation}
 </div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         種族
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.race}
-      </div>
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
+  {selectedHomeCard?.race}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         グレード
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.grade}
-      </div>
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
+  {selectedHomeCard?.grade}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         パワー
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.power}
-      </div>
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
+  {selectedHomeCard?.power}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         クリティカル
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.critical}
-      </div>
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
+  {selectedHomeCard?.critical}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         シールド
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.shield}
-      </div>
+<div className="border-b border-gray-300 px-2 py-2 whitespace-nowrap">
+  {selectedHomeCard?.shield}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         アイコン
       </div>
-<div className="border-b border-gray-300 px-3 py-2 whitespace-nowrap">
-  {selectedHomeCard?.skill_icon}
+<div className="border-b border-gray-300 px-2 py-2">
+  {selectedHomeCard?.skill_icon
+    ?.split("、")
+    .map((icon: string, index: number) => (
+      <div key={index} className="whitespace-nowrap">
+        {icon}
+      </div>
+    ))}
 </div>
 
       <div className="bg-gray-50 border-r border-gray-300 px-3 py-2 font-medium">
         トリガー
       </div>
-      <div className="px-3 py-2">
-        {selectedHomeCard?.trigger_type}
-      </div>
+<div className="px-2 py-2 whitespace-nowrap">
+  {selectedHomeCard?.trigger_type}
+</div>
 
     </div>
   </div>
