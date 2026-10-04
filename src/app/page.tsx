@@ -11150,17 +11150,17 @@ onClick={() => {
     【{selectedHomeCard?.rarity}】
   </div>
 
-<div className="flex flex-row md:flex-row gap-4 md:gap-8 items-start mb-8">
+<div className="grid grid-cols-[160px_minmax(0,1fr)] gap-4 items-start mb-8 md:flex md:gap-8">
 
-  <div>
+<div className="contents md:block">
 
 {selectedHomeCard?.image_url && (
-  <img
-    src={getCardImage(selectedHomeCard)}
-    alt={selectedHomeCard.card_name}
-    onClick={() => setZoomCard(selectedHomeCard)}
-    className="w-[160px] md:w-[280px] mb-2 cursor-pointer"
-  />
+<img
+  src={getCardImage(selectedHomeCard)}
+  alt={selectedHomeCard.card_name}
+  onClick={() => setZoomCard(selectedHomeCard)}
+  className="w-[160px] md:w-[280px] mb-2 cursor-pointer col-start-1 row-start-1"
+/>
 )}
 <div className="
 mt-4
@@ -11173,6 +11173,10 @@ flex
 items-center
 justify-between
 gap-2
+col-span-2
+row-start-6
+md:col-span-auto
+md:row-auto
 ">
 
 <div className="flex gap-4 items-start">
@@ -11367,7 +11371,7 @@ wanted
 
 </div>
 
-<div className="space-y-2 text-lg w-full md:w-[500px]">
+<div className="contents md:block">
 
     <div>
       カードタイプ：
