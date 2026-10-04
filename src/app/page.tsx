@@ -10478,7 +10478,7 @@ onClick={() => {
   詳細
 </button>
 {showSearchDetail && (
-  <div className="absolute z-50 mt-2 bg-white border rounded shadow-lg p-3 w-[220px]">
+  <div className="absolute top-full left-0 mt-2 z-50 bg-white border rounded shadow-lg p-3 w-[220px]">
     <div className="font-bold mb-2">
       検索対象
     </div>
