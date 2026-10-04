@@ -11459,7 +11459,25 @@ wanted
   <h2 className="text-2xl font-bold mb-4">
     メモ
   </h2>
-  
+
+  <textarea
+  className="border p-2 w-full md:max-w-[800px] h-[120px]"
+  value={memo}
+  onChange={async (e) => {
+
+    const value = e.target.value;
+
+    setMemo(value);
+
+    await saveCollection(
+      selectedHomeCard.id,
+      {
+        memo: value,
+      }
+    );
+
+  }}
+/>
 <div className="
 mt-4
 bg-white
@@ -11662,24 +11680,7 @@ wanted
 
 </div>
 </div>
-  <textarea
-  className="border p-2 w-full md:max-w-[800px] h-[120px]"
-  value={memo}
-  onChange={async (e) => {
 
-    const value = e.target.value;
-
-    setMemo(value);
-
-    await saveCollection(
-      selectedHomeCard.id,
-      {
-        memo: value,
-      }
-    );
-
-  }}
-/>
 </div>
 
 <div className="mt-8">
