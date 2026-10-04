@@ -11556,7 +11556,7 @@ wanted
       );
     }}
   />
-
+</div>
 <div className="
 mt-4
 bg-white
@@ -11758,8 +11758,6 @@ wanted
 </button>
 
 </div>
-</div>
-
 </div>
 
 <div className="mt-8">
