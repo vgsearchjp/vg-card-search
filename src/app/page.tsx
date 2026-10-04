@@ -10546,7 +10546,6 @@ onClick={() => {
       setHomeGrade("");
       setHomeRarity("");
       setHomeTrigger("");
-      searchCards();
     }}
   >
     ×
@@ -10872,7 +10871,6 @@ onClick={searchCards}
       setHomeGrade("");
       setHomeRarity("");
       setHomeTrigger("");
-      searchCards();
     }}
   >
     ×
