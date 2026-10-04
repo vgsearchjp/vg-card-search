@@ -11150,7 +11150,7 @@ onClick={() => {
     【{selectedHomeCard?.rarity}】
   </div>
 
-<div className="grid grid-cols-[160px_minmax(0,1fr)] gap-4 items-start mb-8 md:flex md:gap-8">
+<div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-8 items-start mb-8">
 
 <div className="contents md:block">
 
@@ -11173,10 +11173,10 @@ flex
 items-center
 justify-between
 gap-2
-col-span-2
-row-start-6
-md:col-span-auto
-md:row-auto
+basis-full
+order-3
+md:basis-auto
+md:order-none
 ">
 
 <div className="flex gap-4 items-start">
@@ -11371,7 +11371,7 @@ wanted
 
 </div>
 
-<div className="contents md:block">
+<div className="space-y-2 text-lg w-full md:w-[500px]">
 
     <div>
       カードタイプ：
