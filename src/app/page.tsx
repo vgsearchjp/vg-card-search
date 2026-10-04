@@ -11174,7 +11174,7 @@ items-center
 justify-between
 gap-2
 col-span-2
-md:col-span-auto
+hidden md:flex
 ">
 
 <div className="flex gap-4 items-start">
@@ -11430,13 +11430,13 @@ wanted
   />
 </div>
 
-<div className="mb-0 w-full basis-full md:basis-auto">
+<div className="mb-0 w-full col-span-2 md:w-full">
   <h2 className="text-lg font-bold">
     フレーバーテキスト
   </h2>
 
-  <div
-  className="border p-3 text-base min-h-[70px] w-full md:w-[500px]"
+<div
+  className="border p-3 text-base min-h-[70px] w-full"
   dangerouslySetInnerHTML={{
     __html: selectedHomeCard?.flavor_text || "",
   }}
