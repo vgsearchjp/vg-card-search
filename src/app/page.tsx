@@ -11371,7 +11371,7 @@ wanted
 
 </div>
 
-<div className="space-y-2 text-lg w-full md:w-[500px]">
+<div className="space-y-2 text-lg w-[calc(100%-176px)] flex-1 min-w-0 order-2 md:order-none">
 
     <div>
       カードタイプ：
