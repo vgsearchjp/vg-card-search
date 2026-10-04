@@ -11499,6 +11499,8 @@ wanted
 
 </div>
 
+</div>
+
 <div className="mb-6 w-full basis-full md:basis-auto bg-gray-50 border border-gray-200 rounded-xl p-3">
   <h2 className="text-lg font-bold mb-2">
     能力テキスト
@@ -11533,8 +11535,6 @@ wanted
   <div className="border p-3 text-base w-full bg-white rounded-lg">
     {selectedHomeCard?.illustrator}
   </div>
-</div>
-
 </div>
   
 <div className="mt-0 bg-gray-50 border border-gray-200 rounded-xl p-3">
