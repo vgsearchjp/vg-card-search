@@ -11159,7 +11159,7 @@ onClick={() => {
   src={getCardImage(selectedHomeCard)}
   alt={selectedHomeCard.card_name}
   onClick={() => setZoomCard(selectedHomeCard)}
-  className="w-[160px] md:w-[280px] mb-2 cursor-pointer col-start-1 row-start-1"
+  className="w-[130px] md:w-[280px] mb-2 cursor-pointer"
 />
 )}
 <div className="
@@ -11371,7 +11371,7 @@ wanted
 
 </div>
 
-<div className="space-y-2 text-lg w-[calc(100%-176px)] flex-1 min-w-0 order-2 md:order-none">
+<div className="space-y-2 text-base md:text-lg flex-1 min-w-0 order-2 md:order-none">
 
     <div>
       カードタイプ：
@@ -11417,22 +11417,22 @@ wanted
       トリガー：
       {selectedHomeCard?.trigger_type}
     </div>
+</div>
 
-
-<div className="mb-6">
-  <h2 className="text-lg font-bold">
+<div className="mb-6 w-full basis-full md:basis-auto">
+  <h2 className="text-lg font-bold mb-2">
     能力テキスト
   </h2>
 
   <div
-  className="border p-3 text-base min-h-[220px] w-full md:w-[500px]"
-  dangerouslySetInnerHTML={{
-    __html: selectedHomeCard?.card_text || "",
-  }}
-/>
+    className="border p-3 text-base min-h-[220px] w-full md:w-[500px]"
+    dangerouslySetInnerHTML={{
+      __html: selectedHomeCard?.card_text || "",
+    }}
+  />
 </div>
 
-<div className="mb-0">
+<div className="mb-0 w-full basis-full md:basis-auto">
   <h2 className="text-lg font-bold">
     フレーバーテキスト
   </h2>
@@ -11445,15 +11445,14 @@ wanted
 />
 </div>
 
-<h2 className="text-lg font-bold mt-6">
-イラストレーター
-</h2>
+<div className="w-full basis-full md:basis-auto mt-6">
+  <h2 className="text-lg font-bold mb-2">
+    イラストレーター
+  </h2>
 
-<div className="border p-3 text-base w-full md:w-[500px]">
-  {selectedHomeCard?.illustrator}
-</div>
-
-
+  <div className="border p-3 text-base w-full md:w-[500px]">
+    {selectedHomeCard?.illustrator}
+  </div>
 </div>
 
 </div>
