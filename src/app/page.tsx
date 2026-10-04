@@ -11150,7 +11150,7 @@ onClick={() => {
   </div>
 </div>
 
-<div className="grid grid-cols-[130px_minmax(0,1fr)] gap-4 items-start mb-8 md:flex md:flex-nowrap md:gap-8">
+<div className="grid grid-cols-[120px_minmax(0,1fr)] gap-3 items-start mb-8 md:flex md:flex-nowrap md:gap-8">
 
 <div className="contents md:block">
 
@@ -11372,9 +11372,8 @@ wanted
 <div className="flex-1 min-w-0 order-none">
 
   {/* スマホ用 */}
-  <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-[10px]">
-
-    <div className="grid grid-cols-[78px_minmax(0,1fr)]">
+<div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-[10px]">
+  <div className="grid grid-cols-[105px_minmax(0,1fr)]">
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         カードタイプ
       </div>
