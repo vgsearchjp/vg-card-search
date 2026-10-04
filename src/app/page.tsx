@@ -11369,7 +11369,7 @@ wanted
 
 </div>
 
-<div className="flex-1 min-w-0 order-2 md:order-none">
+<div className="flex-1 min-w-0 order-none">
 
   {/* スマホ用 */}
   <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-sm">
