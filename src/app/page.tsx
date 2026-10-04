@@ -11377,7 +11377,7 @@ wanted
 
   {/* スマホ用 */}
 <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-[10px]">
-  <div className="grid grid-cols-[105px_minmax(0,1fr)]">
+  <div className="grid grid-cols-[95px_minmax(0,1fr)]">
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         カードタイプ
       </div>
