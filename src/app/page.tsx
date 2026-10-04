@@ -1784,6 +1784,8 @@ const [ownedCount, setOwnedCount] = useState(0);
 const [shortageCount, setShortageCount] = useState(0);
 const [collectionData, setCollectionData] = useState<any>(null);
 const [memo, setMemo] = useState("");
+const [showShopPrices, setShowShopPrices] = useState(false);
+const [shopPrices, setShopPrices] = useState<Record<number, string>>({});
 const [favorite, setFavorite] = useState(false);
 const [wanted, setWanted] = useState(false);
 const [favoriteCards, setFavoriteCards] = useState<any[]>([]);
@@ -11760,263 +11762,273 @@ wanted
 </div>
 
 <div className="mt-8 pb-16">
-  <h2 className="text-2xl font-bold mb-4">
+<div className="flex items-center gap-2 mb-4">
+  <h2 className="text-2xl font-bold">
     ショップリンク
   </h2>
 
-  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 w-full md:max-w-[800px]">
+  <button
+    type="button"
+    onClick={() => setShowShopPrices(!showShopPrices)}
+    className="text-xl"
+  >
+    🔽
+  </button>
+</div>
 
-    <button
-  onClick={() =>
-    window.open(
-      `https://dorasuta.jp/vanguard/product-list?kw=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  ドラスタ
-</button>
+ <div className="grid grid-cols-2 md:grid-cols-2 gap-2 w-full md:max-w-[800px]">
 
-    <button
-  onClick={() =>
-    window.open(
-      `https://www.cardrush-vanguard.jp/phone/product-list?search_tmp=検索&keyword=${encodedCardName}&Submit=検索`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  カードラッシュ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://dorasuta.jp/vanguard/product-list?kw=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        ドラスタ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[0] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 0: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-    <button
-  onClick={() =>
-    window.open(
-      `https://www.torecolo.jp/shop/goods/search.aspx?search=x&ct2=1050&keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  トレコロ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.cardrush-vanguard.jp/phone/product-list?search_tmp=検索&keyword=${encodedCardName}&Submit=検索`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        カードラッシュ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[1] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 1: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-    <button
-  onClick={() =>
-    window.open(
-      `https://193tcg.com/products/list?category_id=2&name=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  193
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.torecolo.jp/shop/goods/search.aspx?search=x&ct2=1050&keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        トレコロ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[2] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 2: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-    <button
-  onClick={() =>
-    window.open(
-      `https://www.c-labo-online.jp/product-list?keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  カードラボ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://193tcg.com/products/list?category_id=2&name=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        193
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[3] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 3: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://olta-tcg.com/VG/product/list?keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  オルタ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.c-labo-online.jp/product-list?keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        カードラボ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[4] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 4: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.bigweb.co.jp/ja/products/vg/list?name=${encodedCardName}&is_box=0&is_supply=0&is_purchase=0`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  BIGWEB
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://olta-tcg.com/VG/product/list?keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        オルタ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[5] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 5: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.square-bushiroad.com/phone/product-list?keyword=${encodedCardName}&Submit=検索`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  マスターズスクウェア
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.bigweb.co.jp/ja/products/vg/list?name=${encodedCardName}&is_box=0&is_supply=0&is_purchase=0`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        BIGWEB
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[6] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 6: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.hikahako.com/products/list?name=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  光のハコ舟
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.square-bushiroad.com/phone/product-list?keyword=${encodedCardName}&Submit=検索`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        マスターズスクウェア
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[7] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 7: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://shopmanzokuya.com/products/list?name=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  まんぞく屋
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.hikahako.com/products/list?name=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        光のハコ舟
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[8] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 8: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.advantagetcg.jp/phone/product-list?keyword=${encodedCardName}&Submit=検索`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  アドバンテージ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://shopmanzokuya.com/products/list?name=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        まんぞく屋
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[9] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 9: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.amenitydream.com/phone/product-list?keyword=${encodedCardName}&Submit=検索`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  アメニティドリーム
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.advantagetcg.jp/phone/product-list?keyword=${encodedCardName}&Submit=検索`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        アドバンテージ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[10] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 10: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.manasource.net/product-list?keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  マナソース
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.amenitydream.com/phone/product-list?keyword=${encodedCardName}&Submit=検索`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        アメニティドリーム
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[11] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 11: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.ryuunoshippo4.com/product-list?search_tmp=検索&keyword=${encodedCardName}&Submit=検索`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  竜のしっぽ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.manasource.net/product-list?keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        マナソース
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[12] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 12: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://pao-onlineshop.com/view/search?search_keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  PAO
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.ryuunoshippo4.com/product-list?search_tmp=検索&keyword=${encodedCardName}&Submit=検索`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        竜のしっぽ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[13] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 13: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.tcgshop-noah.net/product-list?search_tmp=検索&keyword=${encodedCardName}&Submit=検索`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  ノア
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://pao-onlineshop.com/view/search?search_keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        PAO
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[14] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 14: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://yuyu-tei.jp/sell/vg/s/search?search_word=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  遊々亭
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.tcgshop-noah.net/product-list?search_tmp=検索&keyword=${encodedCardName}&Submit=検索`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        ノア
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[15] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 15: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.van-happy.com/view/search?search_keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  ヴァンハッピー
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://yuyu-tei.jp/sell/vg/s/search?search_word=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        遊々亭
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[16] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 16: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://www.tcgmp.jp/s/product/?prc_id=5&prg_id=9&word=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  トレマ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.van-happy.com/view/search?search_keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        ヴァンハッピー
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[17] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 17: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://fullahead-vg.com/shop/shopbrand.html?search=${encodedCardName}`,
-      "_blank"
-    )
-  }
-  className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  フルアヘッド
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://www.tcgmp.jp/s/product/?prc_id=5&prg_id=9&word=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        トレマ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[18] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 18: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
-<button
-  onClick={() =>
-    window.open(
-      `https://jp.mercari.com/search?keyword=${encodedCardName}`,
-      "_blank"
-    )
-  }
- className="bg-slate-900 text-white py-2 rounded text-sm"
->
-  メルカリ
-</button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://fullahead-vg.com/shop/shopbrand.html?search=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        フルアヘッド
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[19] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 19: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
+
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={() => window.open(`https://jp.mercari.com/search?keyword=${encodedCardName}`, "_blank")}
+        className="bg-slate-900 text-white py-2 rounded text-sm"
+      >
+        メルカリ
+      </button>
+      {showShopPrices && (
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[20] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 20: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+      )}
+    </div>
 
   </div>
 </div>
