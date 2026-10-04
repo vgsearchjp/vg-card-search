@@ -11499,67 +11499,64 @@ wanted
 
 </div>
 
-<div className="mb-6 w-full col-span-2 md:col-span-auto">
+<div className="mb-6 w-full basis-full md:basis-auto bg-gray-50 border border-gray-200 rounded-xl p-3">
   <h2 className="text-lg font-bold mb-2">
     能力テキスト
   </h2>
 
   <div
-    className="border p-3 text-base min-h-[220px] w-full md:w-[500px]"
+    className="border p-3 text-base min-h-[220px] w-full bg-white rounded-lg"
     dangerouslySetInnerHTML={{
       __html: selectedHomeCard?.card_text || "",
     }}
   />
 </div>
 
-<div className="mb-0 w-full col-span-2 md:w-full">
-  <h2 className="text-lg font-bold">
+<div className="mb-0 w-full basis-full md:basis-auto bg-gray-50 border border-gray-200 rounded-xl p-3">
+  <h2 className="text-lg font-bold mb-2">
     フレーバーテキスト
   </h2>
 
-<div
-  className="border p-3 text-base min-h-[70px] w-full"
-  dangerouslySetInnerHTML={{
-    __html: selectedHomeCard?.flavor_text || "",
-  }}
-/>
+  <div
+    className="border p-3 text-base min-h-[70px] w-full bg-white rounded-lg"
+    dangerouslySetInnerHTML={{
+      __html: selectedHomeCard?.flavor_text || "",
+    }}
+  />
 </div>
 
-<div className="w-full col-span-2 md:col-span-auto mt-6">
+<div className="w-full basis-full md:basis-auto mt-6 bg-gray-50 border border-gray-200 rounded-xl p-3">
   <h2 className="text-lg font-bold mb-2">
     イラストレーター
   </h2>
 
-  <div className="border p-3 text-base w-full md:w-[500px]">
+  <div className="border p-3 text-base w-full bg-white rounded-lg">
     {selectedHomeCard?.illustrator}
   </div>
 </div>
 
 </div>
   
-<div className="mt-0">
+<div className="mt-0 bg-gray-50 border border-gray-200 rounded-xl p-3">
   <h2 className="text-2xl font-bold mb-4">
     メモ
   </h2>
 
   <textarea
-  className="border p-2 w-full md:max-w-[800px] h-[120px]"
-  value={memo}
-  onChange={async (e) => {
+    className="border p-2 w-full md:max-w-[800px] h-[120px] bg-white rounded-lg"
+    value={memo}
+    onChange={async (e) => {
+      const value = e.target.value;
+      setMemo(value);
+      await saveCollection(
+        selectedHomeCard.id,
+        {
+          memo: value,
+        }
+      );
+    }}
+  />
 
-    const value = e.target.value;
-
-    setMemo(value);
-
-    await saveCollection(
-      selectedHomeCard.id,
-      {
-        memo: value,
-      }
-    );
-
-  }}
-/>
 <div className="
 mt-4
 bg-white
