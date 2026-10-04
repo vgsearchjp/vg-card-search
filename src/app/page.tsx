@@ -11117,8 +11117,8 @@ onClick={() => {
     戻る
   </button>
 
-  <h1
-  className="text-2xl md:text-4xl"
+<h1
+  className="text-[16px] md:text-4xl font-bold whitespace-nowrap"
   onTouchStart={() => {
     const timer = setTimeout(() => {
       copyCardName();
@@ -11140,15 +11140,15 @@ onClick={() => {
   </div>
 )}
 
-  <div className="text-xl mb-2">
-    カード番号：
-    {selectedHomeCard?.card_no}
-  </div>
+<div className="flex items-center gap-4 text-base md:text-xl mb-6 whitespace-nowrap">
+  <span>
+    カード番号：{selectedHomeCard?.card_no}
+  </span>
 
-  <div className="text-xl mb-6">
-    レアリティ：
-    【{selectedHomeCard?.rarity}】
-  </div>
+  <span>
+    レアリティ：【{selectedHomeCard?.rarity}】
+  </span>
+</div>
 
 <div className="grid grid-cols-[130px_minmax(0,1fr)] gap-4 items-start mb-8 md:flex md:flex-nowrap md:gap-8">
 
@@ -11369,7 +11369,80 @@ wanted
 
 </div>
 
-<div className="space-y-2 text-base md:text-lg min-w-0 col-start-2 row-start-1 md:col-auto md:row-auto">
+<div className="flex-1 min-w-0 order-2 md:order-none">
+
+  {/* スマホ用 */}
+  <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-sm">
+
+    <div className="grid grid-cols-[110px_minmax(0,1fr)]">
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        カードタイプ
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.card_type}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        国家
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.nation}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        種族
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.race}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        グレード
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.grade}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        パワー
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.power}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        クリティカル
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.critical}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        シールド
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.shield}
+      </div>
+
+      <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
+        アイコン
+      </div>
+      <div className="border-b border-gray-300 px-3 py-2">
+        {selectedHomeCard?.skill_icon}
+      </div>
+
+      <div className="bg-gray-50 border-r border-gray-300 px-3 py-2 font-medium">
+        トリガー
+      </div>
+      <div className="px-3 py-2">
+        {selectedHomeCard?.trigger_type}
+      </div>
+
+    </div>
+  </div>
+
+  {/* PC用 */}
+  <div className="hidden md:block space-y-2 text-lg">
 
     <div>
       カードタイプ：
@@ -11415,6 +11488,9 @@ wanted
       トリガー：
       {selectedHomeCard?.trigger_type}
     </div>
+
+  </div>
+
 </div>
 
 <div className="mb-6 w-full col-span-2 md:col-span-auto">
