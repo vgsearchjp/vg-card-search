@@ -11150,7 +11150,7 @@ onClick={() => {
     【{selectedHomeCard?.rarity}】
   </div>
 
-<div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-8 items-start mb-8">
+<div className="grid grid-cols-[130px_minmax(0,1fr)] gap-4 items-start mb-8 md:flex md:flex-nowrap md:gap-8">
 
 <div className="contents md:block">
 
@@ -11173,10 +11173,8 @@ flex
 items-center
 justify-between
 gap-2
-basis-full
-order-3
-md:basis-auto
-md:order-none
+col-span-2
+md:col-span-auto
 ">
 
 <div className="flex gap-4 items-start">
@@ -11371,7 +11369,7 @@ wanted
 
 </div>
 
-<div className="space-y-2 text-base md:text-lg flex-1 min-w-0 order-2 md:order-none">
+<div className="space-y-2 text-base md:text-lg min-w-0 col-start-2 row-start-1 md:col-auto md:row-auto">
 
     <div>
       カードタイプ：
@@ -11419,7 +11417,7 @@ wanted
     </div>
 </div>
 
-<div className="mb-6 w-full basis-full md:basis-auto">
+<div className="mb-6 w-full col-span-2 md:col-span-auto">
   <h2 className="text-lg font-bold mb-2">
     能力テキスト
   </h2>
@@ -11445,7 +11443,7 @@ wanted
 />
 </div>
 
-<div className="w-full basis-full md:basis-auto mt-6">
+<div className="w-full col-span-2 md:col-span-auto mt-6">
   <h2 className="text-lg font-bold mb-2">
     イラストレーター
   </h2>
