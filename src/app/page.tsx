@@ -50,6 +50,8 @@ const [rarityView, setRarityView] = useState<  "all" | "normal" | "parallel">("a
 const [searchNo, setSearchNo] = useState("");
 const [searchName, setSearchName] = useState("");
 const [searchRarity, setSearchRarity] = useState("");
+const [confirmCardDelete, setConfirmCardDelete] = useState(true);
+const [manageSearchNation, setManageSearchNation] = useState("");
 const [searchGrade,setSearchGrade]=useState("");
 const [searchTrigger,setSearchTrigger]=useState("");
 const [searchParallel,setSearchParallel]=useState("");
@@ -3281,12 +3283,41 @@ const loadAllNations = async () => {
 
 const data = await loadAllCardsCache();
 
-const list = [
+const fixedNations = [
+  "ドラゴンエンパイア",
+  "ダークステイツ",
+  "ブラントゲート",
+  "ケテルサンクチュアリ",
+  "ストイケイア",
+  "リリカルモナステリオ",
+  "刀剣乱舞",
+  "モンスターストライク",
+  "SHAMAN KING",
+  "終末のワルキューレ",
+  "BanG Dream!",
+  "ぶいすぽっ！",
+  "コロコロ",
+  "バディファイト",
+  "イナズマイレブン",
+];
+
+const loadedNations = [
   ...new Set(
     (data ?? [])
-      .map((card) => card.nation)
-      .filter(Boolean)
+      .map((card) => card.nation || "-")
   ),
+];
+
+const list = [
+  ...fixedNations.filter((nation) =>
+    loadedNations.includes(nation)
+  ),
+  ...loadedNations.filter(
+    (nation) =>
+      !fixedNations.includes(nation) &&
+      nation !== "-"
+  ),
+  ...(loadedNations.includes("-") ? ["-"] : []),
 ];
 
 setNationList(list);
@@ -3838,8 +3869,8 @@ const saveCollection = async (
     const result = await supabase
       .from("card_collection")
       .update(updates)
-　　　.eq("card_id", cardId)
-　　　.eq("user_id", user?.id);
+      .eq("card_id", cardId)
+      .eq("user_id", user?.id);
 
   }
 
@@ -3847,9 +3878,11 @@ const saveCollection = async (
 };
 
 const deleteCard = async (id: number) => {
-  const ok = confirm("このカードを削除しますか？");
 
-  if (!ok) return;
+  if (confirmCardDelete) {
+    const ok = confirm("このカードを削除しますか？");
+    if (!ok) return;
+  }
 
   const { error } = await supabase
     .from("cards")
@@ -3862,7 +3895,9 @@ const deleteCard = async (id: number) => {
     return;
   }
 
+if (confirmCardDelete) {
   alert("削除成功");
+}
 
   await resequenceCards();
 
@@ -12010,9 +12045,23 @@ Storageへ保存
 </div>
 
 <div className="mt-10">
-  <h2 className="text-2xl font-bold mb-4">
-    カード管理
-  </h2>
+  <div className="flex items-center gap-3 mb-4">
+    <h2 className="text-2xl font-bold">
+      カード管理
+    </h2>
+
+    <button
+      type="button"
+      className={`border px-3 py-1 ${
+        confirmCardDelete
+          ? "bg-gray-500 text-white"
+          : "bg-white text-black"
+      }`}
+      onClick={() => setConfirmCardDelete((prev) => !prev)}
+    >
+      削除確認：{confirmCardDelete ? "ON" : "OFF"}
+    </button>
+  </div>
   <select
   className="border p-2 w-full max-w-xl"
   value={selectedProductId}
@@ -12076,24 +12125,47 @@ Storageへ保存
   value={searchName}
   onChange={(e) => setSearchName(e.target.value)}
 />
-<select
-  className="border p-2 w-full max-w-xl mb-4"
-  value={searchRarity}
-  onChange={(e) => setSearchRarity(e.target.value)}
->
-  <option value="">
-    全レアリティ
-  </option>
+<div className="flex gap-2 mb-4">
 
-  {rarityList.map((rarity) => (
-    <option
-      key={rarity}
-      value={rarity}
-    >
-      {rarity}
+  <select
+    className="border p-2 w-full max-w-xl"
+    value={searchRarity}
+    onChange={(e) => setSearchRarity(e.target.value)}
+  >
+    <option value="">
+      全レアリティ
     </option>
-  ))}
-</select>
+
+    {rarityList.map((rarity) => (
+      <option
+        key={rarity}
+        value={rarity}
+      >
+        {rarity}
+      </option>
+    ))}
+  </select>
+
+  <select
+    className="border p-2 w-full max-w-xl"
+    value={manageSearchNation}
+    onChange={(e) => setManageSearchNation(e.target.value)}
+  >
+    <option value="">
+      全国家
+    </option>
+
+    {nationList.map((nation) => (
+      <option
+        key={nation}
+        value={nation}
+      >
+        {nation}
+      </option>
+    ))}
+  </select>
+
+</div>
  <div className="flex flex-col md:flex-row gap-4 mt-4">
   
   <div className="order-2 md:order-1 w-full md:w-[500px] h-[500px] overflow-y-scroll border">
@@ -12123,7 +12195,11 @@ const rarityMatch =
   searchRarity === "" ||
   card.rarity === searchRarity;
 
-return noMatch && nameMatch && rarityMatch;
+const nationMatch =
+  manageSearchNation === "" ||
+  card.nation === manageSearchNation;
+
+return noMatch && nameMatch && rarityMatch && nationMatch;
     })
     .map((card) => {
 
