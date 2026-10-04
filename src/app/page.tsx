@@ -2743,15 +2743,19 @@ const searchProductsByCard = async () => {
 const searchCards = async () => {
 
 const keyword = cardSearch.trim();
-  let query = supabase
+let query = supabase
   .from("cards")
   .select(`
     *,
     card_collection (*),
     products (*)
-  `, { count: "exact" })
-if (keyword) {
+  `, { count: "exact" });
 
+if (searchNation) {
+  query = query.eq("nation", searchNation);
+}
+
+if (keyword) {
   const searchConditions =
     searchFields.includes("all")
       ? [
@@ -2766,11 +2770,6 @@ if (keyword) {
         );
 
   query = query.or(searchConditions.join(","));
-
-}
-
-if (searchNation){
-    query=query.eq("nation",searchNation);
 }
 
 if (homeCardType) {
@@ -11151,16 +11150,17 @@ onClick={() => {
     【{selectedHomeCard?.rarity}】
   </div>
 
-  <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
+<div className="flex flex-row md:flex-row gap-4 md:gap-8 items-start mb-8">
 
   <div>
 
 {selectedHomeCard?.image_url && (
   <img
-  src={getCardImage(selectedHomeCard)}
-  alt={selectedHomeCard.card_name}
-  className="w-[220px] md:w-[280px] mb-2"
-/>
+    src={getCardImage(selectedHomeCard)}
+    alt={selectedHomeCard.card_name}
+    onClick={() => setZoomCard(selectedHomeCard)}
+    className="w-[160px] md:w-[280px] mb-2 cursor-pointer"
+  />
 )}
 <div className="
 mt-4
