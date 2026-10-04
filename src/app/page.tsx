@@ -11140,14 +11140,14 @@ onClick={() => {
   </div>
 )}
 
-<div className="flex items-center gap-4 text-base md:text-xl mb-6 whitespace-nowrap">
-  <span>
+<div className="text-base md:text-xl mb-6">
+  <div>
     カード番号：{selectedHomeCard?.card_no}
-  </span>
+  </div>
 
-  <span>
+  <div>
     レアリティ：【{selectedHomeCard?.rarity}】
-  </span>
+  </div>
 </div>
 
 <div className="grid grid-cols-[130px_minmax(0,1fr)] gap-4 items-start mb-8 md:flex md:flex-nowrap md:gap-8">
@@ -11372,22 +11372,22 @@ wanted
 <div className="flex-1 min-w-0 order-none">
 
   {/* スマホ用 */}
-  <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-sm">
+  <div className="md:hidden border border-gray-300 rounded-lg overflow-hidden text-[11px]">
 
-    <div className="grid grid-cols-[110px_minmax(0,1fr)]">
+    <div className="grid grid-cols-[90px_minmax(0,1fr)]">
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         カードタイプ
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.card_type}
-      </div>
+<div className="border-b border-gray-300 px-3 py-2 whitespace-nowrap">
+  {selectedHomeCard?.card_type}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         国家
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.nation}
-      </div>
+<div className="border-b border-gray-300 px-3 py-2 whitespace-nowrap">
+  {selectedHomeCard?.nation}
+</div>
 
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         種族
@@ -11427,9 +11427,9 @@ wanted
       <div className="bg-gray-50 border-b border-r border-gray-300 px-3 py-2 font-medium">
         アイコン
       </div>
-      <div className="border-b border-gray-300 px-3 py-2">
-        {selectedHomeCard?.skill_icon}
-      </div>
+<div className="border-b border-gray-300 px-3 py-2 whitespace-nowrap">
+  {selectedHomeCard?.skill_icon}
+</div>
 
       <div className="bg-gray-50 border-r border-gray-300 px-3 py-2 font-medium">
         トリガー
