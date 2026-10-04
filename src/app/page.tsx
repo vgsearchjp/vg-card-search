@@ -3090,11 +3090,12 @@ const loadCollection = async (
 
   setCollectionData(data);
 
-  if (!data) {
+if (!data) {
   setOwnedCount(0);
   setShortageCount(0);
   setFavorite(false);
   setWanted(false);
+  setShopPrices({});
   return;
 }
   setOwnedCount(data.owned_count || 0);
@@ -3102,6 +3103,7 @@ const loadCollection = async (
   setFavorite(data.favorite || false);
   setWanted(data.wanted || false);
   setMemo(data.memo || "");
+  setShopPrices(data.shop_prices || {});
 };
 const loadFavoriteCards = async () => {
   const { data, error } = await supabase
@@ -11786,7 +11788,12 @@ wanted
         ドラスタ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[0] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 0: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[0] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 0: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11798,7 +11805,12 @@ wanted
         カードラッシュ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[1] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 1: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[1] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 1: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11810,7 +11822,12 @@ wanted
         トレコロ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[2] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 2: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[2] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 2: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11822,7 +11839,12 @@ wanted
         193
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[3] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 3: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[3] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 3: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11834,7 +11856,12 @@ wanted
         カードラボ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[4] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 4: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[4] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 4: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11846,7 +11873,12 @@ wanted
         オルタ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[5] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 5: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[5] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 5: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11858,7 +11890,12 @@ wanted
         BIGWEB
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[6] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 6: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[6] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 6: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11870,7 +11907,12 @@ wanted
         マスターズスクウェア
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[7] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 7: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[7] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 7: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11882,7 +11924,12 @@ wanted
         光のハコ舟
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[8] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 8: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[8] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 8: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11894,7 +11941,12 @@ wanted
         まんぞく屋
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[9] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 9: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[9] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 9: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11906,7 +11958,12 @@ wanted
         アドバンテージ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[10] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 10: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[10] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 10: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11918,7 +11975,12 @@ wanted
         アメニティドリーム
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[11] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 11: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[11] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 11: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11930,7 +11992,12 @@ wanted
         マナソース
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[12] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 12: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[12] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 12: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11942,7 +12009,12 @@ wanted
         竜のしっぽ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[13] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 13: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[13] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 13: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11954,7 +12026,12 @@ wanted
         PAO
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[14] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 14: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[14] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 14: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11966,7 +12043,12 @@ wanted
         ノア
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[15] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 15: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[15] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 15: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11978,7 +12060,12 @@ wanted
         遊々亭
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[16] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 16: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[16] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 16: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -11990,7 +12077,12 @@ wanted
         ヴァンハッピー
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[17] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 17: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[17] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 17: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -12002,7 +12094,12 @@ wanted
         トレマ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[18] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 18: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[18] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 18: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -12014,7 +12111,12 @@ wanted
         フルアヘッド
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[19] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 19: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[19] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 19: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
@@ -12026,7 +12128,12 @@ wanted
         メルカリ
       </button>
       {showShopPrices && (
-        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[20] ?? ""} onChange={(e) => setShopPrices((prev) => ({ ...prev, 20: e.target.value.replace(/[^0-9]/g, "") }))} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" value={shopPrices[20] ?? ""} onChange={async (e) => {
+  const value = e.target.value.replace(/[^0-9]/g, "");
+  const nextPrices = { ...shopPrices, 20: value };
+  setShopPrices(nextPrices);
+  await saveCollection(selectedHomeCard.id, { shop_prices: nextPrices });
+}} placeholder="価格" className="border rounded px-2 py-1 text-center w-full" />
       )}
     </div>
 
