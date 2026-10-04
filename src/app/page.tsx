@@ -10538,7 +10538,7 @@ onClick={() => {
 <div className="flex gap-2 mt-4 items-center">
 
   <button
-    className="bg-gray-500 text-white w-12 h-12 rounded flex-shrink-0 text-2xl -translate-y-[2px]"
+    className="bg-gray-500 text-white w-12 h-12 rounded flex-shrink-0 text-2xl -translate-y-[3px]"
     onClick={() => {
       setCardSearch("");
       setSearchNation("");
@@ -10863,7 +10863,7 @@ onClick={searchCards}
 <div className="flex gap-2 mt-4 items-center">
 
   <button
-    className="bg-gray-500 text-white w-12 h-12 rounded flex-shrink-0 text-2xl -translate-y-[2px]"
+    className="bg-gray-500 text-white w-12 h-12 rounded flex-shrink-0 text-2xl -translate-y-[3px]"
     onClick={() => {
       setCardSearch("");
       setSearchNation("");
