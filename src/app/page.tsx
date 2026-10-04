@@ -11459,7 +11459,209 @@ wanted
   <h2 className="text-2xl font-bold mb-4">
     メモ
   </h2>
+  
+<div className="
+mt-4
+bg-white
+rounded-xl
+shadow
+px-2
+py-3
+flex
+items-center
+justify-between
+gap-2
+flex md:hidden
+">
 
+<div className="flex gap-4 items-start">
+
+<div className="flex flex-col items-center">
+
+<h2 className="text-xs font-bold whitespace-nowrap mb-1">
+所持枚数
+</h2>
+
+<div className="flex items-center gap-2">
+
+      <button
+  onClick={async () => {
+
+    const newCount =
+      Math.max(
+        0,
+        ownedCount - 1
+      );
+
+    setOwnedCount(newCount);
+
+    await saveCollection(
+      selectedHomeCard.id,
+      {
+        owned_count: newCount,
+      }
+    );
+
+  }}
+  className="w-8 h-8 border"
+>
+  -
+</button>
+
+<div className="font-bold w-5 text-center text-sm">
+  {ownedCount}
+</div>
+
+      <button
+  onClick={async () => {
+
+    const newCount =
+      ownedCount + 1;
+
+    setOwnedCount(newCount);
+
+    await saveCollection(
+      selectedHomeCard.id,
+      {
+        owned_count: newCount,
+      }
+    );
+
+  }}
+  className="w-8 h-8 border"
+>
+  +
+</button>
+</div>
+</div>
+
+<div className="flex flex-col items-center">
+
+<h2 className="text-xs font-bold whitespace-nowrap mb-1">
+不足枚数
+</h2>
+
+<div className="flex items-center gap-2">
+
+  <button
+    onClick={async () => {
+
+      const newCount =
+        Math.max(
+          0,
+          shortageCount - 1
+        );
+
+      setShortageCount(newCount);
+
+      await saveCollection(
+        selectedHomeCard.id,
+        {
+          shortage_count: newCount,
+        }
+      );
+
+    }}
+    className="w-8 h-8 border"
+  >
+    -
+  </button>
+
+<div className="font-bold w-5 text-center text-sm">
+  {shortageCount}
+</div>
+
+  <button
+    onClick={async () => {
+
+      const newCount =
+        shortageCount + 1;
+
+      setShortageCount(newCount);
+
+      await saveCollection(
+        selectedHomeCard.id,
+        {
+          shortage_count: newCount,
+        }
+      );
+
+    }}
+    className="w-8 h-8 border"
+  >
+    +
+  </button>
+</div>
+</div>
+
+</div>
+  <div className="flex gap-3 items-center">
+
+    <button
+  onClick={async () => {
+    const next = !favorite;
+
+    setFavorite(next);
+
+    await saveCollection(
+      selectedHomeCard.id,
+      { favorite: next }
+    );
+  }}
+  className={`
+w-12
+h-12
+rounded-full
+border-2
+border-black
+flex
+items-center
+justify-center
+text-2xl
+transition
+${
+favorite
+? "bg-yellow-300"
+: "bg-white"
+}
+`}
+>
+{favorite ? "★" : "☆"}
+</button>
+
+    <button
+  onClick={async () => {
+    const next = !wanted;
+
+    setWanted(next);
+
+    await saveCollection(
+      selectedHomeCard.id,
+      { wanted: next }
+    );
+  }}
+  className={`
+w-12
+h-12
+rounded-full
+border-2
+flex
+items-center
+justify-center
+text-2xl
+transition
+${
+wanted
+? "bg-blue-500 border-blue-600 text-white"
+: "bg-white border-gray-400 text-black"
+}
+`}
+>
+📦
+</button>
+
+</div>
+</div>
   <textarea
   className="border p-2 w-full md:max-w-[800px] h-[120px]"
   value={memo}
