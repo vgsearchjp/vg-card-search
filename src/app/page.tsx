@@ -11444,7 +11444,7 @@ wanted
         トリガー
       </div>
 <div className="px-2 py-2 whitespace-nowrap">
-  {selectedHomeCard?.trigger_type?.replace(/\s*[＋+]\s*10000/g, "")}
+ {selectedHomeCard?.trigger_type?.replace(/\s*[＋+]\s*\d+/g, "")}
 </div>
 
     </div>
