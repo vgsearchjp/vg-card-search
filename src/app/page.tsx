@@ -15,6 +15,7 @@ import { toPng } from "html-to-image";
 import DeckImageForSave from "@/components/DeckImageForSave";
 import { FiArrowLeft } from "react-icons/fi";
 import { generateDeckImage } from "@/lib/canvasTest";
+import { jsPDF } from "jspdf";
 
 export default function Home() {
   const isIOS =
@@ -60,10 +61,60 @@ const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
 const [proxyCards, setProxyCards] = useState<{id: string; file: File; previewUrl: string; quantity: number}[]>([]);
 const proxyPrintCards = proxyCards.flatMap((card) => Array.from({ length: card.quantity }, () => card));
-const proxyPages = [];
+const proxyPages: typeof proxyPrintCards[] = [];
 for (let i = 0; i < proxyPrintCards.length; i += 9) {
   proxyPages.push(proxyPrintCards.slice(i, i + 9));
 }
+const createProxyPDF = async () => {
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
+
+  for (let pageIndex = 0; pageIndex < proxyPages.length; pageIndex++) {
+    if (pageIndex > 0) pdf.addPage();
+
+    const page = proxyPages[pageIndex];
+
+    for (let cardIndex = 0; cardIndex < page.length; cardIndex++) {
+      const card = page[cardIndex];
+
+      const column = cardIndex % 3;
+      const row = Math.floor(cardIndex / 3);
+
+      const x = 16.5 + column * 59;
+      const y = 19.5 + row * 86;
+
+      const imageData = await new Promise<string>((resolve, reject) => {
+        const image = new Image();
+
+        image.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = image.naturalWidth;
+          canvas.height = image.naturalHeight;
+
+          const context = canvas.getContext("2d");
+
+          if (!context) {
+            reject(new Error("Canvas取得失敗"));
+            return;
+          }
+
+          context.drawImage(image, 0, 0);
+          resolve(canvas.toDataURL("image/jpeg", 0.95));
+        };
+
+        image.onerror = () => reject(new Error("画像読み込み失敗"));
+        image.src = card.previewUrl;
+      });
+
+      pdf.addImage(imageData, "JPEG", x, y, 59, 86);
+    }
+  }
+
+  pdf.save("proxy-cards.pdf");
+};
 const [showManageMenu, setShowManageMenu] = useState(false);
 const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
@@ -4991,8 +5042,80 @@ activeTab === "proxy" && (
 
 </div>
 )}
-{proxyPrintCards.length > 0 && (<div className="mt-10"><h3 className="text-lg font-bold mb-4">印刷プレビュー</h3><button className="border px-4 py-2 mb-4 hover:bg-gray-100">PDFを作成</button><div className="space-y-8">{proxyPages.map((page, pageIndex) => (<div key={pageIndex} className="mx-auto bg-white border shadow-sm" style={{width:"210mm",height:"297mm",padding:"19.5mm 16.5mm",boxSizing:"border-box"}}><div className="grid grid-cols-3" style={{width:"177mm",height:"258mm",gridTemplateRows:"repeat(3, 86mm)",gridTemplateColumns:"repeat(3, 59mm)"}}>{page.map((card, cardIndex) => (<div key={`${card.id}-${cardIndex}`} style={{width:"59mm",height:"86mm"}}><img src={card.previewUrl} alt="" style={{width:"59mm",height:"86mm",objectFit:"fill",display:"block"}} /></div>))}</div></div>))}</div></div>)}
+{proxyPrintCards.length > 0 && (
+  <div className="mt-10">
 
+    <h3 className="text-lg font-bold mb-4">
+      印刷プレビュー
+    </h3>
+
+<button
+  onClick={createProxyPDF}
+  className="border px-4 py-2 mb-4 hover:bg-gray-100"
+>
+  PDFを作成
+</button>
+
+    <div className="space-y-8">
+
+      {proxyPages.map((page, pageIndex) => (
+
+        <div
+          key={pageIndex}
+          className="mx-auto bg-white border shadow-sm"
+          style={{
+            width: "210mm",
+            height: "297mm",
+            padding: "19.5mm 16.5mm",
+            boxSizing: "border-box",
+          }}
+        >
+
+          <div
+            className="grid grid-cols-3"
+            style={{
+              width: "177mm",
+              height: "258mm",
+              gridTemplateRows: "repeat(3, 86mm)",
+              gridTemplateColumns: "repeat(3, 59mm)",
+            }}
+          >
+
+            {page.map((card, cardIndex) => (
+
+              <div
+                key={`${card.id}-${cardIndex}`}
+                style={{
+                  width: "59mm",
+                  height: "86mm",
+                }}
+              >
+
+                <img
+                  src={card.previewUrl}
+                  alt=""
+                  style={{
+                    width: "59mm",
+                    height: "86mm",
+                    objectFit: "fill",
+                    display: "block",
+                  }}
+                />
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+)}
 </div>
 
 </div>
