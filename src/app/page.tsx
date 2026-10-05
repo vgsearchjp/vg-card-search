@@ -5067,7 +5067,7 @@ activeTab === "proxy" && (
 
 {proxyPages.map((page, pageIndex) => (
 
-  <div className="w-[85mm] h-[121.34mm] md:w-[210mm] md:h-[297mm] mx-auto">
+  <div className="w-[85mm] h-[123mm] md:w-[210mm] md:h-[297mm] mx-auto -translate-x-1 md:translate-x-0">
 
     <div
       key={pageIndex}
