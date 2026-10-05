@@ -11146,7 +11146,7 @@ onClick={() => {
 
 <div className="text-base md:text-xl mb-6">
   <div>
-    カード番号：{selectedHomeCard?.card_no}
+    収録商品：{selectedHomeCard?.products?.product_name}　{selectedHomeCard?.card_no}
   </div>
 
   <div>
