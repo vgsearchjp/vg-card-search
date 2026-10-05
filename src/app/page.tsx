@@ -11505,9 +11505,9 @@ wanted
 </div>
 
 <div className="mb-6 w-full basis-full md:basis-auto bg-gray-50 border border-gray-200 rounded-xl p-3">
-  <h2 className="text-lg font-bold mb-2">
-    能力テキスト
-  </h2>
+<h2 className="text-base font-bold mb-2">
+  能力テキスト
+</h2>
 
   <div
     className="border p-3 text-base min-h-[220px] w-full bg-white rounded-lg"
