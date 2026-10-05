@@ -4871,7 +4871,7 @@ activeTab === "tools" && (
 
 <div className="p-4">
 
-<div className="grid grid-cols-3 gap-3 md:block">
+<div className="flex flex-wrap gap-3">
 
 <button
   onClick={() => setActiveTab("proxy")}
