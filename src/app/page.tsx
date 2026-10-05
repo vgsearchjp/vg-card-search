@@ -4880,6 +4880,13 @@ activeTab === "tools" && (
   プロキシメーカー
 </button>
 
+<button
+  onClick={() => setShowLimitModal(true)}
+  className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+>
+  制限カード一覧
+</button>
+
 </div>
 
 </div>
