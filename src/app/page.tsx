@@ -11509,12 +11509,12 @@ wanted
   能力テキスト
 </h2>
 
-  <div
-    className="border p-3 text-base min-h-[220px] w-full bg-white rounded-lg"
-    dangerouslySetInnerHTML={{
-      __html: selectedHomeCard?.card_text || "",
-    }}
-  />
+<div
+  className="border p-3 text-sm min-h-[220px] w-full bg-white rounded-lg"
+  dangerouslySetInnerHTML={{
+    __html: selectedHomeCard?.card_text || "",
+  }}
+/>
 </div>
 
 <div className="mb-0 w-full basis-full md:basis-auto bg-gray-50 border border-gray-200 rounded-xl p-3">
