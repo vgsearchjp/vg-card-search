@@ -59,6 +59,11 @@ const [rarityList, setRarityList] = useState<string[]>([]);
 const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
 const [proxyCards, setProxyCards] = useState<{id: string; file: File; previewUrl: string; quantity: number}[]>([]);
+const proxyPrintCards = proxyCards.flatMap((card) => Array.from({ length: card.quantity }, () => card));
+const proxyPages = [];
+for (let i = 0; i < proxyPrintCards.length; i += 9) {
+  proxyPages.push(proxyPrintCards.slice(i, i + 9));
+}
 const [showManageMenu, setShowManageMenu] = useState(false);
 const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
@@ -4935,17 +4940,60 @@ activeTab === "proxy" && (
     ＋
   </button>
 
+  <button
+  onClick={() => {
+    URL.revokeObjectURL(card.previewUrl);
+
+    setProxyCards((prev) =>
+      prev.filter((item) => item.id !== card.id)
+    );
+  }}
+  className="border px-3 py-1 text-red-600"
+>
+  🗑
+</button>
+
+<label className="border px-3 py-1 cursor-pointer inline-block ml-2">
+  ✎
+  <input
+    type="file"
+    accept="image/*"
+    className="hidden"
+    onChange={(e) => {
+      const newFile = e.target.files?.[0];
+      if (!newFile) return;
+
+      const newPreviewUrl = URL.createObjectURL(newFile);
+
+      setProxyCards((prev) =>
+        prev.map((item) =>
+          item.id === card.id
+            ? {
+                ...item,
+                file: newFile,
+                previewUrl: newPreviewUrl,
+              }
+            : item
+        )
+      );
+
+      URL.revokeObjectURL(card.previewUrl);
+      e.target.value = "";
+    }}
+  />
+</label>
+
 </div>
 
-          </div>
+</div>
 
-        ))}
+))}
 
-      </div>
+</div>
+)}
+{proxyPrintCards.length > 0 && (<div className="mt-10"><h3 className="text-lg font-bold mb-4">印刷プレビュー</h3><div className="space-y-8">{proxyPages.map((page, pageIndex) => (<div key={pageIndex} className="mx-auto bg-white border shadow-sm" style={{width:"210mm",height:"297mm",padding:"19.5mm 16.5mm",boxSizing:"border-box"}}><div className="grid grid-cols-3" style={{width:"177mm",height:"258mm",gridTemplateRows:"repeat(3, 86mm)",gridTemplateColumns:"repeat(3, 59mm)"}}>{page.map((card, cardIndex) => (<div key={`${card.id}-${cardIndex}`} style={{width:"59mm",height:"86mm"}}><img src={card.previewUrl} alt="" style={{width:"59mm",height:"86mm",objectFit:"fill",display:"block"}} /></div>))}</div></div>))}</div></div>)}
 
-    )}
-
-  </div>
+</div>
 
 </div>
 
