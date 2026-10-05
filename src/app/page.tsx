@@ -58,6 +58,7 @@ const [searchParallel,setSearchParallel]=useState("");
 const [rarityList, setRarityList] = useState<string[]>([]);
 const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
+const [proxyCards, setProxyCards] = useState<{id: string; file: File; previewUrl: string; quantity: number}[]>([]);
 const [showManageMenu, setShowManageMenu] = useState(false);
 const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
@@ -4538,15 +4539,14 @@ className="bg-white text-black py-2 px-6 border hover:bg-gray-200" >
 
 <button
 onClick={() => {
-setActiveTab("wanted");
+setActiveTab("tools");
 setHomeView("products");
 setSelectedHomeProduct(null);
 setSelectedHomeCard(null);
-loadWantedCards();
 }}
 className="bg-white text-black py-2 px-6 border hover:bg-gray-200">
 
-欲しいもの
+その他・ツール
 </button>
 
 <button
@@ -4661,16 +4661,15 @@ onClick={()=>{
   お気に入り
 </button>
 
-   <button
-   onClick={() => {
-    setActiveTab("wanted");
+<button
+  onClick={() => {
+    setActiveTab("tools");
     setHomeView("products");
     setSelectedHomeProduct(null);
     setSelectedHomeCard(null);
-    loadWantedCards();
 }}
 className="bg-white text-black py-2 px-2 text-sm md:text-base whitespace-nowrap border hover:bg-gray-200">
-  欲しいもの
+  その他・ツール
 </button>
 </div>
 
@@ -4810,6 +4809,147 @@ onClick={()=>{
 </div>
 
 <div className="max-w-full px-4">
+
+{user &&
+activeTab === "tools" && (
+
+<div className="p-4">
+
+<button
+  onClick={() => setActiveTab("proxy")}
+  className="bg-white text-black border px-6 py-4 rounded-lg font-bold"
+>
+  プロキシメーカー
+</button>
+
+</div>
+
+)}
+
+{user &&
+activeTab === "proxy" && (
+
+<div className="p-4">
+
+  <button
+    onClick={() => setActiveTab("tools")}
+    className="border px-4 py-2 mb-6 hover:bg-gray-100"
+  >
+    ← 戻る
+  </button>
+
+  <h2 className="text-2xl font-bold mb-6">
+    プロキシメーカー
+  </h2>
+
+  <div className="border rounded-lg p-6 bg-white">
+
+    <h3 className="text-lg font-bold mb-4">
+      カード登録
+    </h3>
+
+    <label className="inline-block bg-white border px-4 py-2 cursor-pointer hover:bg-gray-100">
+      画像を追加
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+
+          const files = Array.from(e.target.files || []);
+
+          const newCards = files.map((file) => ({
+            id: crypto.randomUUID(),
+            file,
+            previewUrl: URL.createObjectURL(file),
+            quantity: 1,
+          }));
+
+          setProxyCards((prev) => [
+            ...prev,
+            ...newCards,
+          ]);
+
+          e.target.value = "";
+        }}
+      />
+    </label>
+
+    {proxyCards.length > 0 && (
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+
+        {proxyCards.map((card) => (
+
+          <div
+            key={card.id}
+            className="border rounded-lg p-2 bg-gray-50"
+          >
+
+<img
+  src={card.previewUrl}
+  alt=""
+  className="w-full"
+/>
+
+<div className="flex items-center justify-center gap-2 mt-2">
+
+  <button
+    onClick={() => {
+      setProxyCards((prev) =>
+        prev.map((item) =>
+          item.id === card.id
+            ? {
+                ...item,
+                quantity: Math.max(0, item.quantity - 1),
+              }
+            : item
+        )
+      );
+    }}
+    className="border px-3 py-1"
+  >
+    −
+  </button>
+
+  <div className="w-8 text-center font-bold">
+    {card.quantity}
+  </div>
+
+  <button
+    onClick={() => {
+      setProxyCards((prev) =>
+        prev.map((item) =>
+          item.id === card.id
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+              }
+            : item
+        )
+      );
+    }}
+    className="border px-3 py-1"
+  >
+    ＋
+  </button>
+
+</div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    )}
+
+  </div>
+
+</div>
+
+)}
 
 {user &&
 activeTab === "favorite" && (
