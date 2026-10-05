@@ -13804,16 +13804,23 @@ className="max-h-[90vh] max-w-[90vw]"
     onClick={() => setShowLimitModal(false)}
   >
     <div
-  className="bg-white rounded-lg shadow-lg w-[95%] max-w-5xl max-h-[90vh] overflow-y-auto"
+  className="bg-white rounded-lg shadow-lg w-[95%] max-w-5xl max-h-[80vh] overflow-y-auto"
   onClick={(e)=>e.stopPropagation()}
 >
 
-      <div className="flex items-center justify-between border-b p-4">
-        <h2 className="text-xl font-bold">
-          制限カード一覧
-        </h2>
+<div className="flex items-center justify-between border-b p-4">
+  <h2 className="text-xl font-bold">
+    制限カード一覧
+  </h2>
 
-      </div>
+  <button
+    onClick={() => setShowLimitModal(false)}
+    className="text-2xl font-bold px-2"
+  >
+    ✕
+  </button>
+
+</div>
 <div className="p-4">
 
   <h3 className="text-lg font-bold mb-3">
