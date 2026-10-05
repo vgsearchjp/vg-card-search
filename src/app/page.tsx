@@ -4875,7 +4875,7 @@ activeTab === "tools" && (
 
 <button
   onClick={() => setActiveTab("proxy")}
-  className="w-full aspect-[3/4] bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+  className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
   プロキシメーカー
 </button>
