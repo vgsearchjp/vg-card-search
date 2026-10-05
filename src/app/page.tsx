@@ -4869,7 +4869,7 @@ onClick={()=>{
 {user &&
 activeTab === "tools" && (
 
-<div className="p-4">
+<div className="p-4 pb-16">
 
 <button
   onClick={() => setActiveTab("proxy")}
@@ -5067,7 +5067,7 @@ activeTab === "proxy" && (
 
 {proxyPages.map((page, pageIndex) => (
 
-  <div className="w-[85mm] h-[123mm] md:w-[210mm] md:h-[297mm] mx-auto -translate-x-1 md:translate-x-0">
+  <div className="w-[85mm] h-[121.34mm] md:w-[210mm] md:h-[297mm] mx-auto">
 
     <div
       key={pageIndex}
