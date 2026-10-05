@@ -11656,37 +11656,6 @@ favorite
 {favorite ? "★" : "☆"}
 </button>
 
-    <button
-  onClick={async () => {
-    const next = !wanted;
-
-    setWanted(next);
-
-    await saveCollection(
-      selectedHomeCard.id,
-      { wanted: next }
-    );
-  }}
-  className={`
-w-12
-h-12
-rounded-full
-border-2
-flex
-items-center
-justify-center
-text-2xl
-transition
-${
-wanted
-? "bg-blue-500 border-blue-600 text-white"
-: "bg-white border-gray-400 text-black"
-}
-`}
->
-📦
-</button>
-
 </div>
 
 </div>
@@ -12047,37 +12016,6 @@ favorite
 `}
 >
 {favorite ? "★" : "☆"}
-</button>
-
-    <button
-  onClick={async () => {
-    const next = !wanted;
-
-    setWanted(next);
-
-    await saveCollection(
-      selectedHomeCard.id,
-      { wanted: next }
-    );
-  }}
-  className={`
-w-12
-h-12
-rounded-full
-border-2
-flex
-items-center
-justify-center
-text-2xl
-transition
-${
-wanted
-? "bg-blue-500 border-blue-600 text-white"
-: "bg-white border-gray-400 text-black"
-}
-`}
->
-📦
 </button>
 
 </div>
