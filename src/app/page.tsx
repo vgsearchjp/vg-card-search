@@ -5066,7 +5066,7 @@ activeTab === "proxy" && (
 
 <div
   key={pageIndex}
-  className="mx-auto bg-white border shadow-sm w-[calc(100vw-2rem)] md:w-[210mm] aspect-[210/297]"
+  className="mx-auto bg-white border shadow-sm w-[calc(100vw-3rem)] md:w-[210mm] aspect-[210/297]"
   style={{
     padding: "6.566% 7.857%",
     boxSizing: "border-box",
@@ -5076,28 +5076,22 @@ activeTab === "proxy" && (
   className="grid grid-cols-3 w-full h-full"
 >
 
-            {page.map((card, cardIndex) => (
+ {page.map((card, cardIndex) => (
 
-              <div
-                key={`${card.id}-${cardIndex}`}
-                style={{
-                  width: "59mm",
-                  height: "86mm",
-                }}
-              >
-
-                <img
-                  src={card.previewUrl}
-                  alt=""
-                  style={{
-                    width: "59mm",
-                    height: "86mm",
-                    objectFit: "fill",
-                    display: "block",
-                  }}
-                />
-
-              </div>
+<div
+  key={`${card.id}-${cardIndex}`}
+  className="w-full h-full"
+>
+  <img
+    src={card.previewUrl}
+    alt=""
+    className="w-full h-full"
+    style={{
+      objectFit: "fill",
+      display: "block",
+    }}
+  />
+</div>
 
             ))}
 
