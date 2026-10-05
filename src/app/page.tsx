@@ -5071,7 +5071,7 @@ activeTab === "proxy" && (
 
     <div
       key={pageIndex}
-      className="mx-auto bg-white border shadow-sm origin-top-left scale-[0.42857] md:scale-100"
+      className="mx-auto bg-white border shadow-sm origin-top-left scale-[0.42857] -translate-x-4 md:scale-100 md:translate-x-0"
       style={{
         width: "210mm",
         height: "297mm",
