@@ -4951,7 +4951,7 @@ activeTab === "proxy" && (
 
 <div className="flex flex-col items-center gap-2 mt-2">
 
-  <div className="flex items-center justify-center gap-2">
+  <div className="flex items-center justify-center gap-3 px-2">
     <button
       onClick={() => {
         setProxyCards((prev) =>
