@@ -4869,14 +4869,18 @@ onClick={()=>{
 {user &&
 activeTab === "tools" && (
 
-<div className="p-4 pb-16">
+<div className="p-4">
+
+<div className="grid grid-cols-3 gap-3 md:block">
 
 <button
   onClick={() => setActiveTab("proxy")}
-  className="bg-white text-black border px-6 py-4 rounded-lg font-bold"
+  className="w-full aspect-[3/4] bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
   プロキシメーカー
 </button>
+
+</div>
 
 </div>
 
