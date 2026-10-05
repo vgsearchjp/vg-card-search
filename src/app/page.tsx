@@ -5046,6 +5046,9 @@ activeTab === "proxy" && (
 
 </div>
 )}
+
+</div>
+
 {proxyPrintCards.length > 0 && (
   <div className="mt-10">
 
@@ -5119,8 +5122,6 @@ activeTab === "proxy" && (
 
 </div>
 )}
-</div>
-
 </div>
 
 )}
