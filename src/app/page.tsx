@@ -4991,7 +4991,7 @@ activeTab === "proxy" && (
 
 </div>
 )}
-{proxyPrintCards.length > 0 && (<div className="mt-10"><h3 className="text-lg font-bold mb-4">印刷プレビュー</h3><div className="space-y-8">{proxyPages.map((page, pageIndex) => (<div key={pageIndex} className="mx-auto bg-white border shadow-sm" style={{width:"210mm",height:"297mm",padding:"19.5mm 16.5mm",boxSizing:"border-box"}}><div className="grid grid-cols-3" style={{width:"177mm",height:"258mm",gridTemplateRows:"repeat(3, 86mm)",gridTemplateColumns:"repeat(3, 59mm)"}}>{page.map((card, cardIndex) => (<div key={`${card.id}-${cardIndex}`} style={{width:"59mm",height:"86mm"}}><img src={card.previewUrl} alt="" style={{width:"59mm",height:"86mm",objectFit:"fill",display:"block"}} /></div>))}</div></div>))}</div></div>)}
+{proxyPrintCards.length > 0 && (<div className="mt-10"><h3 className="text-lg font-bold mb-4">印刷プレビュー</h3><button className="border px-4 py-2 mb-4 hover:bg-gray-100">PDFを作成</button><div className="space-y-8">{proxyPages.map((page, pageIndex) => (<div key={pageIndex} className="mx-auto bg-white border shadow-sm" style={{width:"210mm",height:"297mm",padding:"19.5mm 16.5mm",boxSizing:"border-box"}}><div className="grid grid-cols-3" style={{width:"177mm",height:"258mm",gridTemplateRows:"repeat(3, 86mm)",gridTemplateColumns:"repeat(3, 59mm)"}}>{page.map((card, cardIndex) => (<div key={`${card.id}-${cardIndex}`} style={{width:"59mm",height:"86mm"}}><img src={card.previewUrl} alt="" style={{width:"59mm",height:"86mm",objectFit:"fill",display:"block"}} /></div>))}</div></div>))}</div></div>)}
 
 </div>
 
