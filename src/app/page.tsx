@@ -4949,95 +4949,99 @@ activeTab === "proxy" && (
   className="w-full"
 />
 
-<div className="flex items-center justify-center gap-2 mt-2">
+<div className="flex flex-col items-center gap-2 mt-2">
 
-  <button
-    onClick={() => {
-      setProxyCards((prev) =>
-        prev.map((item) =>
-          item.id === card.id
-            ? {
-                ...item,
-                quantity: Math.max(0, item.quantity - 1),
-              }
-            : item
-        )
-      );
-    }}
-    className="border px-3 py-1"
-  >
-    −
-  </button>
+  <div className="flex items-center justify-center gap-2">
+    <button
+      onClick={() => {
+        setProxyCards((prev) =>
+          prev.map((item) =>
+            item.id === card.id
+              ? {
+                  ...item,
+                  quantity: Math.max(0, item.quantity - 1),
+                }
+              : item
+          )
+        );
+      }}
+      className="border px-3 py-1"
+    >
+      −
+    </button>
 
-  <div className="w-8 text-center font-bold">
-    {card.quantity}
+    <div className="w-8 text-center font-bold">
+      {card.quantity}
+    </div>
+
+    <button
+      onClick={() => {
+        setProxyCards((prev) =>
+          prev.map((item) =>
+            item.id === card.id
+              ? {
+                  ...item,
+                  quantity: item.quantity + 1,
+                }
+              : item
+          )
+        );
+      }}
+      className="border px-3 py-1"
+    >
+      ＋
+    </button>
   </div>
 
-  <button
-    onClick={() => {
-      setProxyCards((prev) =>
-        prev.map((item) =>
-          item.id === card.id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-            : item
-        )
-      );
-    }}
-    className="border px-3 py-1"
-  >
-    ＋
-  </button>
+  <div className="flex items-center justify-center gap-2">
 
-  <button
-  onClick={() => {
-    URL.revokeObjectURL(card.previewUrl);
+    <button
+      onClick={() => {
+        URL.revokeObjectURL(card.previewUrl);
 
-    setProxyCards((prev) =>
-      prev.filter((item) => item.id !== card.id)
-    );
-  }}
-  className="border px-3 py-1 text-red-600"
->
-  🗑
-</button>
+        setProxyCards((prev) =>
+          prev.filter((item) => item.id !== card.id)
+        );
+      }}
+      className="border px-3 py-1 text-red-600"
+    >
+      🗑
+    </button>
 
-<label className="border px-3 py-1 cursor-pointer inline-block ml-2">
-  ✎
-  <input
-    type="file"
-    accept="image/*"
-    className="hidden"
-    onChange={(e) => {
-      const newFile = e.target.files?.[0];
-      if (!newFile) return;
+    <label className="border px-3 py-1 cursor-pointer inline-block">
+      ✎
+      <input
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const newFile = e.target.files?.[0];
+          if (!newFile) return;
 
-      const newPreviewUrl = URL.createObjectURL(newFile);
+          const newPreviewUrl = URL.createObjectURL(newFile);
 
-      setProxyCards((prev) =>
-        prev.map((item) =>
-          item.id === card.id
-            ? {
-                ...item,
-                file: newFile,
-                previewUrl: newPreviewUrl,
-              }
-            : item
-        )
-      );
+          setProxyCards((prev) =>
+            prev.map((item) =>
+              item.id === card.id
+                ? {
+                    ...item,
+                    file: newFile,
+                    previewUrl: newPreviewUrl,
+                  }
+                : item
+            )
+          );
 
-      URL.revokeObjectURL(card.previewUrl);
-      e.target.value = "";
-    }}
-  />
-</label>
+          URL.revokeObjectURL(card.previewUrl);
+          e.target.value = "";
+        }}
+      />
+    </label>
+
+  </div>
 
 </div>
-
 </div>
-
 ))}
 
 </div>
