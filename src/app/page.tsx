@@ -5062,18 +5062,21 @@ activeTab === "proxy" && (
 
     <div className="space-y-8">
 
-      {proxyPages.map((page, pageIndex) => (
+{proxyPages.map((page, pageIndex) => (
 
-<div
-  key={pageIndex}
-  className="mx-auto bg-white border shadow-sm"
-style={{
-  width: "210mm",
-  height: "297mm",
-  padding: "19.5mm 16.5mm",
-  boxSizing: "border-box",
-}}
->
+  <div className="w-[90mm] h-[127.29mm] md:w-[210mm] md:h-[297mm] mx-auto">
+
+    <div
+      key={pageIndex}
+      className="mx-auto bg-white border shadow-sm origin-top-left scale-[0.42857] md:scale-100"
+      style={{
+        width: "210mm",
+        height: "297mm",
+        padding: "19.5mm 16.5mm",
+        boxSizing: "border-box",
+      }}
+    >
+
 <div
   className="grid grid-cols-3"
   style={{
@@ -5110,7 +5113,7 @@ style={{
           </div>
 
         </div>
-
+ </div>
       ))}
 
     </div>
