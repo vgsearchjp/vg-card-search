@@ -13436,7 +13436,7 @@ OFF：新規登録後すぐに利用できます。
 <div className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center"onClick={()=>setZoomCard(null)}>
 
 <div
-className="bg-white p-4 rounded"
+className="bg-white p-4 rounded flex flex-col items-center"
 onClick={(e)=>
 e.stopPropagation()
 }
@@ -13447,6 +13447,15 @@ src={getCardImage(zoomCard)}
 alt={zoomCard.card_name}
 className="max-h-[90vh] max-w-[90vw]"
 />
+
+<div className="mt-3 text-center">
+  <div className="text-sm text-gray-600">
+    {zoomCard.card_no}
+  </div>
+  <div className="text-base font-bold">
+    {zoomCard.card_name}
+  </div>
+</div>
 
 </div>
 
