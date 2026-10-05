@@ -5064,26 +5064,17 @@ activeTab === "proxy" && (
 
       {proxyPages.map((page, pageIndex) => (
 
-        <div
-          key={pageIndex}
-          className="mx-auto bg-white border shadow-sm"
-          style={{
-            width: "210mm",
-            height: "297mm",
-            padding: "19.5mm 16.5mm",
-            boxSizing: "border-box",
-          }}
-        >
-
-          <div
-            className="grid grid-cols-3"
-            style={{
-              width: "177mm",
-              height: "258mm",
-              gridTemplateRows: "repeat(3, 86mm)",
-              gridTemplateColumns: "repeat(3, 59mm)",
-            }}
-          >
+<div
+  key={pageIndex}
+  className="mx-auto bg-white border shadow-sm w-[calc(100vw-2rem)] md:w-[210mm] aspect-[210/297]"
+  style={{
+    padding: "6.566% 7.857%",
+    boxSizing: "border-box",
+  }}
+>
+ <div
+  className="grid grid-cols-3 w-full h-full"
+>
 
             {page.map((card, cardIndex) => (
 
