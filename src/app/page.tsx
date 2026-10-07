@@ -145,6 +145,7 @@ const [hideSameCard, setHideSameCard] = useState(false);
 const [deckNation, setDeckNation] =useState("");
 const [includeNationless, setIncludeNationless] = useState(false);
 const [decks, setDecks] = useState<any[]>([]);
+const [decklogSelectMode, setDecklogSelectMode] = useState(false);
 const [deckSearch, setDeckSearch] =useState("");
 const [deckRideG3Images,setDeckRideG3Images] = useState<any>({});
 const [rideG3, setRideG3] = useState<any>(null);
@@ -3647,12 +3648,13 @@ setDeckView("list");
 
 const createDecklogTransfer = async (deck: any) => {
 
-  const rideIds = [
-    deck.ride_g3,
-    deck.ride_g2,
-    deck.ride_g1,
-    deck.ride_g0,
-  ].filter(Boolean);
+const rideIds = [
+  deck.ride_g3,
+  deck.ride_g2,
+  deck.ride_g1,
+  deck.ride_g0,
+  deck.ride_generator,
+].filter(Boolean);
 
   const rideCards = [];
 
@@ -5398,6 +5400,15 @@ className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl 
   1人回し
 </button>
 
+<button
+  onClick={() => {
+    setDecklogSelectMode(true);
+  }}
+  className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded ml-2"
+>
+  DECK LOGへ登録
+</button>
+
 <div className="mt-6 grid grid-cols-2 md:flex md:flex-wrap gap-4 w-full">
 
   {decks
@@ -5438,6 +5449,12 @@ md:h-[150px]
 "
     
 onClick={async () => {
+
+if (decklogSelectMode) {
+  await createDecklogTransfer(deck);
+  setDecklogSelectMode(false);
+  return;
+}
 
 if (onePlayerMode) {
   setSelectedDeck(deck);
