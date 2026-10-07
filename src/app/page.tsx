@@ -3645,6 +3645,74 @@ setDeckView("list");
 
 };
 
+const createDecklogTransfer = async (deck: any) => {
+
+  const rideIds = [
+    deck.ride_g3,
+    deck.ride_g2,
+    deck.ride_g1,
+    deck.ride_g0,
+  ].filter(Boolean);
+
+  const rideCards = [];
+
+  for (const id of rideIds) {
+    const card = await loadCardById(id);
+
+    if (card) {
+      rideCards.push({
+        cardNo: card.card_no,
+        count: 1,
+      });
+    }
+  }
+
+  const mainCards = Object.values(
+    (deck.main_deck || []).reduce((acc: any, card: any) => {
+      if (!acc[card.card_no]) {
+        acc[card.card_no] = {
+          cardNo: card.card_no,
+          count: 0,
+        };
+      }
+
+      acc[card.card_no].count++;
+
+      return acc;
+    }, {})
+  );
+
+  const deckData = {
+    deckName: deck.deck_name,
+    nation: deck.nation,
+    ride: rideCards,
+    main: mainCards,
+  };
+
+  console.log("DECKLOG TRANSFER DATA", deckData);
+
+  const { data, error } = await supabase
+    .from("decklog_transfer")
+    .insert({
+      deck_data: deckData,
+    })
+    .select("id")
+    .single();
+
+  if (error) {
+    console.log("DECKLOG TRANSFER ERROR", error);
+    alert("DECK LOG用データの作成に失敗しました");
+    return;
+  }
+
+  console.log("DECKLOG TRANSFER ID", data.id);
+
+  alert(
+    "DECK LOG用データを作成しました\n\nID:\n" +
+    data.id
+  );
+};
+
 const deleteDeck = async (
   deckId: number
 ) => {
