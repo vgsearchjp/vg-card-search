@@ -5258,7 +5258,7 @@ activeTab === "favorite" && (
     お気に入り一覧
   </h2>
 */}
-  <div className="grid grid-cols-2 md:grid-cols-10 gap-4">
+<div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4">
 
     {favoriteCards.map((item) => (
   <div
