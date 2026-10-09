@@ -5260,7 +5260,7 @@ activeTab === "proxy" && (
       {favoriteCards.map((item) => (
         <div
           key={item.id}
-          className="border rounded p-2 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-3"
+          className="border rounded p-1.5 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-2 md:gap-3"
           onClick={() => {
             setPreviousTab("favorite");
             window.history.pushState({ view: "favorite-detail" }, "", "");
@@ -5276,7 +5276,7 @@ activeTab === "proxy" && (
             <img
               src={getCardImage(item.cards)}
               alt=""
-              className="w-28 shrink-0 object-contain md:w-full"
+              className="w-24 shrink-0 object-contain md:w-full"
             />
           )}
 
