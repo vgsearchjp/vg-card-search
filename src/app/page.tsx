@@ -3647,7 +3647,7 @@ setDeckView("list");
 };
 
 const createDecklogTransfer = async (deck: any) => {
-  console.log("転送元の必殺技デッキ", deck.finisher_deck);
+
 
 const rideIds = [
   deck.ride_g3,
@@ -3746,10 +3746,13 @@ const rideIds = [
 
   console.log("DECKLOG TRANSFER ID", data.id);
 
-  alert(
-    "DECK LOG用データを作成しました\n\nID:\n" +
-    data.id
-  );
+const decklogUrl = `https://decklog.bushiroad.com/create?c=1&id=${data.id}`;
+
+const message = `DECK LOG用データを作成しました\n\nURL:\n${decklogUrl}\n\nID:\n${data.id}`;
+
+await navigator.clipboard.writeText(decklogUrl).catch(() => {});
+
+alert(message);
 };
 
 const deleteDeck = async (
