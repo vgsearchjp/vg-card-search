@@ -3684,12 +3684,30 @@ const rideIds = [
     }, {})
   );
 
+
+  const gDeckCards = [];
+
+  for (const item of (deck.g_deck || [])) {
+    const cardId = typeof item === "object" ? item.id : item;
+    const count = typeof item === "object" ? (item.count || 1) : 1;
+    const card = await loadCardById(cardId);
+
+    if (card) {
+      gDeckCards.push({
+        cardNo: card.card_no,
+        count,
+      });
+    }
+  }
+
   const deckData = {
     deckName: deck.deck_name,
     nation: deck.nation,
     ride: rideCards,
     main: mainCards,
+    gDeck: gDeckCards,
   };
+
 
   console.log("DECKLOG TRANSFER DATA", deckData);
 
