@@ -5293,12 +5293,13 @@ activeTab === "favorite" && (
       />
     )}
 
-<div className="font-semibold mt-2 line-clamp-2">
+<div className="text-sm md:text-base font-semibold mt-2 line-clamp-2">
   {item.cards?.card_name}
 </div>
 
 <div className="text-sm mt-1">
-  所持：{item.owned_count || 0} / 不足：{item.shortage_count || 0}
+  <div>所持：{item.owned_count || 0}</div>
+  <div>不足：{item.shortage_count || 0}</div>
 </div>
   </div>
 ))}
