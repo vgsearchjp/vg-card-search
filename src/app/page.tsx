@@ -3205,10 +3205,10 @@ const loadDecks = async () => {
   const { data, error } = await supabase
     .from("decks")
     .select("*")
-    .order(
-      "created_at",
-      { ascending: false }
-    );
+ .order(
+  "updated_at",
+  { ascending: false }
+);
 
   if (error) {
     console.log(
@@ -3553,8 +3553,9 @@ if (mainDeck.length !== 50) {
     await supabase
       .from("decks")
       .update({
-       deck_name: deckName,
-       nation: deckNation,
+  deck_name: deckName,
+  nation: deckNation,
+  updated_at: new Date().toISOString(),
 
       ride_g3: rideG3?.id ?? null,
       ride_g2: rideG2?.id ?? null,
