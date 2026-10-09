@@ -5258,12 +5258,12 @@ activeTab === "favorite" && (
     お気に入り一覧
   </h2>
 */}
-<div className="grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-4">
+<div className="grid grid-cols-1 gap-3 md:grid-cols-10 md:gap-4">
 
     {favoriteCards.map((item) => (
-  <div
-    key={item.id}
-    className="border rounded p-3 bg-white cursor-pointer"
+<div
+  key={item.id}
+  className="border rounded p-2 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-3 md:block"
     onClick={() => {
 
   setPreviousTab("favorite");
