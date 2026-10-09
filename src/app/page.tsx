@@ -5387,79 +5387,68 @@ setActiveTab("home");
 </h2>
 */}
 
-<div className="p-0 md:p-4">
-
+<div className="p-0 mb-3 md:mb-0 md:p-4">
   <input
     type="text"
     value={deckSearch}
-    onChange={(e) =>
-      setDeckSearch(
-        e.target.value
-      )
-    }
+    onChange={(e) => setDeckSearch(e.target.value)}
     placeholder="デッキ検索"
-    className="
-      border
-      rounded
-      p-3
-      w-[300px]
-    "
+    className="border rounded p-3 w-[300px]"
   />
-
 </div>
 
+<div className="overflow-x-auto mb-4 md:mb-0">
+  <div className="flex w-max items-center gap-2 md:w-auto">
+    <button
+      onClick={() => {
+        setSelectedDeck(null);
+        setDeckName("");
+        setDeckNation("");
+        setRideG3(null);
+        setRideG2(null);
+        setRideG1(null);
+        setRideG0(null);
+        setRideGenerator(null);
+        setMainDeck([]);
+        setGDeck([]);
+        setFinisherDeck([]);
+        setDeckView("edit");
+      }}
+      className="shrink-0 bg-blue-500 text-white px-3 py-2 text-sm md:px-4 md:py-2 md:text-2xl rounded"
+    >
+      ＋ 新規デッキ
+    </button>
+
+    <button
+      onClick={() => {
+        setOnePlayerMode(true);
+      }}
+      className="shrink-0 bg-green-500 text-white px-3 py-2 text-sm md:px-4 md:py-2 md:text-2xl rounded"
+    >
+      1人回し
+    </button>
+
+    <div className="inline-flex shrink-0 items-center gap-1">
       <button
-  onClick={() => {
+        onClick={() => setDecklogSelectMode(true)}
+        className="shrink-0 bg-black text-white px-3 py-2 text-sm md:px-4 md:py-2 md:text-2xl rounded"
+      >
+        デッキログへ登録(iOS版)
+      </button>
 
-setSelectedDeck(null);
-setDeckName("");
-setDeckNation("");
-
-setRideG3(null);
-setRideG2(null);
-setRideG1(null);
-setRideG0(null);
-setRideGenerator(null);
-
-setMainDeck([]);
-setGDeck([]);
-setFinisherDeck([]);
-
-setDeckView("edit");
-
-  }}
-className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded"
->
-  ＋ 新規デッキ
-</button>
-<button
-  onClick={() => {
-    setOnePlayerMode(true);
-  }}
-  className="bg-green-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded ml-2"
->
-  1人回し
-</button>
-
-<div className="inline-flex items-center gap-1 ml-2">
-  <button
-    onClick={() => setDecklogSelectMode(true)}
-    className="bg-black text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded"
-  >
-    デッキログへ登録(iOS版)
-  </button>
-  <button
-    type="button"
-    onClick={() => setDecklogHelpOpen(true)}
-    aria-label="デッキログ登録の使い方"
-    className="bg-black text-white border border-white/40 rounded-full w-8 h-8 text-lg font-bold"
-  >
-    ？
-  </button>
+      <button
+        type="button"
+        onClick={() => setDecklogHelpOpen(true)}
+        aria-label="デッキログ登録の使い方"
+        className="shrink-0 bg-black text-white border border-white/40 rounded-full w-8 h-8 text-lg font-bold"
+      >
+        ？
+      </button>
+    </div>
+  </div>
 </div>
 
 <div className="mt-6 grid grid-cols-2 md:flex md:flex-wrap gap-4 w-full">
-
   {decks
   .filter((deck) =>
     deck.deck_name
