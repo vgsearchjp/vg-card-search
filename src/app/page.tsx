@@ -3647,6 +3647,7 @@ setDeckView("list");
 };
 
 const createDecklogTransfer = async (deck: any) => {
+  console.log("転送元の必殺技デッキ", deck.finisher_deck);
 
 const rideIds = [
   deck.ride_g3,
