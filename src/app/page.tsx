@@ -14195,6 +14195,9 @@ className="max-h-[90vh] max-w-[90vw]"
         <li>デッキログでブックマークレットを実行します。</li>
         <li>登録完了後、内容を確認してDECK LOG側で手動保存します。</li>
       </ol>
+       <p className="mt-2 text-sm">
+            ※先にログイン操作を行った後にURLを開き、ブックマークレットを実行するのがオススメです。
+       </p>
 
       <h3 className="mt-5 font-bold">ブックマークレット</h3>
 
