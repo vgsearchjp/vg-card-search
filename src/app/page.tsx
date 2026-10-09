@@ -14209,7 +14209,7 @@ className="max-h-[90vh] max-w-[90vw]"
 
       <h3 className="mt-5 font-bold">ブックマークレット</h3>
 
-<div className="mt-2 text-sm text-gray-600">
+<div className="mt-2 text-sm">
   <p className="mb-2 font-bold">
     初回のみ、ブックマークを作成してください。
   </p>
