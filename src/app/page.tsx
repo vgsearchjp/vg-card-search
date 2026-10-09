@@ -147,6 +147,8 @@ const [includeNationless, setIncludeNationless] = useState(false);
 const [decks, setDecks] = useState<any[]>([]);
 const [decklogSelectMode, setDecklogSelectMode] = useState(false);
 const [deckSearch, setDeckSearch] =useState("");
+const [decklogResult, setDecklogResult] = useState<{id: string; url: string} | null>(null);
+const [decklogCreating, setDecklogCreating] = useState(false);
 const [deckRideG3Images,setDeckRideG3Images] = useState<any>({});
 const [rideG3, setRideG3] = useState<any>(null);
 const [rideG2, setRideG2] = useState<any>(null);
@@ -3746,13 +3748,10 @@ const rideIds = [
 
   console.log("DECKLOG TRANSFER ID", data.id);
 
+console.log("DECKLOG TRANSFER ID", data.id);
+
 const decklogUrl = `https://decklog.bushiroad.com/create?c=1&id=${data.id}`;
-
-const message = `DECK LOG用データを作成しました\n\nURL:\n${decklogUrl}\n\nID:\n${data.id}`;
-
-await navigator.clipboard.writeText(decklogUrl).catch(() => {});
-
-alert(message);
+setDecklogResult({ id: data.id, url: decklogUrl });
 };
 
 const deleteDeck = async (
@@ -14134,6 +14133,48 @@ className="max-h-[90vh] max-w-[90vw]"
 </div>
 </div>
 </div>
+)}
+
+{decklogResult && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+    <div className="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
+      <h2 className="text-lg font-bold">
+        DECK LOG用データを作成しました
+      </h2>
+
+      <p className="mt-3 text-sm">
+        デッキの転送データを作成しました。
+      </p>
+
+      <a
+        href={decklogResult.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 block rounded bg-blue-600 px-4 py-3 text-center font-semibold text-white"
+      >
+        DECK LOGを開く
+      </a>
+
+      <p className="mt-4 text-sm text-gray-500">転送ID</p>
+      <p className="break-all text-sm">{decklogResult.id}</p>
+
+      <div className="mt-5 flex justify-end gap-2">
+        <button
+          onClick={() => navigator.clipboard.writeText(decklogResult.url)}
+          className="rounded border px-4 py-2"
+        >
+          URLをコピー
+        </button>
+
+        <button
+          onClick={() => setDecklogResult(null)}
+          className="rounded bg-gray-200 px-4 py-2"
+        >
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
 )}
 
 </main>
