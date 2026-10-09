@@ -14208,9 +14208,22 @@ className="max-h-[90vh] max-w-[90vw]"
       </ol>
 
       <h3 className="mt-5 font-bold">ブックマークレット</h3>
-      <p className="mt-2 text-sm text-gray-600">
-        下のコードをコピーし、SafariのブックマークのURL欄に登録してください。
-      </p>
+
+<div className="mt-2 text-sm text-gray-600">
+  <p className="mb-2 font-bold">
+    初回のみ、ブックマークを作成してください。
+  </p>
+  <ol className="list-decimal pl-5 space-y-1">
+    <li>Safariで適当なページをブックマークに追加します。</li>
+    <li>ブックマークの名前を「DECK LOG自動登録」などに変更します。</li>
+    <li>作成したブックマークの編集画面を開き、URL欄を下のブックマークレットのコードに置き換えて保存します。</li>
+    <li>以降は、DECK LOGのデッキ作成画面を開き、このブックマークを選ぶと自動登録を実行できます。</li>
+  </ol>
+  <p className="mt-2">
+    ※ ブックマークレットのコードは、下の「ブックマークレットをコピー」ボタンからコピーしてください。
+  </p>
+</div>
+
 
       <textarea
   readOnly
