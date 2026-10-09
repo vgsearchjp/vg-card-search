@@ -149,6 +149,8 @@ const [decklogSelectMode, setDecklogSelectMode] = useState(false);
 const [deckSearch, setDeckSearch] =useState("");
 const [decklogResult, setDecklogResult] = useState<{id: string; url: string} | null>(null);
 const [decklogCreating, setDecklogCreating] = useState(false);
+const [decklogHelpOpen, setDecklogHelpOpen] = useState(false);
+const decklogBookmarklet = String.raw`javascript:(async()=>{try{const wait=ms=>new Promise(r=>setTimeout(r,ms));const id=new URL(location.href).searchParams.get("id");if(!id)throw Error("idがありません");const r=await fetch("https://cardvg.vercel.app/api/decklog-transfer?id="+encodeURIComponent(id));if(!r.ok)throw Error("転送データ取得失敗: "+r.status);const d=await r.json(),deck=d.deck_data;if(!deck)throw Error("デッキデータがありません");const regulation=document.querySelector('input[name="regulation"][value="D"]');if(regulation){regulation.click();await wait(1200)}const nation=[...document.querySelectorAll("select")].find(e=>[...e.options].some(o=>o.value===deck.nation));if(nation){nation.value=deck.nation;nation.dispatchEvent(new Event("change",{bubbles:true}));nation.dispatchEvent(new Event("input",{bubbles:true}));await wait(1200)}const input=()=>{const e=[...document.querySelectorAll("input")].find(e=>e.placeholder==="キーワードを入力");if(!e)throw Error("キーワード欄が見つかりません");return e};const setSearch=no=>{const i=input();i.focus();Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value").set.call(i,no);i.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:"insertText",data:no}));i.dispatchEvent(new Event("change",{bubbles:true}));i.dispatchEvent(new KeyboardEvent("keyup",{bubbles:true,key:"7"}))};const findCard=no=>document.querySelector('img.card-search-item[title^="'+no+'"]');const selectLabel=t=>{const e=[...document.querySelectorAll("label")].find(e=>e.textContent?.trim()===t);if(!e)throw Error(t+"のlabelが見つかりません");e.click()};const registerCard=async(no,count)=>{setSearch(no);await wait(2000);let f=findCard(no);if(!f)throw Error(no+"のカードが見つかりません");f.click();await wait(500);for(let n=0;n<count;n++){f=findCard(no);if(!f)throw Error(no+"のカードが見つかりません");f.click();await wait(800)}};const registerList=async cards=>{const grouped=Object.values((cards||[]).reduce((a,c)=>{if(!c?.cardNo)return a;if(!a[c.cardNo])a[c.cardNo]={cardNo:c.cardNo,count:0};a[c.cardNo].count+=Number(c.count||1);return a},{})).sort((a,b)=>a.cardNo.localeCompare(b.cardNo,undefined,{numeric:true}));for(const c of grouped)await registerCard(c.cardNo,c.count);return grouped.reduce((s,c)=>s+c.count,0)};const ride=deck.ride||[];if(ride.length<5)throw Error("ライドデッキ5枚のデータがありません");await registerCard(ride[0].cardNo,1);selectLabel("グレード2");await wait(300);await registerCard(ride[1].cardNo,1);selectLabel("グレード1");await wait(300);await registerCard(ride[2].cardNo,1);selectLabel("グレード0");await wait(300);await registerCard(ride[3].cardNo,1);selectLabel("ライドデッキクレスト");await wait(300);await registerCard(ride[4].cardNo,1);selectLabel("通常デッキ");await wait(500);const main=await registerList(deck.main||[]);let g=0;if((deck.gDeck||[]).length){const e=document.querySelector('input[type="radio"][value="G"]');if(e){e.click();await wait(500);g=await registerList(deck.gDeck)}}let f=0;if((deck.finisherDeck||[]).length){const e=document.querySelector('input[type="radio"][value="F"]');if(e){e.click();await wait(500);f=await registerList(deck.finisherDeck)}}alert("自動登録が完了しました\n\nライドデッキ: 5枚\n通常デッキ: "+main+"枚\nGデッキ: "+g+"枚\n必殺技デッキ: "+f+"枚\n\nDECK LOGで内容を確認して手動保存してください")}catch(e){alert("エラー: "+e.message)}})()`;
 const [deckRideG3Images,setDeckRideG3Images] = useState<any>({});
 const [rideG3, setRideG3] = useState<any>(null);
 const [rideG2, setRideG2] = useState<any>(null);
@@ -5439,14 +5441,22 @@ className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl 
   1人回し
 </button>
 
-<button
-  onClick={() => {
-    setDecklogSelectMode(true);
-  }}
-  className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded ml-2"
->
-  デッキログへ登録(ios版)
-</button>
+<div className="inline-flex items-center gap-1 ml-2">
+  <button
+    onClick={() => setDecklogSelectMode(true)}
+    className="bg-black text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded"
+  >
+    デッキログへ登録(iOS版)
+  </button>
+  <button
+    type="button"
+    onClick={() => setDecklogHelpOpen(true)}
+    aria-label="デッキログ登録の使い方"
+    className="bg-black text-white border border-white/40 rounded-full w-8 h-8 text-lg font-bold"
+  >
+    ？
+  </button>
+</div>
 
 <div className="mt-6 grid grid-cols-2 md:flex md:flex-wrap gap-4 w-full">
 
@@ -14173,6 +14183,64 @@ className="max-h-[90vh] max-w-[90vw]"
           閉じる
         </button>
       </div>
+    </div>
+  </div>
+)}
+
+{decklogHelpOpen && (
+  <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4">
+    <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-xl bg-white p-5 text-black shadow-xl">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-xl font-bold">DECK LOGへの登録方法（iOS版）</h2>
+        <button
+          onClick={() => setDecklogHelpOpen(false)}
+          className="rounded bg-gray-200 px-3 py-2"
+        >
+          閉じる
+        </button>
+      </div>
+
+      <ol className="list-decimal pl-5 mt-4 space-y-2">
+        <li>この画面で「デッキログへ登録」を押し、登録するデッキを選択します。</li>
+        <li>作成完了画面に表示されたリンクからDECK LOGを開きます。</li>
+        <li>デッキログでブックマークレットを実行します。</li>
+        <li>登録完了後、内容を確認してDECK LOG側で手動保存します。</li>
+      </ol>
+
+      <h3 className="mt-5 font-bold">ブックマークレット</h3>
+      <p className="mt-2 text-sm text-gray-600">
+        下のコードをコピーし、SafariのブックマークのURL欄に登録してください。
+      </p>
+
+      <textarea
+  readOnly
+  value={decklogBookmarklet}
+  rows={6}
+  className="mt-3 w-full rounded border border-gray-300 p-3 text-xs"
+  onFocus={(e) => e.currentTarget.select()}
+/>
+
+<button
+  type="button"
+  onClick={async () => {
+    try {
+      await navigator.clipboard.writeText(decklogBookmarklet);
+      alert("ブックマークレットをコピーしました");
+    } catch {
+      alert("コピーできませんでした。コード欄を長押ししてコピーしてください。");
+    }
+  }}
+  className="mt-2 w-full rounded bg-black px-4 py-3 text-white"
+>
+  ブックマークレットをコピー
+</button>
+
+      <button
+        onClick={() => setDecklogHelpOpen(false)}
+        className="mt-4 w-full rounded bg-black px-4 py-3 text-white"
+      >
+        閉じる
+      </button>
     </div>
   </div>
 )}
