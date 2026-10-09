@@ -3700,13 +3700,31 @@ const rideIds = [
     }
   }
 
+
+  const finisherCards = [];
+
+  for (const item of (deck.finisher_deck || [])) {
+    const cardId = typeof item === "object" ? item.id : item;
+    const count = typeof item === "object" ? (item.count || 1) : 1;
+    const card = await loadCardById(cardId);
+
+    if (card) {
+      finisherCards.push({
+        cardNo: card.card_no,
+        count,
+      });
+    }
+  }
+
   const deckData = {
     deckName: deck.deck_name,
     nation: deck.nation,
     ride: rideCards,
     main: mainCards,
     gDeck: gDeckCards,
+    finisherDeck: finisherCards,
   };
+
 
 
   console.log("DECKLOG TRANSFER DATA", deckData);
