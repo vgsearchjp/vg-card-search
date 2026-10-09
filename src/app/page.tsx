@@ -5249,69 +5249,53 @@ activeTab === "proxy" && (
 
 )}
 
-{user &&
-activeTab === "favorite" && (
+{user && activeTab === "favorite" && (
+  <div>
+    {/*
+    <h2 className="text-3xl font-bold mb-6">
+      お気に入り一覧
+    </h2>
+    */}
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-10 md:gap-4">
+      {favoriteCards.map((item) => (
+        <div
+          key={item.id}
+          className="border rounded p-2 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-3"
+          onClick={() => {
+            setPreviousTab("favorite");
+            window.history.pushState({ view: "favorite-detail" }, "", "");
+            setHomeDetailFrom("favorite");
+            setSelectedHomeCard(item.cards);
+            loadCollection(item.cards.id);
+            setHomeView("detail");
+            setActiveTab("home");
+            window.scrollTo({ top: 0, behavior: "instant" });
+          }}
+        >
+          {item.cards?.image_url && (
+            <img
+              src={getCardImage(item.cards)}
+              alt=""
+              className="w-28 shrink-0 object-contain md:w-full"
+            />
+          )}
 
-<div>
-{/*
-  <h2 className="text-3xl font-bold mb-6">
-    お気に入り一覧
-  </h2>
-*/}
-<div className="grid grid-cols-1 gap-3 md:grid-cols-10 md:gap-4">
-
-    {favoriteCards.map((item) => (
-<div
-  key={item.id}
-  className="border rounded p-2 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-3 md:block"
-    onClick={() => {
-
-  setPreviousTab("favorite");
-
-  window.history.pushState(
-    { view: "favorite-detail" },
-    "",
-    ""
-  );
-  setHomeDetailFrom("favorite");
-  setSelectedHomeCard(item.cards);
-  loadCollection(item.cards.id);
-  setHomeView("detail");
-  setActiveTab("home");
-  window.scrollTo({
-  top: 0,
-  behavior: "instant"
-});
-
-}}
-  >
-    {item.cards?.image_url && (
-      <img
-        src={getCardImage(item.cards)}
-        alt=""
-        className="w-full"
-      />
-    )}
-
-<div className="text-sm md:text-base font-semibold mt-2 line-clamp-2">
-  {item.cards?.card_name}
-</div>
-
-<div className="text-sm mt-1">
-  <div>所持：{item.owned_count || 0}</div>
-  <div>不足：{item.shortage_count || 0}</div>
-</div>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-semibold break-words">
+              {item.cards?.card_name}
+            </div>
+            <div className="text-sm mt-1">
+              <div>所持：{item.owned_count || 0}</div>
+              <div>不足：{item.shortage_count || 0}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
-))}
-
-  </div>
-
-</div>
-
 )}
 
-{user &&
-activeTab === "wanted" && (
+{user && activeTab === "wanted" && (
 
 <div>
 {/*
