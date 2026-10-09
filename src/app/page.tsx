@@ -5445,7 +5445,7 @@ className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl 
   }}
   className="bg-blue-500 text-white px-4 py-3 text-lg md:px-4 md:py-2 md:text-2xl rounded ml-2"
 >
-  DECK LOGへ登録
+  デッキログへ登録(ios版)
 </button>
 
 <div className="mt-6 grid grid-cols-2 md:flex md:flex-wrap gap-4 w-full">
