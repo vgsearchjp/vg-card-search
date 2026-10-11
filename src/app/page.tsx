@@ -12112,25 +12112,27 @@ flex md:hidden
 
 <div className="fixed bottom-6 right-6 z-50 flex items-center md:hidden">
 
-  <button
-    onClick={async () => {
-      const next = !favorite;
-
-      setFavorite(next);
-
-      await saveCollection(
-        selectedHomeCard.id,
-        { favorite: next }
-      );
-    }}
-    className={`
-      w-12 h-12 rounded-full border-2 border-black
-      bg-white flex items-center justify-center text-2xl transition
-      ${favorite ? "text-yellow-400" : "text-black"}
-    `}
-  >
-    {favorite ? "★" : "☆"}
-  </button>
+<button
+  onClick={async () => {
+    const next = !favorite;
+    setFavorite(next);
+    await saveCollection(selectedHomeCard.id, { favorite: next });
+  }}
+  className={`
+    w-12 h-12 rounded-full
+    border-2 border-black
+    flex items-center justify-center text-2xl
+    transition
+    ${favorite ? "text-yellow-400" : "text-white"}
+  `}
+  style={{
+    background: "rgba(80, 80, 80, 0.60)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.18)",
+  }}
+>
+  {favorite ? "★" : "☆"}
+</button>
 
 </div>
 
