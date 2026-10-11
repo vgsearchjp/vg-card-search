@@ -11748,30 +11748,40 @@ hidden md:flex
 </div>
   <div className="flex gap-3 items-center">
 
-<div className="fixed bottom-6 right-6 z-50 flex items-center md:hidden">
+    <button
+  onClick={async () => {
+    const next = !favorite;
 
-  <button
-    onClick={async () => {
-      const next = !favorite;
+    setFavorite(next);
 
-      setFavorite(next);
-
-      await saveCollection(
-        selectedHomeCard.id,
-        { favorite: next }
-      );
-    }}
-    className={`
-      w-12 h-12 rounded-full border-2 border-black
-      bg-white flex items-center justify-center text-2xl transition
-      ${favorite ? "text-yellow-400" : "text-black"}
-    `}
-  >
-    {favorite ? "★" : "☆"}
-  </button>
+    await saveCollection(
+      selectedHomeCard.id,
+      { favorite: next }
+    );
+  }}
+  className={`
+w-12
+h-12
+rounded-full
+border-2
+border-black
+flex
+items-center
+justify-center
+text-2xl
+transition
+${
+favorite
+? "bg-yellow-300"
+: "bg-white"
+}
+`}
+>
+{favorite ? "★" : "☆"}
+</button>
 
 </div>
-</div>
+
 </div>
 
 </div>
@@ -12100,37 +12110,29 @@ flex md:hidden
 </div>
   <div className="flex gap-3 items-center">
 
-    <button
-  onClick={async () => {
-    const next = !favorite;
+<div className="fixed bottom-6 right-6 z-50 flex items-center md:hidden">
 
-    setFavorite(next);
+  <button
+    onClick={async () => {
+      const next = !favorite;
 
-    await saveCollection(
-      selectedHomeCard.id,
-      { favorite: next }
-    );
-  }}
-  className={`
-w-12
-h-12
-rounded-full
-border-2
-border-black
-flex
-items-center
-justify-center
-text-2xl
-transition
-${
-favorite
-? "bg-yellow-300"
-: "bg-white"
-}
-`}
->
-{favorite ? "★" : "☆"}
-</button>
+      setFavorite(next);
+
+      await saveCollection(
+        selectedHomeCard.id,
+        { favorite: next }
+      );
+    }}
+    className={`
+      w-12 h-12 rounded-full border-2 border-black
+      bg-white flex items-center justify-center text-2xl transition
+      ${favorite ? "text-yellow-400" : "text-black"}
+    `}
+  >
+    {favorite ? "★" : "☆"}
+  </button>
+
+</div>
 
 </div>
 </div>
