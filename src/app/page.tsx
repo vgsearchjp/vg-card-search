@@ -2566,9 +2566,12 @@ if (cache && cache.length > 0) {
     return cache;
   }
 
-  if (count === cache.length) {
-    return cache;
-  }
+if (
+  count === cache.length &&
+  cache.every((card: any) => card.products?.product_code)
+) {
+  return cache;
+}
 }
 
 const { data, error } = await supabase
@@ -2584,10 +2587,10 @@ const { data, error } = await supabase
     card_type,
     trigger_type,
     sort_order,
-
-    products (
-      sort_order
-    )
+products (
+  product_code,
+  sort_order
+)
   `)
   .order("sort_order", {
     referencedTable: "products",
@@ -2612,6 +2615,59 @@ return data || [];
 
 };
 
+
+const getSpecialParallelCardIds = (cards: any[]) => {
+  const groups = new Map<string, any[]>();
+
+  for (const card of cards) {
+    const name = card.card_name?.trim();
+    if (!name || !card.products?.product_code) continue;
+
+    if (!groups.has(name)) {
+      groups.set(name, []);
+    }
+
+    groups.get(name)!.push(card);
+  }
+
+  const parallelIds = new Set<number>();
+
+  for (const group of groups.values()) {
+    const prCards = group.filter(
+      card => /^PR-/i.test(card.products.product_code)
+    );
+
+    const normalCards = group.filter(
+      card => !/^PR-/i.test(card.products.product_code)
+    );
+
+    // 通常商品とPR商品の両方に同名カードがある場合
+    if (normalCards.length > 0 && prCards.length > 0) {
+      for (const card of prCards) {
+        parallelIds.add(card.id);
+      }
+      continue;
+    }
+
+    // PR商品同士に同名カードがある場合
+    if (prCards.length > 1) {
+      const sorted = [...prCards].sort((a, b) => {
+        const codeA = a.products.product_code;
+        const codeB = b.products.product_code;
+
+        const numberA = Number(codeA.match(/\d+/)?.[0] ?? 0);
+        const numberB = Number(codeB.match(/\d+/)?.[0] ?? 0);
+
+        return numberB - numberA;
+      });
+
+      parallelIds.add(sorted[0].id);
+    }
+  }
+
+  return parallelIds;
+};
+
 const filterDeckCards = (
   cards: any[],
   nation: string,
@@ -2625,6 +2681,7 @@ const filterDeckCards = (
   mode: string
 ) => {
 
+const specialParallelIds = getSpecialParallelCardIds(cards);
   let result = [...cards];
 
   if (include) {
@@ -2695,17 +2752,21 @@ if (!cardType) {
     );
   }
 
-  if (parallel === "normal") {
-    result = result.filter(
-      card => allNormalRarities.includes(card.rarity)
-    );
-  }
+if (parallel === "normal") {
+  result = result.filter(
+    card =>
+      allNormalRarities.includes(card.rarity) &&
+      !specialParallelIds.has(card.id)
+  );
+}
 
-  if (parallel === "parallel") {
-    result = result.filter(
-      card => allParallelRarities.includes(card.rarity)
-    );
-  }
+if (parallel === "parallel") {
+  result = result.filter(
+    card =>
+      allParallelRarities.includes(card.rarity) ||
+      specialParallelIds.has(card.id)
+  );
+}
 
   result.sort((a, b) => {
 
@@ -3394,7 +3455,7 @@ const getNationCardsCache = async (
   nation: string,
   includeNationless: boolean
 ) => {
-  const cache = await getAllCardsCache();
+  const cache = await loadAllCardsCache();
 
   if (!cache || cache.length === 0) {
     return null;
@@ -3408,7 +3469,14 @@ const getNationCardsCache = async (
     (card: any) => nations.includes(card.nation)
   );
 
-  return result.length > 0 ? result : null;
+  if (
+    result.length > 0 &&
+    result.every((card: any) => card.products?.product_code)
+  ) {
+    return result;
+  }
+
+  return null;
 };
 
 const loadCardsByNation = async (
@@ -3438,9 +3506,10 @@ const loadCardsByNation = async (
       card_type,
       trigger_type,
       sort_order,
-      products (
-        sort_order
-      )
+products (
+  product_code,
+  sort_order
+)
     `)
     .in(
       "nation",
@@ -3461,20 +3530,18 @@ const result = data || [];
 if (result.length > 0) {
   const allCache = (await getAllCardsCache()) ?? [];
 
-  const existingIds = new Set(
-    allCache.map((card: any) => card.id)
-  );
+ const resultById = new Map(
+  result.map((card: any) => [card.id, card])
+);
 
-  const newCards = result.filter(
-    (card: any) => !existingIds.has(card.id)
-  );
+const updatedCache = [
+  ...allCache.filter(
+    (card: any) => !resultById.has(card.id)
+  ),
+  ...result,
+];
 
-  if (newCards.length > 0) {
-    await saveAllCardsCache([
-      ...allCache,
-      ...newCards,
-    ]);
-  }
+await saveAllCardsCache(updatedCache);
 }
 
 return result;
