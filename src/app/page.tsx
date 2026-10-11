@@ -49,6 +49,7 @@ const [imageUrl, setImageUrl] = useState("");
 const [cards, setCards] = useState<any[]>([]);
 const [deckSearchCards, setDeckSearchCards] = useState<any[]>([]);
 const [rarityView, setRarityView] = useState<  "all" | "normal" | "parallel">("all");
+const [specialParallelCardIds, setSpecialParallelCardIds] = useState<Set<number>>(new Set());
 const [searchNo, setSearchNo] = useState("");
 const [searchName, setSearchName] = useState("");
 const [searchRarity, setSearchRarity] = useState("");
@@ -1915,6 +1916,24 @@ useEffect(() => {
     `${Math.round(r.width)} / left:${Math.round(r.left)} / right:${Math.round(r.right)}`
   );
 }, [onePlayerMode]);
+useEffect(() => {
+  let cancelled = false;
+
+  const loadSpecialParallelIds = async () => {
+    const allCards = await loadAllCardsCache();
+    const ids = getSpecialParallelCardIds(allCards);
+
+    if (!cancelled) {
+      setSpecialParallelCardIds(ids);
+    }
+  };
+
+  loadSpecialParallelIds();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
 const APP_TITLE = "VGカード検索 ";
 const FloatingBackButton = ({ onClick }: { onClick: () => void }) => (
   <button
@@ -11527,13 +11546,19 @@ const parallelList =
     ?.split(",")
     .map((r: string) => r.trim()) || [];
 
-      if (rarityView === "normal") {
-        return normalList.includes(card.rarity);
-      }
+if (rarityView === "normal") {
+  return (
+    normalList.includes(card.rarity) &&
+    !specialParallelCardIds.has(card.id)
+  );
+}
 
-      if (rarityView === "parallel") {
-        return parallelList.includes(card.rarity);
-      }
+if (rarityView === "parallel") {
+  return (
+    parallelList.includes(card.rarity) ||
+    specialParallelCardIds.has(card.id)
+  );
+}
 
       return true;
     })
