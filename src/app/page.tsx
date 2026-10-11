@@ -35,6 +35,7 @@ export default function Home() {
   const [editingProductId, setEditingProductId] = useState<number | null>(null);
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState("");
+  const [showCollectionCounts, setShowCollectionCounts] = useState(true);
   const [registrationApproval, setRegistrationApproval] = useState(false);
   const [pendingUsers, setPendingUsers] = useState<any[]>([]);
   const [loginEmail, setLoginEmail] = useState("");
@@ -4328,13 +4329,16 @@ if (setting) {
 
     if (!user) return;
 
-    const { data } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+const { data } = await supabase
+  .from("profiles")
+  .select("role, show_collection_counts")
+  .eq("id", user.id)
+  .single();
 
-    setRole(data?.role || "");
+setRole(data?.role || "");
+setShowCollectionCounts(data?.show_collection_counts ?? true);
+
+setRole(data?.role || "");
 
   };
 
@@ -11501,15 +11505,15 @@ const parallelList =
         {card.card_name}
       </div>
 
-      <div className="text-xs md:text-sm">
-       所持：
-        {card.card_collection?.[0]?.owned_count || 0}
-
-  {" / "}
-
-       不足：
-        {card.card_collection?.[0]?.shortage_count || 0}
-      </div>
+{showCollectionCounts && (
+  <div className="text-xs md:text-sm">
+    所持：
+    {card.card_collection?.[0]?.owned_count || 0}
+    {" / "}
+    不足：
+    {card.card_collection?.[0]?.shortage_count || 0}
+  </div>
+)}
     </div>
   ))}
 </div>
@@ -13702,6 +13706,45 @@ className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded"
 </div>
 
 </div>
+
+
+<div className="border rounded-lg bg-white shadow p-6 mt-6">
+  <div className="text-xl font-bold mb-4">
+    表示設定
+  </div>
+
+  <div className="border rounded p-4">
+    <label className="flex items-center justify-between gap-3">
+      <span>
+        カード一覧の所持数・不足数を表示
+      </span>
+      <input
+        type="checkbox"
+        checked={showCollectionCounts}
+onChange={async (e) => {
+  const checked = e.target.checked;
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      show_collection_counts: checked,
+    })
+    .eq("id", user.id);
+
+  if (error) {
+    alert("設定の保存に失敗しました");
+    console.error(error);
+    return;
+  }
+
+  setShowCollectionCounts(checked);
+}}
+        className="h-5 w-5"
+      />
+    </label>
+  </div>
+</div>
+
 
 {role === "admin" && (
 
