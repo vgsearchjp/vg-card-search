@@ -5257,11 +5257,11 @@ activeTab === "proxy" && (
       お気に入り一覧
     </h2>
     */}
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-10 md:gap-4">
+    <div className="grid grid-cols-1 gap-2 md:grid-cols-10 md:gap-4">
       {favoriteCards.map((item) => (
         <div
           key={item.id}
-          className="border rounded p-1.5 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-2 md:gap-3"
+          className="border rounded p-1 md:p-3 bg-white cursor-pointer flex flex-row items-start gap-2"
           onClick={() => {
             setPreviousTab("favorite");
             window.history.pushState({ view: "favorite-detail" }, "", "");
@@ -5277,7 +5277,7 @@ activeTab === "proxy" && (
             <img
               src={getCardImage(item.cards)}
               alt=""
-              className="w-24 shrink-0 object-contain md:w-full"
+              className="w-20 shrink-0 object-contain md:w-full"
             />
           )}
 
