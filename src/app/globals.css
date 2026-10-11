@@ -30,13 +30,16 @@ body {
 }
 
 
-/* ボタンの押下エフェクト */
-button {
+
+/* ボタン・リンクの押下エフェクト */
+button,
+a {
   transition: transform 0.08s ease, filter 0.08s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-button:active {
+button:active,
+a:active {
   transform: scale(0.96);
   filter: brightness(0.88);
 }
