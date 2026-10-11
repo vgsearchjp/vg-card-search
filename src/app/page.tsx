@@ -11958,20 +11958,30 @@ favorite
     メモ
   </h2>
 
-  <textarea
-    className="border p-2 w-full md:max-w-[800px] h-[120px] bg-white rounded-lg"
-    value={memo}
-    onChange={async (e) => {
-      const value = e.target.value;
-      setMemo(value);
-      await saveCollection(
-        selectedHomeCard.id,
-        {
-          memo: value,
-        }
-      );
-    }}
-  />
+<textarea
+  rows={1}
+  className="border p-2 w-full md:max-w-[800px] h-[38px] md:h-[120px] bg-white rounded-lg resize-none overflow-hidden"
+  value={memo}
+  onChange={async (e) => {
+    const el = e.target;
+    const value = el.value;
+    setMemo(value);
+
+    if (window.innerWidth < 768) {
+      el.style.height = "38px";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+
+    await saveCollection(selectedHomeCard.id, { memo: value });
+  }}
+  onInput={(e) => {
+    if (window.innerWidth < 768) {
+      const el = e.currentTarget;
+      el.style.height = "38px";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  }}
+/>
 </div>
 <div className="
 mt-4
