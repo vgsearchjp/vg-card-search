@@ -2635,57 +2635,89 @@ return data || [];
 };
 
 
+
 const getSpecialParallelCardIds = (cards: any[]) => {
   const groups = new Map<string, any[]>();
 
   for (const card of cards) {
     const name = card.card_name?.trim();
     if (!name || !card.products?.product_code) continue;
-
-    if (!groups.has(name)) {
-      groups.set(name, []);
-    }
-
+    if (!groups.has(name)) groups.set(name, []);
     groups.get(name)!.push(card);
   }
 
   const parallelIds = new Set<number>();
 
   for (const group of groups.values()) {
-    const prCards = group.filter(
-      card => /^PR-/i.test(card.products.product_code)
-    );
+    const prCards = group.filter(card => /^PR-/i.test(card.products.product_code));
+    const normalCards = group.filter(card => !/^PR-/i.test(card.products.product_code));
 
-    const normalCards = group.filter(
-      card => !/^PR-/i.test(card.products.product_code)
-    );
+    const prProductGroups = new Map<string, any[]>();
 
-    // 通常商品とPR商品の両方に同名カードがある場合
-    if (normalCards.length > 0 && prCards.length > 0) {
-      for (const card of prCards) {
-        parallelIds.add(card.id);
-      }
-      continue;
+    for (const card of prCards) {
+      const code = card.products.product_code;
+      if (!prProductGroups.has(code)) prProductGroups.set(code, []);
+      prProductGroups.get(code)!.push(card);
     }
 
-    // PR商品同士に同名カードがある場合
-    if (prCards.length > 1) {
-      const sorted = [...prCards].sort((a, b) => {
-        const codeA = a.products.product_code;
-        const codeB = b.products.product_code;
+    // 優先順位1：PR商品内の同名カードを通常判定
+    // カード番号が最大のカードをパラレル扱いにする
+    let hasExactlyTwoPrCards = false;
 
-        const numberA = Number(codeA.match(/\d+/)?.[0] ?? 0);
-        const numberB = Number(codeB.match(/\d+/)?.[0] ?? 0);
+    for (const prGroup of prProductGroups.values()) {
+      if (prGroup.length < 2) continue;
 
-        return numberB - numberA;
-      });
+      if (prGroup.length === 2) {
+        hasExactlyTwoPrCards = true;
+      }
 
-      parallelIds.add(sorted[0].id);
+      const sorted = [...prGroup].sort((a, b) =>
+        a.card_no.localeCompare(b.card_no, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        })
+      );
+
+      for (const card of sorted.slice(1)) {
+        parallelIds.add(card.id);
+      }
+    }
+
+    // 優先順位2：PR商品内に同名カードがちょうど2枚ある場合、
+    // 商品間の判定を行わず、PR商品内の通常判定を維持する
+    if (hasExactlyTwoPrCards) continue;
+
+    // 優先順位3：通常商品との重複を発売順で判定
+    if (normalCards.length > 0 && prCards.length > 0) {
+      for (const card of prCards) {
+        const hasNewerNormalProduct = normalCards.some(
+          normal =>
+            Number(normal.products.sort_order) <
+            Number(card.products.sort_order)
+        );
+
+        const hasOlderNormalProduct = normalCards.some(
+          normal =>
+            Number(normal.products.sort_order) >
+            Number(card.products.sort_order)
+        );
+
+        if (hasNewerNormalProduct) {
+          // 新しい通常商品に同名カードがあれば、
+          // 商品間の判定ではパラレル扱いにしない
+          parallelIds.delete(card.id);
+        } else if (hasOlderNormalProduct) {
+          // 古い通常商品に同名カードがあれば、
+          // PR側をパラレル扱いにする
+          parallelIds.add(card.id);
+        }
+      }
     }
   }
 
   return parallelIds;
 };
+
 
 const filterDeckCards = (
   cards: any[],
