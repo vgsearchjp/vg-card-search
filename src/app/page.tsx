@@ -5400,10 +5400,10 @@ activeTab === "tools" && (
       ) : (
         <div className="flex flex-col">
           {battleHistory.map((battle: any) => (
-            <div
-              key={battle.id}
-              className="flex items-center gap-3 border-b py-4 text-black"
-            >
+        <div
+  key={battle.id}
+  className="my-2 flex min-w-0 items-center gap-3 rounded-lg border border-gray-400 p-3 text-black sm:p-4"
+>
               <div className="flex h-11 w-[72px] shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-bold">
                 {new Date(battle.played_at).toLocaleDateString("ja-JP", {
                   month: "2-digit",
