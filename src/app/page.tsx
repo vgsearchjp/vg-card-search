@@ -5542,7 +5542,7 @@ setActiveTab("home");
         onClick={() => setDecklogSelectMode(true)}
         className="shrink-0 bg-black text-white px-3 py-2 text-sm md:px-4 md:py-2 md:text-2xl rounded"
       >
-        デッキログへ登録(iOS版)
+        デッキログへ登録
       </button>
 
       <button
