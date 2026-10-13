@@ -12047,7 +12047,7 @@ favorite
 </h2>
 
 <div
-  className="border p-3 text-sm min-h-[220px] w-full bg-white rounded-lg"
+ className="border p-3 text-sm min-h-0 w-full bg-white rounded-lg md:min-h-[220px]"
   dangerouslySetInnerHTML={{
     __html: selectedHomeCard?.card_text || "",
   }}
