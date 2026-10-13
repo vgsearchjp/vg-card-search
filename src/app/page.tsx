@@ -152,6 +152,7 @@ const [deckSearch, setDeckSearch] =useState("");
 const [decklogResult, setDecklogResult] = useState<{id: string; url: string} | null>(null);
 const [decklogCreating, setDecklogCreating] = useState(false);
 const [decklogHelpOpen, setDecklogHelpOpen] = useState(false);
+const [decklogHelpTab, setDecklogHelpTab] = useState<"ios" | "android">("ios");
 const decklogBookmarklet = String.raw`javascript:(async()=>{try{const wait=ms=>new Promise(r=>setTimeout(r,ms));const id=new URL(location.href).searchParams.get("id");if(!id)throw Error("idがありません");const r=await fetch("https://cardvg.vercel.app/api/decklog-transfer?id="+encodeURIComponent(id));if(!r.ok)throw Error("転送データ取得失敗: "+r.status);const d=await r.json(),deck=d.deck_data;if(!deck)throw Error("デッキデータがありません");const regulation=document.querySelector('input[name="regulation"][value="D"]');if(regulation){regulation.click();await wait(1200)}const nation=[...document.querySelectorAll("select")].find(e=>[...e.options].some(o=>o.value===deck.nation));if(nation){nation.value=deck.nation;nation.dispatchEvent(new Event("change",{bubbles:true}));nation.dispatchEvent(new Event("input",{bubbles:true}));await wait(1200)}const input=()=>{const e=[...document.querySelectorAll("input")].find(e=>e.placeholder==="キーワードを入力");if(!e)throw Error("キーワード欄が見つかりません");return e};const setSearch=no=>{const i=input();i.focus();Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value").set.call(i,no);i.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:"insertText",data:no}));i.dispatchEvent(new Event("change",{bubbles:true}));i.dispatchEvent(new KeyboardEvent("keyup",{bubbles:true,key:"7"}))};const findCard=no=>document.querySelector('img.card-search-item[title^="'+no+'"]');const selectLabel=t=>{const e=[...document.querySelectorAll("label")].find(e=>e.textContent?.trim()===t);if(!e)throw Error(t+"のlabelが見つかりません");e.click()};const registerCard=async(no,count)=>{setSearch(no);await wait(2000);let f=findCard(no);if(!f)throw Error(no+"のカードが見つかりません");f.click();await wait(500);for(let n=0;n<count;n++){f=findCard(no);if(!f)throw Error(no+"のカードが見つかりません");f.click();await wait(800)}};const registerList=async cards=>{const grouped=Object.values((cards||[]).reduce((a,c)=>{if(!c?.cardNo)return a;if(!a[c.cardNo])a[c.cardNo]={cardNo:c.cardNo,count:0};a[c.cardNo].count+=Number(c.count||1);return a},{})).sort((a,b)=>a.cardNo.localeCompare(b.cardNo,undefined,{numeric:true}));for(const c of grouped)await registerCard(c.cardNo,c.count);return grouped.reduce((s,c)=>s+c.count,0)};const ride=deck.ride||[];if(ride.length<5)throw Error("ライドデッキ5枚のデータがありません");await registerCard(ride[0].cardNo,1);selectLabel("グレード2");await wait(300);await registerCard(ride[1].cardNo,1);selectLabel("グレード1");await wait(300);await registerCard(ride[2].cardNo,1);selectLabel("グレード0");await wait(300);await registerCard(ride[3].cardNo,1);selectLabel("ライドデッキクレスト");await wait(300);await registerCard(ride[4].cardNo,1);selectLabel("通常デッキ");await wait(500);const main=await registerList(deck.main||[]);let g=0;if((deck.gDeck||[]).length){const e=document.querySelector('input[type="radio"][value="G"]');if(e){e.click();await wait(500);g=await registerList(deck.gDeck)}}let f=0;if((deck.finisherDeck||[]).length){const e=document.querySelector('input[type="radio"][value="F"]');if(e){e.click();await wait(500);f=await registerList(deck.finisherDeck)}}alert("自動登録が完了しました\n\nライドデッキ: 5枚\n通常デッキ: "+main+"枚\nGデッキ: "+g+"枚\n必殺技デッキ: "+f+"枚\n\nDECK LOGで内容を確認して手動保存してください")}catch(e){alert("エラー: "+e.message)}})()`;
 const [deckRideG3Images,setDeckRideG3Images] = useState<any>({});
 const [rideG3, setRideG3] = useState<any>(null);
@@ -14341,12 +14342,29 @@ className="max-h-[90vh] max-w-[90vw]"
   <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4">
     <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-xl bg-white p-5 text-black shadow-xl">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-xl font-bold">DECK LOGへの登録方法（iOS版）</h2>
+        <h2 className="text-xl font-bold">DECK LOGへの登録方法</h2>
         <button
           onClick={() => setDecklogHelpOpen(false)}
           className="rounded bg-gray-200 px-3 py-2"
         >
           閉じる
+        </button>
+      </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setDecklogHelpTab("ios")}
+          className={`rounded-lg px-4 py-3 font-bold ${decklogHelpTab === "ios" ? "bg-black text-white" : "bg-gray-200 text-black"}`}
+        >
+          iOS
+        </button>
+        <button
+          type="button"
+          onClick={() => setDecklogHelpTab("android")}
+          className={`rounded-lg px-4 py-3 font-bold ${decklogHelpTab === "android" ? "bg-black text-white" : "bg-gray-200 text-black"}`}
+        >
+          Android
         </button>
       </div>
 
@@ -14362,20 +14380,31 @@ className="max-h-[90vh] max-w-[90vw]"
 
       <h3 className="mt-5 font-bold">ブックマークレット</h3>
 
-<div className="mt-2 text-sm">
-  <p className="mb-2 font-bold">
-    初回のみ、ブックマークを作成してください。
-  </p>
-  <ol className="list-decimal pl-5 space-y-1">
-    <li>Safariで適当なページをブックマークに追加します。</li>
-    <li>ブックマークの名前を「DECK LOG自動登録」などに変更します。</li>
-    <li>作成したブックマークの編集画面を開き、URL欄を下のブックマークレットのコードに置き換えて保存します。</li>
-    <li>以降は、DECK LOGのデッキ作成画面を開き、このブックマークを選ぶと自動登録を実行できます。</li>
-  </ol>
-  <p className="mt-2">
-    ※ ブックマークレットのコードは、下の「ブックマークレットをコピー」ボタンからコピーしてください。
-  </p>
-</div>
+{decklogHelpTab === "ios" ? (
+  <div className="mt-2 text-sm">
+    <p className="mb-2 font-bold">初回のみ、ブックマークを作成してください。</p>
+    <ol className="list-decimal pl-5 space-y-1">
+      <li>Safariで適当なページをブックマークに追加します。</li>
+      <li>ブックマークの名前を「DECK LOG自動登録」などに変更します。</li>
+      <li>作成したブックマークの編集画面を開き、URL欄を下のブックマークレットのコードに置き換えて保存します。</li>
+      <li>以降は、DECK LOGのデッキ作成画面を開き、このブックマークを選ぶと自動登録を実行できます。</li>
+    </ol>
+    <p className="mt-2">※ ブックマークレットのコードは、下の「ブックマークレットをコピー」ボタンからコピーしてください。</p>
+  </div>
+) : (
+  <div className="mt-2 text-sm">
+    <p className="mb-2 font-bold">初回のみ、ブックマークを作成してください。</p>
+    <ol className="list-decimal pl-5 space-y-1">
+      <li>Android版Chromeで適当なページを開き、メニュー「︙」からブックマークに追加します。</li>
+      <li>メニュー「︙」→「ブックマーク」を開き、作成したブックマークのメニューから「編集」を選びます。</li>
+      <li>名前を「DECK LOG自動登録」などに変更し、URL欄を下のブックマークレットのコードに置き換えて保存します。</li>
+      <li>以降は、DECK LOGのデッキ作成画面を開き、Chromeのアドレスバーにブックマーク名を入力します。</li>
+      <li>候補に表示されたブックマークをタップして、ブックマークレットを実行します。</li>
+    </ol>
+    <p className="mt-2">※ ブックマークレットのコードは、下の「ブックマークレットをコピー」ボタンからコピーしてください。</p>
+    <p className="mt-2">※ ブックマーク一覧から直接開くのではなく、アドレスバーの候補から実行してください。</p>
+  </div>
+)}
 
 
       <textarea
