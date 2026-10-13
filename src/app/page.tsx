@@ -14341,15 +14341,15 @@ className="max-h-[90vh] max-w-[90vw]"
 {decklogHelpOpen && (
   <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4">
     <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-xl bg-white p-5 text-black shadow-xl">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-xl font-bold">DECK LOGへの登録方法</h2>
-        <button
-          onClick={() => setDecklogHelpOpen(false)}
-          className="rounded bg-gray-200 px-3 py-2"
-        >
-          閉じる
-        </button>
-      </div>
+<div className="flex items-center justify-between gap-2">
+  <h2 className="text-base md:text-xl font-bold whitespace-nowrap">DECK LOGへの登録方法</h2>
+  <button
+    onClick={() => setDecklogHelpOpen(false)}
+    className="shrink-0 rounded bg-gray-200 px-3 py-2 text-sm md:text-base whitespace-nowrap"
+  >
+    閉じる
+  </button>
+</div>
 
             <div className="mt-4 grid grid-cols-2 gap-2">
         <button
