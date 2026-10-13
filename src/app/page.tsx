@@ -5373,7 +5373,7 @@ activeTab === "proxy" && (
 )}
 
 {user && activeTab === "favorite" && (
-  <div>
+  <div className="pb-20 md:pb-0">
     {/*
     <h2 className="text-3xl font-bold mb-6">
       お気に入り一覧
