@@ -61,6 +61,16 @@ const [searchParallel,setSearchParallel]=useState("");
 const [rarityList, setRarityList] = useState<string[]>([]);
 const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
+const [showBattleHistoryForm, setShowBattleHistoryForm] = useState(false);
+const [battleHistory, setBattleHistory] = useState<any[]>([]);
+const [battlePlayedAt, setBattlePlayedAt] = useState(new Date().toISOString().slice(0, 16));
+const [battleDeckId, setBattleDeckId] = useState("");
+const [battleDeckName, setBattleDeckName] = useState("");
+const [battleOpponentDeck, setBattleOpponentDeck] = useState("");
+const [battleResult, setBattleResult] = useState("win");
+const [battleTurnOrder, setBattleTurnOrder] = useState("first");
+const [battleMemo, setBattleMemo] = useState("");
+const [battleFormat, setBattleFormat] = useState("standard");
 const [proxyCards, setProxyCards] = useState<{id: string; file: File; previewUrl: string; quantity: number}[]>([]);
 const proxyPrintCards = proxyCards.flatMap((card) => Array.from({ length: card.quantity }, () => card));
 const proxyPages: typeof proxyPrintCards[] = [];
@@ -3371,6 +3381,73 @@ setDeckRideG3Images(
 );
 };
 
+
+const saveBattleHistory = async () => {
+  if (!battleDeckName.trim()) {
+    alert("使用デッキ名を入力してください");
+    return;
+  }
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    alert("ログイン状態を確認してください");
+    return;
+  }
+
+  const { error } = await supabase.from("battle_history").insert({
+    user_id: user.id,
+    played_at: new Date(battlePlayedAt).toISOString(),
+    deck_id: battleDeckId || null,
+    deck_name: battleDeckName.trim(),
+    opponent_deck: battleOpponentDeck.trim(),
+    result: battleResult,
+    turn_order: battleTurnOrder,
+    memo: battleMemo.trim(),
+    format: battleFormat
+  });
+
+  if (error) {
+    console.error("対戦履歴保存エラー", error);
+    alert("対戦履歴の保存に失敗しました: " + error.message);
+    return;
+  }
+
+  alert("対戦履歴を保存しました");
+  await loadBattleHistory();
+  setShowBattleHistoryForm(false);
+  setBattlePlayedAt(new Date().toISOString().slice(0, 16));
+  setBattleDeckId("");
+  setBattleDeckName("");
+  setBattleOpponentDeck("");
+  setBattleResult("win");
+  setBattleTurnOrder("first");
+  setBattleMemo("");
+  setBattleFormat("standard");
+};
+
+const loadBattleHistory = async () => {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    console.error("ユーザー取得エラー", userError);
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("battle_history")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("played_at", { ascending: false });
+
+  if (error) {
+    console.error("対戦履歴取得エラー", error);
+    return;
+  }
+
+  setBattleHistory(data || []);
+};
+
 const loadPendingUsers = async () => {
 
   const response = await fetch("/api/pending-users");
@@ -4598,6 +4675,12 @@ useEffect(() => {
 }, [activeTab, user, role]);
 
 useEffect(() => {
+  if (user && activeTab === "battleHistory") {
+    loadBattleHistory();
+  }
+}, [user, activeTab]);
+
+useEffect(() => {
 
   setSearchCardType("");
   setSearchGrade("");
@@ -5099,7 +5182,7 @@ onClick={()=>{
   
 </div>
 
-<div className="max-w-full px-4">
+<div className="w-full min-w-0 box-border px-4">
 
 {user &&
 activeTab === "tools" && (
@@ -5122,10 +5205,254 @@ activeTab === "tools" && (
   制限カード一覧
 </button>
 
-</div>
+<button
+  onClick={() => setActiveTab("battleHistory")}
+  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+>
+  対戦履歴確認
+</button>
 
 </div>
 
+</div>
+
+)}
+
+{user && activeTab === "battleHistory" && (
+  <div className="w-full min-w-0 box-border py-4">
+    <button
+      onClick={() => setActiveTab("tools")}
+      className="border px-4 py-2 mb-6 hover:bg-gray-100"
+    >
+      ← 戻る
+    </button>
+
+    <h2 className="text-2xl font-bold mb-6">
+      対戦履歴確認
+    </h2>
+
+    <button
+  onClick={() => setShowBattleHistoryForm(true)}
+  className="bg-blue-600 text-white rounded-lg px-4 py-3 font-bold mb-6"
+>
+  ＋ 戦歴を追加
+</button>
+
+{showBattleHistoryForm && (
+  <div className="border rounded-lg p-4 mb-6 bg-white text-black">
+    <h3 className="text-lg font-bold mb-4">戦歴を追加</h3>
+
+    <div className="flex flex-col gap-4">
+      <label className="flex flex-col gap-1">
+        対戦日時
+        <input
+          type="datetime-local"
+          value={battlePlayedAt}
+          onChange={(e) => setBattlePlayedAt(e.target.value)}
+          className="border rounded p-2"
+        />
+      </label>
+
+      <label className="flex flex-col gap-1">
+        使用デッキ
+        <select
+          value={battleDeckId}
+          onChange={(e) => {
+            const selected = decks.find((deck: any) => String(deck.id) === e.target.value);
+            setBattleDeckId(e.target.value);
+            setBattleDeckName(selected?.deck_name || "");
+          }}
+          className="border rounded p-2"
+        >
+          <option value="">手入力・未選択</option>
+          {decks.map((deck: any) => (
+            <option key={deck.id} value={String(deck.id)}>
+              {deck.deck_name}
+            </option>
+          ))}
+        </select>
+
+        <input
+          type="text"
+          value={battleDeckName}
+          onChange={(e) => {
+            setBattleDeckName(e.target.value);
+            setBattleDeckId("");
+          }}
+          placeholder="使用デッキ名を入力"
+          className="border rounded p-2"
+        />
+      </label>
+
+      <label className="flex flex-col gap-1">
+        対戦相手のデッキ
+        <input
+          type="text"
+          value={battleOpponentDeck}
+          onChange={(e) => setBattleOpponentDeck(e.target.value)}
+          placeholder="対戦相手のデッキ名"
+          className="border rounded p-2"
+        />
+      </label>
+
+      <label className="flex flex-col gap-1">
+        勝敗
+        <select
+          value={battleResult}
+          onChange={(e) => setBattleResult(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="win">勝利</option>
+          <option value="loss">敗北</option>
+          <option value="draw">引き分け</option>
+        </select>
+      </label>
+
+      <label className="flex flex-col gap-1">
+        先攻・後攻
+        <select
+          value={battleTurnOrder}
+          onChange={(e) => setBattleTurnOrder(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="first">先攻</option>
+          <option value="second">後攻</option>
+          <option value="unknown">不明</option>
+        </select>
+      </label>
+
+      <label className="flex flex-col gap-1">
+        対戦形式
+        <select
+          value={battleFormat}
+          onChange={(e) => setBattleFormat(e.target.value)}
+          className="border rounded p-2"
+        >
+          <option value="standard">スタンダード</option>
+          <option value="premium">プレミアム</option>
+          <option value="other">その他</option>
+        </select>
+      </label>
+
+      <label className="flex flex-col gap-1">
+        メモ（任意）
+        <textarea
+          value={battleMemo}
+          onChange={(e) => setBattleMemo(e.target.value)}
+          placeholder="対戦内容や反省点など"
+          className="border rounded p-2"
+          rows={3}
+        />
+      </label>
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => setShowBattleHistoryForm(false)}
+          className="border rounded-lg px-4 py-2"
+        >
+          キャンセル
+        </button>
+
+<button
+  onClick={saveBattleHistory}
+  className="bg-blue-600 text-white rounded-lg px-4 py-2"
+>
+  保存
+</button>
+
+      </div>
+    </div>
+  </div>
+)}
+
+{/* 対戦成績 */}
+{(() => {
+  const total = battleHistory.length;
+  const wins = battleHistory.filter((b: any) => b.result === "win").length;
+  const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
+
+  return (
+    <>
+      <div className="mb-6 grid grid-cols-3 gap-2">
+        <div className="rounded-lg bg-gray-100 p-3 text-black">
+          <p className="text-sm text-gray-500">対戦数</p>
+          <p className="mt-1 text-2xl font-bold">{total}</p>
+        </div>
+        <div className="rounded-lg bg-gray-100 p-3 text-black">
+          <p className="text-sm text-gray-500">勝利</p>
+          <p className="mt-1 text-2xl font-bold text-green-600">{wins}</p>
+        </div>
+        <div className="rounded-lg bg-gray-100 p-3 text-black">
+          <p className="text-sm text-gray-500">勝率</p>
+          <p className="mt-1 text-2xl font-bold">{winRate}%</p>
+        </div>
+      </div>
+
+      <div className="mb-3 flex items-center justify-between border-t pt-5">
+        <h3 className="text-lg font-bold">対戦履歴</h3>
+        <span className="text-sm text-gray-500">新しい順</span>
+      </div>
+
+      {battleHistory.length === 0 ? (
+        <p className="py-6 text-center text-gray-500">
+          対戦履歴はありません。
+        </p>
+      ) : (
+        <div className="flex flex-col">
+          {battleHistory.map((battle: any) => (
+            <div
+              key={battle.id}
+              className="flex items-center gap-3 border-b py-4 text-black"
+            >
+              <div className="flex h-11 w-[72px] shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-bold">
+                {new Date(battle.played_at).toLocaleDateString("ja-JP", {
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="break-words font-bold">
+                  {battle.deck_name} vs {battle.opponent_deck || "不明"}
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  {battle.turn_order === "first"
+                    ? "先攻"
+                    : battle.turn_order === "second"
+                    ? "後攻"
+                    : "不明"}
+                </p>
+                {battle.memo && (
+                  <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-500">
+                    {battle.memo}
+                  </p>
+                )}
+              </div>
+
+              <div
+                className={`shrink-0 text-sm font-bold sm:text-base ${
+                  battle.result === "win"
+                    ? "text-green-600"
+                    : battle.result === "loss"
+                    ? "text-red-600"
+                    : "text-gray-500"
+                }`}
+              >
+                {battle.result === "win"
+                  ? "勝利"
+                  : battle.result === "loss"
+                  ? "敗北"
+                  : "引き分け"}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+})()}
+
+  </div>
 )}
 
 {user &&
