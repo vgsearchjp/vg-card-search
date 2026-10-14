@@ -5321,31 +5321,69 @@ activeTab === "tools" && (
         />
       </label>
 
-      <label className="flex flex-col gap-1">
-        勝敗
-        <select
-          value={battleResult}
-          onChange={(e) => setBattleResult(e.target.value)}
-          className="border rounded p-2"
-        >
-          <option value="win">勝利</option>
-          <option value="loss">敗北</option>
-          <option value="draw">引き分け</option>
-        </select>
-      </label>
 
-      <label className="flex flex-col gap-1">
-        先攻・後攻
-        <select
-          value={battleTurnOrder}
-          onChange={(e) => setBattleTurnOrder(e.target.value)}
-          className="border rounded p-2"
-        >
-          <option value="first">先攻</option>
-          <option value="second">後攻</option>
-          <option value="unknown">不明</option>
-        </select>
-      </label>
+
+<label className="flex flex-col gap-2">
+  <span className="font-bold text-gray-600">勝敗</span>
+  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+    {[
+      { value: "win", label: "勝利" },
+      { value: "loss", label: "敗北" },
+      { value: "draw", label: "引き分け" }
+    ].map((option) => (
+      <button
+        key={option.value}
+        type="button"
+        onClick={() => setBattleResult(option.value)}
+        className="flex items-center gap-3 text-left text-black"
+      >
+        <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${
+          battleResult === option.value
+            ? "border-black"
+            : "border-gray-300"
+        }`}>
+          {battleResult === option.value && (
+            <span className="h-3 w-3 rounded-full bg-black" />
+          )}
+        </span>
+        <span>{option.label}</span>
+      </button>
+    ))}
+  </div>
+</label>
+
+
+
+<label className="flex flex-col gap-2">
+  <span className="font-bold text-gray-600">先攻・後攻</span>
+  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+    {[
+      { value: "first", label: "先攻" },
+      { value: "second", label: "後攻" },
+      { value: "unknown", label: "不明" }
+    ].map((option) => (
+      <button
+        key={option.value}
+        type="button"
+        onClick={() => setBattleTurnOrder(option.value)}
+        className="flex items-center gap-3 text-left text-black"
+      >
+        <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${
+          battleTurnOrder === option.value
+            ? "border-black"
+            : "border-gray-300"
+        }`}>
+          {battleTurnOrder === option.value && (
+            <span className="h-3 w-3 rounded-full bg-black" />
+          )}
+        </span>
+        <span>{option.label}</span>
+      </button>
+    ))}
+  </div>
+</label>
+
+
 
       <label className="flex flex-col gap-1">
         対戦形式
