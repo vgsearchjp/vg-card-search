@@ -5466,7 +5466,7 @@ activeTab === "tools" && (
   key={battle.id}
   className="my-2 flex min-w-0 items-center gap-3 rounded-lg border border-gray-400 p-3 text-black sm:p-4"
 >
-<div className="flex w-[80px] shrink-0 flex-col items-center gap-2">
+<div className="flex w-[68px] shrink-0 flex-col items-center gap-2">
   <div className="flex h-11 w-full items-center justify-center rounded-lg bg-gray-100 text-sm font-bold">
     {new Date(battle.played_at).toLocaleDateString("ja-JP", {
       month: "2-digit",
