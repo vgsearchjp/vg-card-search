@@ -64,6 +64,7 @@ const [activeTab, setActiveTab] = useState("manage");
 const [showBattleHistoryForm, setShowBattleHistoryForm] = useState(false);
 const [editingBattleHistoryId, setEditingBattleHistoryId] = useState<string | null>(null);
 const [battleHistory, setBattleHistory] = useState<any[]>([]);
+const [showBattleStatsDetail, setShowBattleStatsDetail] = useState(false);
 const [battlePlayedAt, setBattlePlayedAt] = useState(new Date().toISOString().slice(0, 16));
 const [battleDeckId, setBattleDeckId] = useState("");
 const [battleDeckName, setBattleDeckName] = useState("");
@@ -5440,22 +5441,141 @@ activeTab === "tools" && (
 
   return (
     <>
-      <div className="mb-6 grid grid-cols-3 gap-2">
-        <div className="rounded-lg bg-gray-100 p-3 text-black">
-          <p className="text-sm text-gray-500">対戦数</p>
-          <p className="mt-1 text-2xl font-bold">{total}</p>
-        </div>
-        <div className="rounded-lg bg-gray-100 p-3 text-black">
-          <p className="text-sm text-gray-500">勝利</p>
-          <p className="mt-1 text-2xl font-bold text-green-600">{wins}</p>
-        </div>
-        <div className="rounded-lg bg-gray-100 p-3 text-black">
-          <p className="text-sm text-gray-500">勝率</p>
-          <p className="mt-1 text-2xl font-bold">{winRate}%</p>
-        </div>
-      </div>
+<div className="mb-6 flex items-stretch gap-2">
+  <div className="grid min-w-0 flex-1 grid-cols-3 gap-2">
+    <div className="rounded-lg bg-gray-100 p-3 text-black">
+      <p className="text-sm text-gray-500">対戦数</p>
+      <p className="mt-1 text-2xl font-bold">{total}</p>
+    </div>
 
-      {battleHistory.length === 0 ? (
+    <div className="rounded-lg bg-gray-100 p-3 text-black">
+      <p className="text-sm text-gray-500">勝利</p>
+      <p className="mt-1 text-2xl font-bold text-green-600">{wins}</p>
+    </div>
+
+    <div className="rounded-lg bg-gray-100 p-3 text-black">
+      <p className="text-sm text-gray-500">勝率</p>
+      <p className="mt-1 text-2xl font-bold">{winRate}%</p>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    onClick={() => setShowBattleStatsDetail(true)}
+    className="shrink-0 self-center rounded-lg border border-gray-400 bg-white px-3 py-2 text-sm font-bold text-black"
+  >
+    詳細
+  </button>
+</div>
+
+{showBattleStatsDetail && (
+  <div className="mb-6 rounded-xl border border-gray-300 p-4 text-black">
+    <div className="mb-5 flex items-center justify-between gap-2">
+      <h3 className="text-lg font-bold">対戦成績の詳細</h3>
+      <button
+        type="button"
+        onClick={() => setShowBattleStatsDetail(false)}
+        className="rounded-lg border border-gray-400 px-3 py-2 text-sm"
+      >
+        閉じる
+      </button>
+    </div>
+
+    {(() => {
+      const getStats = (battles: any[]) => {
+        const wins = battles.filter((b) => b.result === "win").length;
+        const losses = battles.filter((b) => b.result === "loss").length;
+        const decisive = wins + losses;
+        return {
+          total: battles.length,
+          wins,
+          rate: decisive > 0 ? Math.round((wins / decisive) * 100) : null
+        };
+      };
+
+      const firstStats = getStats(
+        battleHistory.filter((b: any) => b.turn_order === "first")
+      );
+      const secondStats = getStats(
+        battleHistory.filter((b: any) => b.turn_order === "second")
+      );
+
+      const deckNames = [...new Set(
+        battleHistory.map((b: any) => b.deck_name)
+      )];
+
+      return (
+        <>
+          <h4 className="mb-3 font-bold">先攻・後攻別の全体勝率</h4>
+          <div className="mb-6 grid grid-cols-2 gap-3">
+            {[
+              { label: "先攻", stats: firstStats },
+              { label: "後攻", stats: secondStats }
+            ].map(({ label, stats }) => (
+              <div key={label} className="rounded-lg bg-gray-100 p-3">
+                <p className="text-sm text-gray-500">{label}</p>
+                <p className="mt-1 text-2xl font-bold">
+                  {stats.rate === null ? "—" : `${stats.rate}%`}
+                </p>
+                <p className="mt-1 text-sm text-gray-600">
+                  {stats.total}戦・{stats.wins}勝
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <h4 className="mb-3 font-bold">デッキ別の勝率</h4>
+          <div className="flex flex-col gap-4">
+            {deckNames.map((deckName) => {
+              const deckBattles = battleHistory.filter(
+                (b: any) => b.deck_name === deckName
+              );
+              const overall = getStats(deckBattles);
+              const first = getStats(
+                deckBattles.filter((b: any) => b.turn_order === "first")
+              );
+              const second = getStats(
+                deckBattles.filter((b: any) => b.turn_order === "second")
+              );
+
+              return (
+                <div
+                  key={deckName}
+                  className="rounded-lg border border-gray-300 p-3"
+                >
+                  <h5 className="mb-3 break-words font-bold">{deckName}</h5>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { label: "全体", stats: overall },
+                      { label: "先攻", stats: first },
+                      { label: "後攻", stats: second }
+                    ].map(({ label, stats }) => (
+                      <div key={label} className="min-w-0">
+                        <p className="text-sm text-gray-500">{label}</p>
+                        <p className="mt-1 text-lg font-bold">
+                          {stats.rate === null ? "—" : `${stats.rate}%`}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {stats.total}戦
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {stats.wins}勝
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      );
+    })()}
+  </div>
+)}
+
+{battleHistory.length === 0 ? (
         <p className="py-6 text-center text-gray-500">
           対戦履歴はありません。
         </p>
