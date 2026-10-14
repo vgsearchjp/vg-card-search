@@ -5255,7 +5255,7 @@ activeTab === "tools" && (
       setEditingBattleHistoryId(null);
       setShowBattleHistoryForm(true);
     }}
-    className="shrink-0 rounded-lg bg-blue-600 px-4 py-3 font-bold text-white"
+    className="shrink-0 rounded-lg bg-black px-4 py-3 font-bold text-white"
   >
     ＋ 戦歴を追加
   </button>
@@ -5270,12 +5270,12 @@ activeTab === "tools" && (
     <div className="flex flex-col gap-4">
       <label className="flex flex-col gap-1">
         対戦日時
-        <input
-          type="datetime-local"
-          value={battlePlayedAt}
-          onChange={(e) => setBattlePlayedAt(e.target.value)}
-          className="border rounded p-2"
-        />
+<input
+  type="date"
+  value={battlePlayedAt.slice(0, 10)}
+  onChange={(e) => setBattlePlayedAt(e.target.value)}
+  className="border rounded p-2"
+/>
       </label>
 
       <label className="flex flex-col gap-1">
@@ -5466,30 +5466,29 @@ activeTab === "tools" && (
   key={battle.id}
   className="my-2 flex min-w-0 items-center gap-3 rounded-lg border border-gray-400 p-3 text-black sm:p-4"
 >
-              <div className="flex h-11 w-[72px] shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-bold">
-                {new Date(battle.played_at).toLocaleDateString("ja-JP", {
-                  month: "2-digit",
-                  day: "2-digit",
-                })}
-              </div>
+<div className="flex w-[80px] shrink-0 flex-col items-center gap-2">
+  <div className="flex h-11 w-full items-center justify-center rounded-lg bg-gray-100 text-sm font-bold">
+    {new Date(battle.played_at).toLocaleDateString("ja-JP", {
+      month: "2-digit",
+      day: "2-digit",
+    })}
+  </div>
+  <span className="text-sm font-medium text-black">
+    {battle.turn_order === "first" ? "先攻" : battle.turn_order === "second" ? "後攻" : "不明"}
+  </span>
+</div>
 
-              <div className="min-w-0 flex-1">
-                <p className="break-words font-bold">
-                  {battle.deck_name} vs {battle.opponent_deck || "不明"}
-                </p>
-                <p className="mt-1 text-sm text-gray-500">
-                  {battle.turn_order === "first"
-                    ? "先攻"
-                    : battle.turn_order === "second"
-                    ? "後攻"
-                    : "不明"}
-                </p>
-                {battle.memo && (
-                  <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-500">
-                    {battle.memo}
-                  </p>
-                )}
-              </div>
+<div className="min-w-0 flex-1">
+  <p className="break-words font-bold">
+    {battle.deck_name}
+    <span className="block">VS {battle.opponent_deck || "不明"}</span>
+  </p>
+  {battle.memo && (
+    <p className="mt-1 whitespace-pre-wrap break-words text-sm text-gray-500">
+      {battle.memo}
+    </p>
+  )}
+</div>
 <div className="flex shrink-0 items-center gap-2">
   <div className={`text-sm font-bold sm:text-base ${
     battle.result === "win"
