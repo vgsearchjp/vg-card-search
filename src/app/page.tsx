@@ -62,6 +62,7 @@ const [rarityList, setRarityList] = useState<string[]>([]);
 const [imageFile, setImageFile] = useState<File | null>(null);
 const [activeTab, setActiveTab] = useState("manage");
 const [showBattleHistoryForm, setShowBattleHistoryForm] = useState(false);
+const [editingBattleHistoryId, setEditingBattleHistoryId] = useState<string | null>(null);
 const [battleHistory, setBattleHistory] = useState<any[]>([]);
 const [battlePlayedAt, setBattlePlayedAt] = useState(new Date().toISOString().slice(0, 16));
 const [battleDeckId, setBattleDeckId] = useState("");
@@ -3382,6 +3383,7 @@ setDeckRideG3Images(
 };
 
 
+
 const saveBattleHistory = async () => {
   if (!battleDeckName.trim()) {
     alert("使用デッキ名を入力してください");
@@ -3395,8 +3397,7 @@ const saveBattleHistory = async () => {
     return;
   }
 
-  const { error } = await supabase.from("battle_history").insert({
-    user_id: user.id,
+  const battleData = {
     played_at: new Date(battlePlayedAt).toISOString(),
     deck_id: battleDeckId || null,
     deck_name: battleDeckName.trim(),
@@ -3405,7 +3406,28 @@ const saveBattleHistory = async () => {
     turn_order: battleTurnOrder,
     memo: battleMemo.trim(),
     format: battleFormat
-  });
+  };
+
+  let error;
+
+  if (editingBattleHistoryId) {
+    const result = await supabase
+      .from("battle_history")
+      .update(battleData)
+      .eq("id", editingBattleHistoryId)
+      .eq("user_id", user.id);
+
+    error = result.error;
+  } else {
+    const result = await supabase
+      .from("battle_history")
+      .insert({
+        user_id: user.id,
+        ...battleData
+      });
+
+    error = result.error;
+  }
 
   if (error) {
     console.error("対戦履歴保存エラー", error);
@@ -3413,9 +3435,12 @@ const saveBattleHistory = async () => {
     return;
   }
 
-  alert("対戦履歴を保存しました");
+  alert(editingBattleHistoryId ? "対戦履歴を更新しました" : "対戦履歴を保存しました");
+
   await loadBattleHistory();
+
   setShowBattleHistoryForm(false);
+  setEditingBattleHistoryId(null);
   setBattlePlayedAt(new Date().toISOString().slice(0, 16));
   setBattleDeckId("");
   setBattleDeckName("");
@@ -3425,6 +3450,7 @@ const saveBattleHistory = async () => {
   setBattleMemo("");
   setBattleFormat("standard");
 };
+
 
 const loadBattleHistory = async () => {
   const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -5220,27 +5246,26 @@ activeTab === "tools" && (
 
 {user && activeTab === "battleHistory" && (
   <div className="w-full min-w-0 box-border py-4">
-    <button
-      onClick={() => setActiveTab("tools")}
-      className="border px-4 py-2 mb-6 hover:bg-gray-100"
-    >
-      ← 戻る
-    </button>
 
-    <h2 className="text-2xl font-bold mb-6">
-      対戦履歴確認
-    </h2>
+<div className="mb-6 flex items-center justify-between gap-3">
+  <h2 className="text-2xl font-bold">対戦履歴</h2>
 
-    <button
-  onClick={() => setShowBattleHistoryForm(true)}
-  className="bg-blue-600 text-white rounded-lg px-4 py-3 font-bold mb-6"
->
-  ＋ 戦歴を追加
-</button>
+  <button
+    onClick={() => {
+      setEditingBattleHistoryId(null);
+      setShowBattleHistoryForm(true);
+    }}
+    className="shrink-0 rounded-lg bg-blue-600 px-4 py-3 font-bold text-white"
+  >
+    ＋ 戦歴を追加
+  </button>
+</div>
 
 {showBattleHistoryForm && (
   <div className="border rounded-lg p-4 mb-6 bg-white text-black">
-    <h3 className="text-lg font-bold mb-4">戦歴を追加</h3>
+<h3 className="text-lg font-bold mb-4">
+  {editingBattleHistoryId ? "戦歴を編集" : "戦歴を追加"}
+</h3>
 
     <div className="flex flex-col gap-4">
       <label className="flex flex-col gap-1">
@@ -5345,24 +5370,66 @@ activeTab === "tools" && (
         />
       </label>
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => setShowBattleHistoryForm(false)}
-          className="border rounded-lg px-4 py-2"
-        >
-          キャンセル
-        </button>
 
-<button
-  onClick={saveBattleHistory}
-  className="bg-blue-600 text-white rounded-lg px-4 py-2"
->
-  保存
-</button>
+<div className="flex flex-wrap gap-2">
+  <button
+    type="button"
+    onClick={() => {
+      setShowBattleHistoryForm(false);
+      setEditingBattleHistoryId(null);
+    }}
+    className="border rounded-lg px-4 py-2"
+  >
+    キャンセル
+  </button>
 
-      </div>
-    </div>
-  </div>
+  {editingBattleHistoryId && (
+    <button
+      type="button"
+      onClick={async () => {
+        if (!window.confirm("この対戦履歴を削除しますか？")) return;
+
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+          alert("ログイン状態を確認してください");
+          return;
+        }
+
+        const { error } = await supabase
+          .from("battle_history")
+          .delete()
+          .eq("id", editingBattleHistoryId)
+          .eq("user_id", user.id);
+
+        if (error) {
+          console.error("対戦履歴削除エラー", error);
+          alert("対戦履歴の削除に失敗しました: " + error.message);
+          return;
+        }
+
+        alert("対戦履歴を削除しました");
+        setShowBattleHistoryForm(false);
+        setEditingBattleHistoryId(null);
+        await loadBattleHistory();
+      }}
+      className="rounded-lg bg-red-600 px-4 py-2 text-white"
+    >
+      削除
+    </button>
+  )}
+
+  <button
+    type="button"
+    onClick={saveBattleHistory}
+    className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+  >
+    保存
+  </button>
+</div>
+
+</div>
+</div>
 )}
 
 {/* 対戦成績 */}
@@ -5386,11 +5453,6 @@ activeTab === "tools" && (
           <p className="text-sm text-gray-500">勝率</p>
           <p className="mt-1 text-2xl font-bold">{winRate}%</p>
         </div>
-      </div>
-
-      <div className="mb-3 flex items-center justify-between border-t pt-5">
-        <h3 className="text-lg font-bold">対戦履歴</h3>
-        <span className="text-sm text-gray-500">新しい順</span>
       </div>
 
       {battleHistory.length === 0 ? (
@@ -5428,22 +5490,43 @@ activeTab === "tools" && (
                   </p>
                 )}
               </div>
+<div className="flex shrink-0 items-center gap-2">
+  <div className={`text-sm font-bold sm:text-base ${
+    battle.result === "win"
+      ? "text-green-600"
+      : battle.result === "loss"
+      ? "text-red-600"
+      : "text-gray-500"
+  }`}>
+    {battle.result === "win" ? "勝利" : battle.result === "loss" ? "敗北" : "引き分け"}
+  </div>
 
-              <div
-                className={`shrink-0 text-sm font-bold sm:text-base ${
-                  battle.result === "win"
-                    ? "text-green-600"
-                    : battle.result === "loss"
-                    ? "text-red-600"
-                    : "text-gray-500"
-                }`}
-              >
-                {battle.result === "win"
-                  ? "勝利"
-                  : battle.result === "loss"
-                  ? "敗北"
-                  : "引き分け"}
-              </div>
+  <button
+    type="button"
+    aria-label="この戦歴を編集"
+    title="戦歴を編集"
+    onClick={() => {
+      setEditingBattleHistoryId(battle.id);
+      setBattlePlayedAt(
+        new Date(
+          new Date(battle.played_at).getTime() -
+          new Date(battle.played_at).getTimezoneOffset() * 60000
+        ).toISOString().slice(0, 16)
+      );
+      setBattleDeckId(battle.deck_id || "");
+      setBattleDeckName(battle.deck_name || "");
+      setBattleOpponentDeck(battle.opponent_deck || "");
+      setBattleResult(battle.result);
+      setBattleTurnOrder(battle.turn_order || "unknown");
+      setBattleMemo(battle.memo || "");
+      setBattleFormat(battle.format || "other");
+      setShowBattleHistoryForm(true);
+    }}
+    className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-black"
+  >
+    <span aria-hidden="true">⚙</span>
+  </button>
+</div>
             </div>
           ))}
         </div>
