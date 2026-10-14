@@ -5236,8 +5236,10 @@ activeTab === "tools" && (
   onClick={() => setActiveTab("battleHistory")}
   className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
-<span className="block whitespace-nowrap">対戦履歴</span>
-<span className="block">確認</span>
+  <span className="flex flex-col items-center text-center leading-tight">
+    <span className="whitespace-nowrap">対戦履歴</span>
+    <span>確認</span>
+  </span>
 </button>
 
 </div>
