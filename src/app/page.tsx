@@ -130,7 +130,7 @@ const createProxyPDF = async () => {
   pdf.save("proxy-cards.pdf");
 };
 const [showManageMenu, setShowManageMenu] = useState(false);
-const [manageView, setManageView] = useState<"manage1" | "manage2">("manage1");
+const [manageView, setManageView] = useState<"manage1" | "manage2" | "limitCards">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
 const [focusState, setFocusState] = useState("");
 const [limitCards, setLimitCards] = useState<any[]>([]);
@@ -13947,8 +13947,19 @@ return (
 </>
 
 )}
-
 {manageView === "manage2" && (
+  <div className="p-6">
+    <div className="flex flex-wrap gap-3">
+      <button
+        onClick={() => setManageView("limitCards")}
+        className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+      >
+        制限カード管理
+      </button>
+    </div>
+  </div>
+)}
+{manageView === "limitCards" && (
 
 <div className="p-6">
 
