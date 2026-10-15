@@ -5220,27 +5220,28 @@ activeTab === "tools" && (
 
 <button
   onClick={() => setActiveTab("proxy")}
-  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
   プロキシメーカー
 </button>
 
 <button
   onClick={() => setShowLimitModal(true)}
-  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
   制限カード一覧
 </button>
 
 <button
   onClick={() => setActiveTab("battleHistory")}
-  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-gray-100 text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+  className="w-[calc((100%-24px)/3)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
   <span className="flex flex-col items-center text-center leading-tight">
     <span className="whitespace-nowrap">対戦履歴</span>
     <span>確認</span>
   </span>
 </button>
+```
 
 </div>
 
@@ -5484,17 +5485,17 @@ activeTab === "tools" && (
     <>
 <div className="mb-6 flex items-stretch gap-2">
   <div className="grid min-w-0 flex-1 grid-cols-3 gap-2">
-    <div className="rounded-lg bg-gray-100 p-3 text-black">
+    <div className="rounded-lg bg-gray-200 p-3 text-black">
       <p className="text-sm text-gray-500">対戦数</p>
       <p className="mt-1 text-2xl font-bold">{total}</p>
     </div>
 
-    <div className="rounded-lg bg-gray-100 p-3 text-black">
+    <div className="rounded-lg bg-gray-200 p-3 text-black">
       <p className="text-sm text-gray-500">勝利</p>
       <p className="mt-1 text-2xl font-bold text-green-600">{wins}</p>
     </div>
 
-    <div className="rounded-lg bg-gray-100 p-3 text-black">
+    <div className="rounded-lg bg-gray-200 p-3 text-black">
       <p className="text-sm text-gray-500">勝率</p>
       <p className="mt-1 text-2xl font-bold">{winRate}%</p>
     </div>
@@ -5625,7 +5626,7 @@ activeTab === "tools" && (
           {battleHistory.map((battle: any) => (
         <div
   key={battle.id}
-  className="my-2 flex min-w-0 items-center gap-3 rounded-lg border border-gray-400 p-3 text-black sm:p-4"
+  className="my-2 flex min-w-0 items-center gap-3 rounded-lg border border-gray-400 bg-white p-3 text-black sm:p-4"
 >
 <div className="flex w-[68px] shrink-0 flex-col items-center gap-2">
   <div className="flex h-11 w-full items-center justify-center rounded-lg bg-gray-100 text-sm font-bold">
@@ -5703,12 +5704,13 @@ activeTab === "proxy" && (
 
 <div className="p-4">
 
-  <button
+<button
     onClick={() => setActiveTab("tools")}
-    className="border px-4 py-2 mb-6 hover:bg-gray-100"
+    className="border bg-white px-4 py-2 mb-6 hover:bg-gray-100"
   >
     ← 戻る
   </button>
+
 
   <h2 className="text-2xl font-bold mb-6">
     プロキシメーカー
@@ -11870,7 +11872,7 @@ onClick={() => {
      setHomeView("products");
      setSelectedHomeProduct(null);
 }}
-    className="hidden md:inline-block border px-4 py-2 mb-4"
+    className="hidden md:inline-block border bg-white px-4 py-2 mb-4"
   >
     戻る
   </button>
@@ -11888,21 +11890,21 @@ onClick={() => {
   <div className="flex flex-wrap gap-2 mt-4 mb-6">
 
 <button
-  className="border px-3 py-2 text-sm md:text-base"
+  className="border bg-white px-3 py-2 text-sm md:text-base"
   onClick={() => setRarityView("all")}
 >
   全て
 </button>
 
 <button
-  className="border px-3 py-2 text-sm md:text-base"
+  className="border bg-white px-3 py-2 text-sm md:text-base"
   onClick={() => setRarityView("normal")}
 >
   通常レアリティ
 </button>
 
 <button
-  className="border px-3 py-2 text-sm md:text-base"
+  className="border bg-white px-3 py-2 text-sm md:text-base"
   onClick={() => setRarityView("parallel")}
 >
   パラレル
@@ -11912,7 +11914,7 @@ onClick={() => {
   {[...new Set(cards.map((card) => card.nation).filter(Boolean))].map((nation) => (
     <button
       key={nation}
-className={`border px-3 py-2 text-sm md:text-base ${
+className={`border bg-white px-3 py-2 text-sm md:text-base ${
   productNation === nation ? "bg-yellow-300" : ""
 }`}
       onClick={() => {
