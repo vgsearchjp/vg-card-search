@@ -130,8 +130,12 @@ const createProxyPDF = async () => {
   pdf.save("proxy-cards.pdf");
 };
 const [showManageMenu, setShowManageMenu] = useState(false);
-const [manageView, setManageView] = useState<"manage1" | "manage2" | "limitCards">("manage1");
+const [manageView, setManageView] = useState<"manage1" | "manage2" | "limitCards" | "temporaryCards">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
+const [temporaryImageFile, setTemporaryImageFile] = useState<File | null>(null);
+const [temporaryImagePreview, setTemporaryImagePreview] = useState<string | null>(null);
+const [temporaryCards, setTemporaryCards] = useState<any[]>([]);
+const [savingTemporaryCard, setSavingTemporaryCard] = useState(false);
 const [focusState, setFocusState] = useState("");
 const [limitCards, setLimitCards] = useState<any[]>([]);
 const [selectedLimitCard, setSelectedLimitCard] = useState<any | null>(null);
@@ -3018,6 +3022,77 @@ const { data, error, count } =
   setIsSearchResult(true);
   setHomeView("cards");
 
+};
+
+const loadTemporaryCards = async () => {
+  const { data, error } = await supabase
+    .from("temporary_cards")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    alert("仮カードの取得に失敗しました");
+    return;
+  }
+
+  setTemporaryCards(data || []);
+};
+
+const saveTemporaryCard = async () => {
+  if (!temporaryImageFile) {
+    alert("画像を選択してください");
+    return;
+  }
+
+  setSavingTemporaryCard(true);
+
+  try {
+    const formData = new FormData();
+    formData.append("file", temporaryImageFile);
+    formData.append("productCode", "TEMP");
+    formData.append("cardNo", `TEMP-${Date.now()}`);
+
+    const response = await fetch("/api/r2-upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success || !result.path) {
+      console.error(result);
+      alert("画像のアップロードに失敗しました");
+      return;
+    }
+
+    const imageUrl = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${result.path}`;
+
+    const { error } = await supabase
+      .from("temporary_cards")
+      .insert({
+        image_url: imageUrl,
+        storage_image_url: result.path,
+      });
+
+    if (error) {
+      console.error(error);
+      alert("画像情報の保存に失敗しました。R2には画像が残っている可能性があります");
+      return;
+    }
+
+    setTemporaryImageFile(null);
+    setTemporaryImagePreview(null);
+
+    await loadTemporaryCards();
+    alert("仮カードを登録しました");
+  } catch (error) {
+    console.error(error);
+    alert("仮カードの登録に失敗しました");
+  } finally {
+    setSavingTemporaryCard(false);
+  }
 };
 
 const searchLimitCards = async () => {
@@ -13955,10 +14030,83 @@ return (
         className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
       >
         制限カード管理
+      </button> 
+
+<button
+  onClick={() => {
+    setTemporaryImageFile(null);
+    setTemporaryImagePreview(null);
+    setManageView("temporaryCards");
+    loadTemporaryCards();
+  }}
+  className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+>
+  仮カード登録
+</button>
+
+</div>
+</div>
+)}
+
+{manageView === "temporaryCards" && (
+  <div className="p-6">
+    <h2 className="text-2xl font-bold mb-6">仮カード登録</h2>
+
+    <div className="flex flex-wrap gap-3 mb-6">
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files?.[0] || null;
+          setTemporaryImageFile(file);
+          setTemporaryImagePreview(file ? URL.createObjectURL(file) : null);
+        }}
+        className="border bg-white p-3"
+      />
+
+      <button
+        onClick={saveTemporaryCard}
+        disabled={!temporaryImageFile || savingTemporaryCard}
+        className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+      >
+        {savingTemporaryCard ? "登録中..." : "画像を登録"}
       </button>
+
+      <button
+        onClick={() => setManageView("manage2")}
+        className="bg-gray-500 text-white px-4 py-2 rounded"
+      >
+        戻る
+      </button>
+    </div>
+
+    {temporaryImagePreview && (
+      <div className="mb-6">
+        <p className="font-bold mb-2">プレビュー</p>
+        <img
+          src={temporaryImagePreview}
+          alt="仮カードのプレビュー"
+          className="w-40 border rounded"
+        />
+      </div>
+    )}
+
+    <h3 className="text-xl font-bold mb-3">登録済み仮カード</h3>
+
+    <div className="flex flex-wrap gap-3">
+      {temporaryCards.map((card) => (
+        <div key={card.id} className="border bg-white rounded p-2">
+          <img
+            src={card.image_url}
+            alt="仮カード"
+            className="w-32"
+          />
+        </div>
+      ))}
     </div>
   </div>
 )}
+
 {manageView === "limitCards" && (
 
 <div className="p-6">
