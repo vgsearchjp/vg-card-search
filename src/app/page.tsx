@@ -6210,9 +6210,10 @@ setHandCards(initialHand);
 setOnePlayerDeck(remainingDeck);
 
 setRideGrade(0);
+setOnePlayerMode(false);
 
 setDeckView("onePlayer");
-  return;
+return;
 }
 
   setCardSearch("");
