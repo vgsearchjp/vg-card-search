@@ -132,8 +132,8 @@ const createProxyPDF = async () => {
 const [showManageMenu, setShowManageMenu] = useState(false);
 const [manageView, setManageView] = useState<"manage1" | "manage2" | "limitCards" | "temporaryCards">("manage1");
 const [limitSearch, setLimitSearch] = useState("");
-const [temporaryImageFile, setTemporaryImageFile] = useState<File | null>(null);
-const [temporaryImagePreview, setTemporaryImagePreview] = useState<string | null>(null);
+const [temporaryImageFiles, setTemporaryImageFiles] = useState<File[]>([]);
+const [temporaryImagePreviews, setTemporaryImagePreviews] = useState<string[]>([]);
 const [temporaryCards, setTemporaryCards] = useState<any[]>([]);
 const [savingTemporaryCard, setSavingTemporaryCard] = useState(false);
 const [focusState, setFocusState] = useState("");
@@ -3041,59 +3041,69 @@ const loadTemporaryCards = async () => {
 };
 
 const saveTemporaryCard = async () => {
-  if (!temporaryImageFile) {
+  if (temporaryImageFiles.length === 0) {
     alert("画像を選択してください");
     return;
   }
 
   setSavingTemporaryCard(true);
 
+  let successCount = 0;
+  let errorCount = 0;
+
   try {
-    const formData = new FormData();
-    formData.append("file", temporaryImageFile);
-    formData.append("productCode", "TEMP");
-    formData.append("cardNo", `TEMP-${Date.now()}`);
+    for (const file of temporaryImageFiles) {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("productCode", "TEMP");
+        formData.append("cardNo", `TEMP-${crypto.randomUUID()}`);
 
-    const response = await fetch("/api/r2-upload", {
-      method: "POST",
-      body: formData,
-    });
+        const response = await fetch("/api/r2-upload", {
+          method: "POST",
+          body: formData,
+        });
 
-    const result = await response.json();
+        const result = await response.json();
 
-    if (!response.ok || !result.success || !result.path) {
-      console.error(result);
-      alert("画像のアップロードに失敗しました");
-      return;
+        if (!response.ok || !result.success || !result.path) {
+          console.error("画像アップロード失敗:", file.name, result);
+          errorCount++;
+          continue;
+        }
+
+        const imageUrl = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${result.path}`;
+
+        const { error } = await supabase
+          .from("temporary_cards")
+          .insert({
+            image_url: imageUrl,
+            storage_image_url: result.path,
+          });
+
+        if (error) {
+          console.error("仮カード登録失敗:", file.name, error);
+          errorCount++;
+          continue;
+        }
+
+        successCount++;
+      } catch (error) {
+        console.error("仮カード登録エラー:", file.name, error);
+        errorCount++;
+      }
     }
 
-    const imageUrl = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${result.path}`;
-
-    const { error } = await supabase
-      .from("temporary_cards")
-      .insert({
-        image_url: imageUrl,
-        storage_image_url: result.path,
-      });
-
-    if (error) {
-      console.error(error);
-      alert("画像情報の保存に失敗しました。R2には画像が残っている可能性があります");
-      return;
-    }
-
-    setTemporaryImageFile(null);
-    setTemporaryImagePreview(null);
-
+    setTemporaryImageFiles([]);
+    setTemporaryImagePreviews([]);
     await loadTemporaryCards();
-    alert("仮カードを登録しました");
-  } catch (error) {
-    console.error(error);
-    alert("仮カードの登録に失敗しました");
+
+    alert(`登録成功：${successCount}枚\n登録失敗：${errorCount}枚`);
   } finally {
     setSavingTemporaryCard(false);
   }
 };
+
 
 const searchLimitCards = async () => {
 
@@ -14034,8 +14044,8 @@ return (
 
 <button
   onClick={() => {
-    setTemporaryImageFile(null);
-    setTemporaryImagePreview(null);
+setTemporaryImageFiles([]);
+setTemporaryImagePreviews([]);
     setManageView("temporaryCards");
     loadTemporaryCards();
   }}
@@ -14053,20 +14063,24 @@ return (
     <h2 className="text-2xl font-bold mb-6">仮カード登録</h2>
 
     <div className="flex flex-wrap gap-3 mb-6">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files?.[0] || null;
-          setTemporaryImageFile(file);
-          setTemporaryImagePreview(file ? URL.createObjectURL(file) : null);
-        }}
-        className="border bg-white p-3"
-      />
+<input
+  type="file"
+  accept="image/*"
+  multiple
+  onChange={(e) => {
+    const files = Array.from(e.target.files || []);
+    setTemporaryImageFiles(files);
+    setTemporaryImagePreviews(
+      files.map((file) => URL.createObjectURL(file))
+    );
+  }}
+  className="border bg-white p-3"
+/>
+
 
       <button
         onClick={saveTemporaryCard}
-        disabled={!temporaryImageFile || savingTemporaryCard}
+        disabled={temporaryImageFiles.length === 0 || savingTemporaryCard}
         className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
       >
         {savingTemporaryCard ? "登録中..." : "画像を登録"}
@@ -14080,20 +14094,27 @@ return (
       </button>
     </div>
 
-    {temporaryImagePreview && (
-      <div className="mb-6">
-        <p className="font-bold mb-2">プレビュー</p>
-        <img
-          src={temporaryImagePreview}
-          alt="仮カードのプレビュー"
-          className="w-40 border rounded"
-        />
-      </div>
-    )}
 
-    <h3 className="text-xl font-bold mb-3">登録済み仮カード</h3>
-
+{temporaryImagePreviews.length > 0 && (
+  <div className="mb-6">
+    <p className="font-bold mb-2">
+      選択した画像：{temporaryImagePreviews.length}枚
+    </p>
     <div className="flex flex-wrap gap-3">
+      {temporaryImagePreviews.map((preview, index) => (
+        <img
+          key={preview}
+          src={preview}
+          alt={`仮カード ${index + 1}`}
+          className="w-24 border rounded"
+        />
+      ))}
+    </div>
+  </div>
+)}
+
+<h3 className="text-xl font-bold mb-3">登録済み仮カード</h3>
+<div className="flex flex-wrap gap-3">
       {temporaryCards.map((card) => (
         <div key={card.id} className="border bg-white rounded p-2">
           <img
