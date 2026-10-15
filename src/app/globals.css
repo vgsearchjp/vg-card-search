@@ -12,14 +12,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-
 body {
   width: 100%;
   min-width: 0;
@@ -30,8 +22,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
-
+/* ボタン・入力欄・プルダウンの背景色 */
+button,
+input,
+select,
+textarea {
+  background-color: #ffffff;
+}
 
 /* ボタン・リンクの押下エフェクト */
 button,
