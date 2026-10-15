@@ -162,6 +162,7 @@ const [selectedDeck, setSelectedDeck] =useState<any>(null);
 const [hideSameCard, setHideSameCard] = useState(false);
 const [deckNation, setDeckNation] =useState("");
 const [includeNationless, setIncludeNationless] = useState(false);
+const [showTemporaryCards, setShowTemporaryCards] = useState(false);
 const [decks, setDecks] = useState<any[]>([]);
 const [decklogSelectMode, setDecklogSelectMode] = useState(false);
 const [deckSearch, setDeckSearch] =useState("");
@@ -190,9 +191,7 @@ const [deckMode, setDeckMode] = useState<
   "gdeck"
 | "finisher" 
 >("ride");
-const loadCardById = async (
-  cardId: number
-) => {
+const loadCardById = async (cardId: number) => {
   const { data, error } =
     await supabase
       .from("cards")
@@ -205,17 +204,64 @@ const loadCardById = async (
   }
   return data;
 };
-const refreshDeckCards = async (cards: any[]) => {if (!cards || cards.length === 0) return [];
-const ids = [...new Set(cards.map(card => card.id).filter(Boolean))];
-const { data, error } = await supabase
+const loadTemporaryCardById = async (temporaryCardId: number | null) => {
+  if (!temporaryCardId) return null;
+
+  const { data, error } = await supabase
+    .from("temporary_cards")
+    .select("*")
+    .eq("id", temporaryCardId)
+    .single();
+
+  if (error || !data) {
+    console.log(error);
+    return null;
+  }
+
+  return {
+    ...data,
+    id: `temporary-${data.id}`,
+    temporaryCardId: data.id,
+    card_no: `TEMP-${data.id}`,
+    card_name: `仮カード ${data.id}`,
+    isTemporaryCard: true,
+  };
+};
+const refreshDeckCards = async (cards: any[]) => {
+  if (!cards || cards.length === 0) return [];
+
+  const normalCards = cards.filter(
+    (card) => !card.isTemporaryCard
+  );
+
+  const ids = [
+    ...new Set(
+      normalCards.map((card) => card.id).filter(Boolean)
+    ),
+  ];
+
+  if (ids.length === 0) return cards;
+
+  const { data, error } = await supabase
     .from("cards")
     .select("*")
     .in("id", ids);
-     if (error || !data) {
+
+  if (error || !data) {
     console.log(error);
     return cards;
   }
-const map = new Map(data.map(card => [card.id, card]));return cards.map(card => map.get(card.id) || card);};
+
+  const map = new Map(
+    data.map((card) => [card.id, card])
+  );
+
+  return cards.map((card) =>
+    card.isTemporaryCard
+      ? card
+      : map.get(card.id) || card
+  );
+};
 const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
 const [isDeckTopRevealed, setIsDeckTopRevealed] = useState(false);
@@ -1601,6 +1647,10 @@ item.card.card_type==="ブリッツオーダー"
 ...mainDeckGrouped.filter(
 (item:any)=>
 item.card.card_type==="セットオーダー"
+),
+
+...mainDeckGrouped.filter(
+(item:any)=>item.card.isTemporaryCard
 )
 
 ];
@@ -1733,6 +1783,45 @@ setMainDeck([
 card
 ]);
 
+};
+
+const moveTemporaryCard = (card: any, direction: -1 | 1) => {
+  const currentIndex = displayMainDeckGrouped.findIndex(
+    (item: any) =>
+      item.card.isTemporaryCard &&
+      item.card.temporaryCardId === card.temporaryCardId
+  );
+
+  const targetIndex = currentIndex + direction;
+
+  if (
+    currentIndex < 0 ||
+    targetIndex < 0 ||
+    targetIndex >= displayMainDeckGrouped.length
+  ) {
+    return;
+  }
+
+  const reordered = [...displayMainDeckGrouped];
+  [reordered[currentIndex], reordered[targetIndex]] = [
+    reordered[targetIndex],
+    reordered[currentIndex],
+  ];
+
+  const orderMap = new Map(
+    reordered.map((item: any, index: number) => [
+      `${item.card.card_name}_${item.card.card_no}`,
+      index,
+    ])
+  );
+
+  setMainDeck((prev: any[]) =>
+    prev.map((item: any) => ({
+      ...item,
+      displayOrder:
+        orderMap.get(`${item.card_name}_${item.card_no}`) ?? 999999,
+    }))
+  );
 };
 
 const getDeckCount=(card:any)=>{
@@ -3866,12 +3955,16 @@ if (mainDeck.length !== 50) {
   nation: deckNation,
   updated_at: new Date().toISOString(),
 
-      ride_g3: rideG3?.id ?? null,
-      ride_g2: rideG2?.id ?? null,
-      ride_g1: rideG1?.id ?? null,
-      ride_g0: rideG0?.id ?? null,
-      ride_generator:
-      rideGenerator?.id ?? null,
+ride_g3: rideG3?.isTemporaryCard ? null : rideG3?.id ?? null,
+ride_g2: rideG2?.isTemporaryCard ? null : rideG2?.id ?? null,
+ride_g1: rideG1?.isTemporaryCard ? null : rideG1?.id ?? null,
+ride_g0: rideG0?.isTemporaryCard ? null : rideG0?.id ?? null,
+ride_generator: rideGenerator?.isTemporaryCard ? null : rideGenerator?.id ?? null,
+ride_g3_temporary_id: rideG3?.isTemporaryCard ? rideG3.temporaryCardId : null,
+ride_g2_temporary_id: rideG2?.isTemporaryCard ? rideG2.temporaryCardId : null,
+ride_g1_temporary_id: rideG1?.isTemporaryCard ? rideG1.temporaryCardId : null,
+ride_g0_temporary_id: rideG0?.isTemporaryCard ? rideG0.temporaryCardId : null,
+ride_generator_temporary_id: rideGenerator?.isTemporaryCard ? rideGenerator.temporaryCardId : null,
 
       main_deck: mainDeck,
       g_deck: gDeck,
@@ -3908,12 +4001,16 @@ if (mainDeck.length !== 50) {
       deck_name: deckName,
       nation: deckNation,
 
-      ride_g3: rideG3?.id ?? null,
-      ride_g2: rideG2?.id ?? null,
-      ride_g1: rideG1?.id ?? null,
-      ride_g0: rideG0?.id ?? null,
-      ride_generator:
-      rideGenerator?.id ?? null,
+ride_g3: rideG3?.isTemporaryCard ? null : rideG3?.id ?? null,
+ride_g2: rideG2?.isTemporaryCard ? null : rideG2?.id ?? null,
+ride_g1: rideG1?.isTemporaryCard ? null : rideG1?.id ?? null,
+ride_g0: rideG0?.isTemporaryCard ? null : rideG0?.id ?? null,
+ride_generator: rideGenerator?.isTemporaryCard ? null : rideGenerator?.id ?? null,
+ride_g3_temporary_id: rideG3?.isTemporaryCard ? rideG3.temporaryCardId : null,
+ride_g2_temporary_id: rideG2?.isTemporaryCard ? rideG2.temporaryCardId : null,
+ride_g1_temporary_id: rideG1?.isTemporaryCard ? rideG1.temporaryCardId : null,
+ride_g0_temporary_id: rideG0?.isTemporaryCard ? rideG0.temporaryCardId : null,
+ride_generator_temporary_id: rideGenerator?.isTemporaryCard ? rideGenerator.temporaryCardId : null,
 
      main_deck: mainDeck,
      g_deck: gDeck,
@@ -4875,6 +4972,15 @@ const displayDeckSearchCards = hideSameCard
 
     )
   : deckSearchCards;
+
+const displayTemporaryCards = temporaryCards.map((card) => ({
+  ...card,
+  id: `temporary-${card.id}`,
+  temporaryCardId: card.id,
+  card_no: `TEMP-${card.id}`,
+  card_name: `仮カード ${card.id}`,
+  isTemporaryCard: true,
+}));
 
 return (
   <main className="overflow-x-visible">
@@ -6267,10 +6373,21 @@ if (decklogSelectMode) {
 if (onePlayerMode) {
   setSelectedDeck(deck);
 
-  const g3Card = await loadCardById(deck.ride_g3);
-  const g2Card = await loadCardById(deck.ride_g2);
-  const g1Card = await loadCardById(deck.ride_g1);
-  const g0Card = await loadCardById(deck.ride_g0);
+const g3Card = deck.ride_g3_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g3_temporary_id)
+  : await loadCardById(deck.ride_g3);
+
+const g2Card = deck.ride_g2_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g2_temporary_id)
+  : await loadCardById(deck.ride_g2);
+
+const g1Card = deck.ride_g1_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g1_temporary_id)
+  : await loadCardById(deck.ride_g1);
+
+const g0Card = deck.ride_g0_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g0_temporary_id)
+  : await loadCardById(deck.ride_g0);
 
 setRideG3(g3Card);
 setRideG2(g2Card);
@@ -6339,31 +6456,25 @@ deck.nation || ""
 // deck.nation || ""
 // );
 
-const g3Card =
-  await loadCardById(
-    deck.ride_g3
-  );
+const g3Card = deck.ride_g3_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g3_temporary_id)
+  : await loadCardById(deck.ride_g3);
 
-const g2Card =
-  await loadCardById(
-    deck.ride_g2
-  );
+const g2Card = deck.ride_g2_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g2_temporary_id)
+  : await loadCardById(deck.ride_g2);
 
-const g1Card =
-  await loadCardById(
-    deck.ride_g1
-  );
+const g1Card = deck.ride_g1_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g1_temporary_id)
+  : await loadCardById(deck.ride_g1);
 
-const g0Card =
-  await loadCardById(
-    deck.ride_g0
-  );
+const g0Card = deck.ride_g0_temporary_id
+  ? await loadTemporaryCardById(deck.ride_g0_temporary_id)
+  : await loadCardById(deck.ride_g0);
 
-const generatorCard =
-  await loadCardById(
-    deck.ride_generator
-  );
-
+const generatorCard = deck.ride_generator_temporary_id
+  ? await loadTemporaryCardById(deck.ride_generator_temporary_id)
+  : await loadCardById(deck.ride_generator);
 setRideG3(
   g3Card
 );
@@ -10356,6 +10467,21 @@ setHideSameCard(e.target.checked);
 同名カードを非表示
 </label>
 
+<label className="flex items-center gap-2 cursor-pointer">
+  <input
+    type="checkbox"
+    checked={showTemporaryCards}
+    onChange={(e) => {
+  const checked = e.target.checked;
+  setShowTemporaryCards(checked);
+
+  if (checked) {
+    loadTemporaryCards();
+  }
+}}
+  />
+  仮カードを表示
+</label>
 
 </div>
 
@@ -10858,8 +10984,11 @@ md:overflow-y-auto
 
 
 
-{displayDeckSearchCards.map(
-(card) => (
+{(showTemporaryCards
+  ? [...displayTemporaryCards, ...displayDeckSearchCards]
+  : displayDeckSearchCards
+).map(
+  (card) => (
 
     <div
       key={card.id}
@@ -11102,8 +11231,7 @@ addToFinisherDeck(card);
 
  <div className={`flex gap-2 flex-wrap ${savingDeckImage ? "mb-2" : "mb-4"}`}>
 
-  {displayMainDeckGrouped.map((item:any)=>(
-
+{displayMainDeckGrouped.map((item:any)=>(
     <div
       key={item.card.id}
       className="w-[120px] relative"
@@ -11115,7 +11243,31 @@ addToFinisherDeck(card);
   className="w-full border rounded cursor-pointer"
   onClick={() => setZoomCard(item.card)}
 />
+{!savingDeckImage && item.card.isTemporaryCard && (
+  <>
+    <button
+      type="button"
+      className="absolute left-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/70 text-white w-7 h-7 flex items-center justify-center"
+      onClick={(e) => {
+        e.stopPropagation();
+        moveTemporaryCard(item.card, -1);
+      }}
+    >
+      ‹
+    </button>
 
+    <button
+      type="button"
+      className="absolute right-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/70 text-white w-7 h-7 flex items-center justify-center"
+      onClick={(e) => {
+        e.stopPropagation();
+        moveTemporaryCard(item.card, 1);
+      }}
+    >
+      ›
+    </button>
+  </>
+)}
       <div
         className="
           absolute
