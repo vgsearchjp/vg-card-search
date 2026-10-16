@@ -14198,9 +14198,11 @@ return (
       <button
         onClick={() => setManageView("limitCards")}
         className="w-[calc(33.333%-0.5rem)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
-      >
-        制限カード管理
-      </button> 
+>
+  <span className="whitespace-nowrap">制限カード</span>
+  <br />
+  管理
+</button>
 
 <button
   onClick={() => {
