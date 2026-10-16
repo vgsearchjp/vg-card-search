@@ -256,11 +256,15 @@ const refreshDeckCards = async (cards: any[]) => {
     data.map((card) => [card.id, card])
   );
 
-  return cards.map((card) =>
-    card.isTemporaryCard
-      ? card
-      : map.get(card.id) || card
-  );
+  return cards.map((card) => {
+    if (card.isTemporaryCard) return card;
+
+    const refreshedCard = map.get(card.id);
+
+    return refreshedCard
+      ? { ...refreshedCard, displayOrder: card.displayOrder }
+      : card;
+  });
 };
 const [mainDeck, setMainDeck] = useState<any[]>([]);
 const [onePlayerDeck, setOnePlayerDeck] = useState<any[]>([]);
@@ -1653,7 +1657,11 @@ item.card.card_type==="セットオーダー"
 (item:any)=>item.card.isTemporaryCard
 )
 
-];
+].sort(
+  (a: any, b: any) =>
+    (a.card.displayOrder ?? 999999) -
+    (b.card.displayOrder ?? 999999)
+);
 
 
 
