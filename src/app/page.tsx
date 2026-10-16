@@ -14197,7 +14197,7 @@ return (
     <div className="flex flex-wrap gap-3">
       <button
         onClick={() => setManageView("limitCards")}
-        className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+        className="w-[calc(33.333%-0.5rem)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
       >
         制限カード管理
       </button> 
@@ -14209,7 +14209,7 @@ setTemporaryImagePreviews([]);
     setManageView("temporaryCards");
     loadTemporaryCards();
   }}
-  className="w-full aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+  className="w-[calc(33.333%-0.5rem)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
 >
   仮カード登録
 </button>
