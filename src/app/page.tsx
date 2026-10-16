@@ -3137,6 +3137,46 @@ const loadTemporaryCards = async () => {
   setTemporaryCards(data || []);
 };
 
+const deleteTemporaryCard = async (id: number) => {
+  if (!confirm("この仮カードを削除しますか？")) return;
+
+  const { error } = await supabase
+    .from("temporary_cards")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("仮カードの削除に失敗しました");
+    return;
+  }
+
+  await loadTemporaryCards();
+};
+
+const deleteAllTemporaryCards = async () => {
+  if (temporaryCards.length === 0) {
+    alert("削除する仮カードがありません");
+    return;
+  }
+
+  if (!confirm(`登録済みの仮カード${temporaryCards.length}枚をすべて削除しますか？`)) return;
+
+  const { error } = await supabase
+    .from("temporary_cards")
+    .delete()
+    .gte("id", 0);
+
+  if (error) {
+    console.error(error);
+    alert("仮カードの全削除に失敗しました");
+    return;
+  }
+
+  await loadTemporaryCards();
+  alert("すべての仮カードを削除しました");
+};
+
 const saveTemporaryCard = async () => {
   if (temporaryImageFiles.length === 0) {
     alert("画像を選択してください");
@@ -14266,15 +14306,33 @@ setTemporaryImagePreviews([]);
   </div>
 )}
 
-<h3 className="text-xl font-bold mb-3">登録済み仮カード</h3>
+<div className="flex items-center justify-between gap-2 mb-3">
+  <h3 className="text-xl font-bold">登録済み仮カード</h3>
+  <button
+    type="button"
+    onClick={deleteAllTemporaryCards}
+    disabled={temporaryCards.length === 0}
+    className="shrink-0 rounded bg-red-600 px-3 py-2 text-sm font-bold text-white disabled:opacity-40"
+  >
+    全削除
+  </button>
+</div>
 <div className="grid grid-cols-3 gap-3">
   {temporaryCards.map((card) => (
-    <div key={card.id} className="min-w-0 border bg-white rounded p-2">
+    <div key={card.id} className="relative min-w-0 border bg-white rounded p-2">
       <img
         src={card.image_url}
         alt="仮カード"
         className="w-full h-auto"
       />
+      <button
+        type="button"
+        onClick={() => deleteTemporaryCard(card.id)}
+        aria-label="この仮カードを削除"
+        className="absolute right-1 top-1 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-red-600 text-lg font-bold leading-none text-white shadow"
+      >
+        ×
+      </button>
     </div>
   ))}
 </div>
