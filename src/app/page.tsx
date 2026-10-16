@@ -14223,7 +14223,7 @@ setTemporaryImagePreviews([]);
   <div className="p-6">
     <h2 className="text-2xl font-bold mb-6">仮カード登録</h2>
 
-    <div className="flex flex-wrap gap-3 mb-6">
+    <div className="flex items-center gap-3 mb-6">
 <input
   type="file"
   accept="image/*"
@@ -14235,10 +14235,8 @@ setTemporaryImagePreviews([]);
       files.map((file) => URL.createObjectURL(file))
     );
   }}
-  className="border bg-white p-3"
+  className="w-0 min-w-0 flex-1 border bg-white p-2 text-sm"
 />
-
-
       <button
         onClick={saveTemporaryCard}
         disabled={temporaryImageFiles.length === 0 || savingTemporaryCard}
@@ -14247,12 +14245,6 @@ setTemporaryImagePreviews([]);
         {savingTemporaryCard ? "登録中..." : "画像を登録"}
       </button>
 
-      <button
-        onClick={() => setManageView("manage2")}
-        className="bg-gray-500 text-white px-4 py-2 rounded"
-      >
-        戻る
-      </button>
     </div>
 
 
@@ -14275,17 +14267,17 @@ setTemporaryImagePreviews([]);
 )}
 
 <h3 className="text-xl font-bold mb-3">登録済み仮カード</h3>
-<div className="flex flex-wrap gap-3">
-      {temporaryCards.map((card) => (
-        <div key={card.id} className="border bg-white rounded p-2">
-          <img
-            src={card.image_url}
-            alt="仮カード"
-            className="w-32"
-          />
-        </div>
-      ))}
+<div className="grid grid-cols-3 gap-3">
+  {temporaryCards.map((card) => (
+    <div key={card.id} className="min-w-0 border bg-white rounded p-2">
+      <img
+        src={card.image_url}
+        alt="仮カード"
+        className="w-full h-auto"
+      />
     </div>
+  ))}
+</div>
   </div>
 )}
 
