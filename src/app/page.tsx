@@ -14197,11 +14197,10 @@ return (
     <div className="flex flex-wrap gap-3">
       <button
         onClick={() => setManageView("limitCards")}
-        className="w-[calc(33.333%-0.5rem)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex items-center justify-center text-lg"
+        className="w-[calc(33.333%-0.5rem)] aspect-[3/4] md:w-[260px] md:h-[180px] md:aspect-auto bg-white text-black border rounded-lg font-bold flex itflex flex-col items-center justify-centerems-center justify-center text-lg"
 >
-  <span className="whitespace-nowrap">制限カード</span>
-  <br />
-  管理
+<span className="whitespace-nowrap">制限カード</span>
+<span>管理</span>
 </button>
 
 <button
