@@ -3140,6 +3140,23 @@ const loadTemporaryCards = async () => {
 const deleteTemporaryCard = async (id: number) => {
   if (!confirm("この仮カードを削除しますか？")) return;
 
+  const card = temporaryCards.find((item) => item.id === id);
+  if (!card) return;
+
+  const response = await fetch("/api/r2-upload", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path: card.storage_image_url }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    console.error(result);
+    alert("R2画像の削除に失敗しました");
+    return;
+  }
+
   const { error } = await supabase
     .from("temporary_cards")
     .delete()
@@ -3147,7 +3164,7 @@ const deleteTemporaryCard = async (id: number) => {
 
   if (error) {
     console.error(error);
-    alert("仮カードの削除に失敗しました");
+    alert("画像は削除しましたが、DBレコードの削除に失敗しました");
     return;
   }
 
@@ -3162,6 +3179,23 @@ const deleteAllTemporaryCards = async () => {
 
   if (!confirm(`登録済みの仮カード${temporaryCards.length}枚をすべて削除しますか？`)) return;
 
+  for (const card of temporaryCards) {
+    const response = await fetch("/api/r2-upload", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path: card.storage_image_url }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      console.error(result);
+      alert(`R2画像の削除に失敗しました。ID: ${card.id}\n残りのカードは削除していません`);
+      await loadTemporaryCards();
+      return;
+    }
+  }
+
   const { error } = await supabase
     .from("temporary_cards")
     .delete()
@@ -3169,7 +3203,8 @@ const deleteAllTemporaryCards = async () => {
 
   if (error) {
     console.error(error);
-    alert("仮カードの全削除に失敗しました");
+    alert("R2画像は削除しましたが、DBレコードの削除に失敗しました");
+    await loadTemporaryCards();
     return;
   }
 
@@ -3193,9 +3228,7 @@ const saveTemporaryCard = async () => {
       try {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("productCode", "TEMP");
-        formData.append("cardNo", `TEMP-${crypto.randomUUID()}`);
-
+        const path = `temporary-cards/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;formData.append("path", path);
         const response = await fetch("/api/r2-upload", {
           method: "POST",
           body: formData,
