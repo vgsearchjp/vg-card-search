@@ -3186,14 +3186,29 @@ const deleteAllTemporaryCards = async () => {
       body: JSON.stringify({ path: card.storage_image_url }),
     });
 
-    const result = await response.json();
+const responseText = await response.text();
+let result: any = {};
 
-    if (!response.ok || !result.success) {
-      console.error(result);
-      alert(`R2画像の削除に失敗しました。ID: ${card.id}\n残りのカードは削除していません`);
-      await loadTemporaryCards();
-      return;
-    }
+try {
+  result = responseText ? JSON.parse(responseText) : {};
+} catch {
+  console.error("R2削除APIの応答がJSONではありません:", responseText);
+}
+
+if (!response.ok || !result.success) {
+  console.error("R2削除失敗:", {
+    status: response.status,
+    responseText,
+    result,
+    cardId: card.id,
+    path: card.storage_image_url,
+  });
+
+  alert(`R2画像の削除に失敗しました。\nカードID: ${card.id}\nHTTPステータス: ${response.status}\n詳細はF12のConsoleを確認してください。`);
+
+  await loadTemporaryCards();
+  return;
+}
   }
 
   const { error } = await supabase
