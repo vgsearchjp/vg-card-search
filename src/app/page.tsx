@@ -3241,9 +3241,10 @@ const saveTemporaryCard = async () => {
   try {
     for (const file of temporaryImageFiles) {
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-        const path = `temporary-cards/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;formData.append("path", path);
+const formData = new FormData();
+formData.append("file", file);
+formData.append("productCode", "TEMP");
+formData.append("cardNo", `TEMP-${crypto.randomUUID()}`);
         const response = await fetch("/api/r2-upload", {
           method: "POST",
           body: formData,
