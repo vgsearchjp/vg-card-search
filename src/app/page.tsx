@@ -15328,14 +15328,20 @@ className="max-h-[90vh] max-w-[90vw]"
         デッキの転送データを作成しました。
       </p>
 
-      <a
-        href={decklogResult.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 block rounded bg-blue-600 px-4 py-3 text-center font-semibold text-white"
-      >
-        DECK LOGを開く
-      </a>
+<a
+  href={decklogResult.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(e) => {
+if ((navigator as Navigator & { standalone?: boolean }).standalone === true) {
+      e.preventDefault();
+      window.location.href = `x-safari-${decklogResult.url}`;
+    }
+  }}
+  className="mt-4 block rounded bg-blue-600 px-4 py-3 text-center font-semibold text-white"
+>
+  DECK LOGを開く
+</a>
 
       <p className="mt-4 text-sm text-gray-500">転送ID</p>
       <p className="break-all text-sm">{decklogResult.id}</p>
