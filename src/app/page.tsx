@@ -12529,11 +12529,13 @@ if (rarityView === "parallel") {
 });
 }}
 >
-      {getCardImage(card) ? (
-  <div className="aspect-[63/88] flex items-center justify-center mb-2">
+{getCardImage(card) ? (
+<div className="aspect-[63/88] flex items-center justify-center mb-2">
   <img
     src={getCardImage(card)}
     alt={card.card_name}
+    loading="lazy"
+    decoding="async"
     className="max-w-full max-h-full"
   />
 </div>
