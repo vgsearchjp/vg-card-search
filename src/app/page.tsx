@@ -47,6 +47,7 @@ const [cardName, setCardName] = useState("");
 const [rarity, setRarity] = useState("");
 const [imageUrl, setImageUrl] = useState("");
 const [cards, setCards] = useState<any[]>([]);
+const homeSearchRequestId = useRef(0);
 const [deckSearchCards, setDeckSearchCards] = useState<any[]>([]);
 const [rarityView, setRarityView] = useState<  "all" | "normal" | "parallel">("all");
 const [specialParallelCardIds, setSpecialParallelCardIds] = useState<Set<number>>(new Set());
@@ -3033,6 +3034,9 @@ const searchProductsByCard = async () => {
 
 const searchCards = async () => {
 
+const requestId = ++homeSearchRequestId.current;
+setCards([]);
+
 const keyword = cardSearch.trim();
 let query = supabase
   .from("cards")
@@ -3089,6 +3093,8 @@ const { data, error, count } =
       ascending: true,
     })
     .range(0, 5000);
+
+if (requestId !== homeSearchRequestId.current) return;
 
   if (error) {
     console.log(error);
