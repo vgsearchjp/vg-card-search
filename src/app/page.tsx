@@ -15342,7 +15342,13 @@ className="max-h-[90vh] max-w-[90vw]"
 
       <div className="mt-5 flex justify-end gap-2">
         <button
-          onClick={() => navigator.clipboard.writeText(decklogResult.url)}
+        onClick={async () => {
+        try {await navigator.clipboard.writeText(decklogResult.url);alert("URLをコピーしました");
+       } catch {
+       alert("URLをコピーできませんでした");
+       }
+       }}
+
           className="rounded border px-4 py-2"
         >
           URLをコピー
