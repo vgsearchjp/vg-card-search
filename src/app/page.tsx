@@ -4610,41 +4610,48 @@ await deleteAllCardsCache();
 await loadCards(selectedProductId);
 };
 
+
 const saveDeckImage = async () => {
-console.log(displayMainDeckGrouped[0]);
-  const blob = await generateDeckImage({
-  deckName,
-  rideDeck: [
-    rideG3,
-    rideG2,
-    rideG1,
-    rideG0,
-    rideGenerator,
-  ].filter(Boolean),
-  mainDeck: displayMainDeckGrouped,
-  gDeck: gDeckGrouped,
-  finisherDeck: finisherDeckGrouped,
-});
+  setSavingDeckImage(true);
 
-const dataUrl = URL.createObjectURL(blob);
+  // 保存中の表示を先に描画する
+  await new Promise((resolve) => setTimeout(resolve, 50));
 
-if (isIOS) {
+  try {
+    const blob = await generateDeckImage({
+      deckName,
+      rideDeck: [
+        rideG3,
+        rideG2,
+        rideG1,
+        rideG0,
+        rideGenerator,
+      ].filter(Boolean),
+      mainDeck: displayMainDeckGrouped,
+      gDeck: gDeckGrouped,
+      finisherDeck: finisherDeckGrouped,
+    });
 
-  setPreviewImage(dataUrl);
+    const dataUrl = URL.createObjectURL(blob);
 
-} else {
+    if (isIOS) {
+      setPreviewImage(dataUrl);
+    } else {
+      const link = document.createElement("a");
+      link.download = `${deckName || "デッキ"}.png`;
+      link.href = dataUrl;
+      link.click();
 
-  const link = document.createElement("a");
-
-  link.download = `${deckName || "デッキ"}.png`;
-  link.href = dataUrl;
-  link.click();
-
-  URL.revokeObjectURL(dataUrl);
-
-}
-
+      URL.revokeObjectURL(dataUrl);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("デッキ画像の保存に失敗しました");
+  } finally {
+    setSavingDeckImage(false);
+  }
 };
+
 
 const signUp = async () => {
 
