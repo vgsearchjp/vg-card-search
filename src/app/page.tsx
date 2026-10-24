@@ -11774,6 +11774,32 @@ className="w-[19%] relative"
   onClick={() => setZoomCard(item.card)}
 />
 
+{!savingDeckImage && item.card.isTemporaryCard && (
+  <>
+    <button
+      type="button"
+      className="absolute left-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/70 text-white w-6 h-6 flex items-center justify-center text-lg font-bold"
+      onClick={(e) => {
+        e.stopPropagation();
+        moveTemporaryCard(item.card, -1);
+      }}
+    >
+      ‹
+    </button>
+
+    <button
+      type="button"
+      className="absolute right-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/70 text-white w-6 h-6 flex items-center justify-center text-lg font-bold"
+      onClick={(e) => {
+        e.stopPropagation();
+        moveTemporaryCard(item.card, 1);
+      }}
+    >
+      ›
+    </button>
+  </>
+)}
+
 <div
   className={`absolute bottom-0 left-0 right-0 bg-black/70 text-white text-lg flex items-center justify-between px-1 ${
     savingDeckImage ? "hidden" : ""
