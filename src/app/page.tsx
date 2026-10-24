@@ -15085,6 +15085,18 @@ className="max-h-[90vh] max-w-[90vw]"
 
 )}
 
+{savingDeckImage && (
+  <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50">
+    <div className="rounded-lg bg-white px-8 py-6 text-center shadow-lg">
+      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
+      <p className="text-lg font-bold">画像を保存中…</p>
+      <p className="mt-2 text-sm text-gray-600">
+        画像の生成が完了するまでお待ちください
+      </p>
+    </div>
+  </div>
+)}
+
 {showSaveImage && (
 
 <div
